@@ -91,6 +91,7 @@ fact Interview_Compiled{
         (s.status != Allowed and s.status != Selected and s.status != RejAfterForm) 
         implies s !in i.InterviewToCompile.InterviewCompiledBy
 }
+
 //Every Student that is in an internship, from more than half its duration,
 //have compiled the first feedback
 fact Half_Work_Done{
