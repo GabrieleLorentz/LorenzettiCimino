@@ -7,7 +7,6 @@ public class CompanyMapper {
 
     public static CompanyDTO mapCompany(Company company) {
         return new CompanyDTO(
-                company.getCompany_Id(),
                 company.getName(),
                 company.getVat_number(),
                 company.getEmail(),
@@ -17,7 +16,6 @@ public class CompanyMapper {
     }
     public static Company mapToCompany(CompanyDTO companyDTO) {
         return new Company(
-                companyDTO.getCompany_id(),
                 companyDTO.getName(),
                 companyDTO.getVat_number(),
                 companyDTO.getEmail(),

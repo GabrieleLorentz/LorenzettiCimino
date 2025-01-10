@@ -5,10 +5,9 @@ import com.example.s_and_c.Service.StudentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -18,8 +17,22 @@ public class StudentController {
     private final StudentService studentService;
 
     //Build Add student REST API
+    @PostMapping
     public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO studentDTO) {
         StudentDTO savedStudent = studentService.createStudent(studentDTO);
         return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
+    }
+
+    @GetMapping({"{email}"})
+    public ResponseEntity<StudentDTO> getStudentById(@PathVariable("email") String email) {
+        StudentDTO savedStudent = studentService.getStudent(email);
+        return ResponseEntity.ok(savedStudent);
+    }
+
+    @GetMapping
+    //Build get all employees REST API
+    public ResponseEntity<List<StudentDTO>> getAllStudents() {
+        List<StudentDTO> allStudents = studentService.getAllStudents();
+        return ResponseEntity.ok(allStudents);
     }
 }

@@ -11,17 +11,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Student")
+@Table(name = "Company")
 public class Company {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
-    private Long company_Id;
+
     @Column(unique = true, nullable = false)
     private String name;
     @Column(unique = true, nullable = false)
     private Long vat_number;
-    @Column(unique = true, nullable = false)
+    @Id
     private String email;
     @Column(unique = false, nullable = false)
     private String password;

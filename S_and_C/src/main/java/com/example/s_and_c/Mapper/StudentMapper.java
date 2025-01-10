@@ -5,9 +5,8 @@ import com.example.s_and_c.Entities.Student;
 
 public class StudentMapper {
 
-    public static StudentDTO mapStudent(Student student) {
+    public static StudentDTO mapToStudentDTO(Student student) {
         return new StudentDTO(
-                student.getStudent_Id(),
                 student.getName(),
                 student.getSurname(),
                 student.getEmail(),
@@ -17,7 +16,6 @@ public class StudentMapper {
     }
     public static Student mapToStudent(StudentDTO studentDTO){
         return new Student(
-                studentDTO.getStudent_id(),
                 studentDTO.getName(),
                 studentDTO.getSurname(),
                 studentDTO.getEmail(),

@@ -1,5 +1,7 @@
 package com.example.s_and_c.DTO;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompanyDTO {
-    private long company_id;
     private String name;
     private Long vat_number;
     private String email;

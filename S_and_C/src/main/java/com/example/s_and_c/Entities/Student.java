@@ -13,19 +13,14 @@ import lombok.Setter;
 @Entity
 @Table(name = "Student")
 public class Student {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
-    private Long student_Id;
-    @Column(unique = false, nullable = false)
+    @Column(nullable = false)
     private String name;
-    @Column(unique = false, nullable = false)
+    @Column(nullable = false)
     private String surname;
-    @Column(unique = true, nullable = false)
+    @Id
     private String email;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String password;
-    @Column(unique = false, nullable = true)
     private String description;
 
 }

@@ -12,7 +12,6 @@ import org.hibernate.internal.build.AllowNonPortable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentDTO {
-    private long student_id;
     private String name;
     private String surname;
     private String email;
