@@ -1,47 +1,38 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div>
+    <img src="/logo.png" />
+  </div>
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <img src="/logo2.png" style="margin-top: -150px" />
+    <button @click = '' style="margin-bottom: 10px;">SIGN IN</button>
+    <button @click = ''>SIGN UP</button>
+  </div>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
+<style>
+body {
+  background-color: white; /* Imposta lo sfondo bianco */
+  margin: 0; /* Rimuove i margini predefiniti */
+  padding: 0; /* Rimuove i padding predefiniti */
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+button {
+  background-color: #232526; /* Colore di sfondo iniziale */
+  color: #f2a73b; /* Colore del testo */
+  border: none; /* Rimuove il bordo */
+  width: 90%;
+  font-size: 45px;
+  padding: 15px;
+  border-radius: 30px; /* Angoli arrotondati */
+  transition: background-color 0.4s ease, color 0.4s ease; /* Transizione morbida per il cambiamento del colore */
+  font-weight: bold;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+/* Effetto hover */
+button:hover {
+  background-color: #f2a73b; /* Colore di sfondo al passaggio del mouse */
+  color: #232526;
+  cursor: pointer; /* Cambia il cursore quando ci passi sopra */
 }
 </style>
