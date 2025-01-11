@@ -40,8 +40,24 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentDTO updateStudent(Long student_id, StudentDTO studentDTO) {
-        return null;
+    public StudentDTO updateStudent(String email,StudentDTO studentDTO) {
+        Student student = studentRepository.findByEmail(studentDTO.getEmail()).orElseThrow(()-> new ResourceNotFoundException("Student with id " + email + " not found"));
+
+        student.setName(studentDTO.getName());
+        student.setEmail(studentDTO.getEmail());
+        student.setPassword(studentDTO.getPassword());
+        student.setDescription(studentDTO.getDescription());
+        student.setSurname(studentDTO.getSurname());
+
+        Student updatedStudent = studentRepository.save(student);
+        return StudentMapper.mapToStudentDTO(updatedStudent);
+    }
+
+    @Override
+    public void deleteStudent(String email) {
+        Student student = studentRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Student with id " + email + " not found"));
+
+        studentRepository.deleteStudentByEmail(email);
     }
 
 }

@@ -30,9 +30,25 @@ public class StudentController {
     }
 
     @GetMapping
-    //Build get all employees REST API
+    //Build get all student REST API
     public ResponseEntity<List<StudentDTO>> getAllStudents() {
         List<StudentDTO> allStudents = studentService.getAllStudents();
         return ResponseEntity.ok(allStudents);
+    }
+
+    @PutMapping("/email")
+    //Build update student
+    public ResponseEntity<StudentDTO> updateStudent(
+            @PathVariable("email") String email,
+            @RequestBody StudentDTO updatedStudentDTO) {
+        StudentDTO studentDTO = studentService.updateStudent(email, updatedStudentDTO);
+        return ResponseEntity.ok(studentDTO);
+    }
+
+    @DeleteMapping("/{email}")
+    public ResponseEntity<String> deleteStudent(
+            @PathVariable("email") String email) {
+        studentService.deleteStudent(email);
+        return ResponseEntity.ok("Student deleted succesfully");
     }
 }

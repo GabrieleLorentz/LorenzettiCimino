@@ -11,5 +11,7 @@ public interface StudentService {
 
     List<StudentDTO> getAllStudents();
 
-    StudentDTO updateStudent(Long student_id, StudentDTO studentDTO);
+    StudentDTO updateStudent(String email, StudentDTO studentDTO);
+
+    void deleteStudent(String email);
 }

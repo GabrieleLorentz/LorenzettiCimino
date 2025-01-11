@@ -5,7 +5,7 @@ import com.example.s_and_c.Entities.Company;
 
 public class CompanyMapper {
 
-    public static CompanyDTO mapCompany(Company company) {
+    public static CompanyDTO mapToCompanyDTO(Company company) {
         return new CompanyDTO(
                 company.getName(),
                 company.getVat_number(),

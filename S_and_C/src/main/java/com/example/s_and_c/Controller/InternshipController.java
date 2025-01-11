@@ -1,0 +1,44 @@
+package com.example.s_and_c.Controller;
+
+
+import com.example.s_and_c.DTO.InternshipDTO;
+import com.example.s_and_c.Service.InternshipService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@AllArgsConstructor
+@RestController
+@RequestMapping("api/Internship")
+public class InternshipController {
+
+    private final InternshipService internshipService;
+
+    @PostMapping
+    public ResponseEntity<InternshipDTO> addInternship(@RequestBody InternshipDTO internshipDTO) {
+        InternshipDTO savedInternship = internshipService.createInternship(internshipDTO);
+        return new ResponseEntity<>(savedInternship, HttpStatus.CREATED);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<InternshipDTO> getInternshipById(@PathVariable int id) {
+        InternshipDTO savedInternship = internshipService.getInternship(id);
+        return ResponseEntity.ok(savedInternship);
+    }
+
+    @PutMapping("/id")
+    public ResponseEntity<InternshipDTO> updateInternship(
+            @PathVariable("id") int id,
+            @RequestBody InternshipDTO internshipDTO) {
+        InternshipDTO savedInternship = internshipService.updateInternship(id, internshipDTO);
+        return ResponseEntity.ok(savedInternship);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteInternship(
+            @PathVariable("id") int id) {
+        internshipService.deleteInternship(id);
+        return ResponseEntity.ok("Internship deleted succesfully");
+    }
+}
