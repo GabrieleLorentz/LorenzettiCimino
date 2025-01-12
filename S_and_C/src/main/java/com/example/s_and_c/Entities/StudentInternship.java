@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+/*
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,4 +30,4 @@ public class StudentInternship {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private InternshipStatus status;
-}
+}*/

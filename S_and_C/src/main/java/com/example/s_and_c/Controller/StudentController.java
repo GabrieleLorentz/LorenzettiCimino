@@ -1,6 +1,6 @@
 package com.example.s_and_c.Controller;
 
-import com.example.s_and_c.DTO.StudentDTO;
+import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.Service.StudentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

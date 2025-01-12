@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class Internship {
     private String description;
     @OneToOne
     private Company company;
-    @OneToMany(mappedBy = "internship", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StudentInternship> studentInternships;
+    @ManyToMany(mappedBy = "internships")
+    private List<Student> students = new ArrayList<>();
 
 }

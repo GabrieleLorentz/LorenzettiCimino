@@ -1,6 +1,6 @@
 package com.example.s_and_c.Service;
 
-import com.example.s_and_c.DTO.StudentDTO;
+import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 
 import java.util.List;
 

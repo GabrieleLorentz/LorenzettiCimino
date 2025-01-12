@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/LorenzettiCimino.iml" filepath="$PROJECT_DIR$/.idea/LorenzettiCimino.iml" />
       <module fileurl="file://$PROJECT_DIR$/S_and_C/S_and_C.iml" filepath="$PROJECT_DIR$/S_and_C/S_and_C.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sc_front_end.iml" filepath="$PROJECT_DIR$/sc_front_end.iml" />
+      <module fileurl="file://$PROJECT_DIR$/frontend.iml" filepath="$PROJECT_DIR$/frontend.iml" />
     </modules>
   </component>
 </project>
