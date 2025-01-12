@@ -4,8 +4,8 @@
   </div>
   <div style="display: flex; flex-direction: column; align-items: center;">
     <img src="/logo2.png" style="margin-top: -150px" />
-    <button @click = '' style="margin-bottom: 10px;">SIGN IN</button>
-    <button @click = ''>SIGN UP</button>
+    <button @click = "goToPage('/signin')" style="margin-bottom: 10px;">SIGN IN</button>
+    <button @click = "goToPage('/signup')">SIGN UP</button>
   </div>
 
 </template>
@@ -20,7 +20,7 @@ body {
 button {
   background-color: #232526; /* Colore di sfondo iniziale */
   color: #f2a73b; /* Colore del testo */
-  border: none; /* Rimuove il bordo */
+  border: 4px solid #f2a73b; /* Rimuove il bordo */
   width: 90%;
   font-size: 45px;
   padding: 15px;
@@ -36,3 +36,12 @@ button:hover {
   cursor: pointer; /* Cambia il cursore quando ci passi sopra */
 }
 </style>
+<script setup lang="ts">
+import { useRouter } from 'vue-router';
+// Inizializziamo il router
+const router = useRouter();
+// Funzione per navigare verso una pagina specifica
+const goToPage = (path: string) => {
+  router.push(path);
+};
+</script>
