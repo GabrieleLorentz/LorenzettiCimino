@@ -26,7 +26,7 @@ public class Student {
     private String password;
     private String description;
     @ManyToMany
-    @JoinTable(
+    @JoinTable(//da risolvere
             name = "student_internship", // Nome della tabella di join
             joinColumns = @JoinColumn(name = "student_email"), // FK verso `students`
             inverseJoinColumns = @JoinColumn(name = "internship_id") // FK verso `internships`
