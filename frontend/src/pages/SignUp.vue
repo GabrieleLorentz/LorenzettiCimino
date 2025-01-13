@@ -4,12 +4,36 @@
       <img src="/src/assets/logo.png"  alt="Logo"/>
     </div>
     <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
-      <button @click="" class="button1">STUDENT</button>
-      <button @click="" class="button1">COMPANY</button>
-      <button @click="" class="button">SIGN UP</button>
+      <button @click="selectOption('student')" :class="{'selected': selectedOption === 'student', 'button1': true}">STUDENT</button>
+      <button @click="selectOption('company')" :class="{'selected': selectedOption === 'company', 'button1': true}">COMPANY</button>
+      <button @click="navigate" class="button">SIGN UP</button>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      selectedOption: null, // Memorizza quale bottone è stato selezionato
+    };
+  },
+  methods: {
+    selectOption(option) {
+      this.selectedOption = option; // Aggiorna l'opzione selezionata
+    },
+    navigate() {
+      if (this.selectedOption === 'student') {
+        this.$router.push('/student_signup'); // Naviga alla pagina di signup dello studente
+      } else if (this.selectedOption === 'company') {
+        this.$router.push('/company_signup'); // Naviga alla pagina di signup dell'azienda
+      } else {
+        alert('Please select an option before signing up!'); // Avvisa l'utente se nessuna opzione è selezionata
+      }
+    },
+  },
+};
+</script>
 
 <style>
 .button1 {
@@ -31,6 +55,9 @@
   color: #f2a73b;
   cursor: pointer; /* Cambia il cursore quando ci passi sopra */
 }
+
+.selected {
+  background-color: #232526; /* Colore di sfondo per il bottone selezionato */
+  color: #f2a73b;
+}
 </style>
-<script setup lang="ts">
-</script>

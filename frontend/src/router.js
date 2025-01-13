@@ -13,8 +13,8 @@ const router = createRouter({
         {path: '/', component: Access},
         {path: '/signin', component: SignIn},
         {path: '/signup', component: SignUp},
-        {path: '/student.signup', component: Student_SignUp},
-        {path: '/company.signup', component: Company_SignUp}
+        {path: '/student_signup', component: Student_SignUp},
+        {path: '/company_signup', component: Company_SignUp}
     ]
 })
 

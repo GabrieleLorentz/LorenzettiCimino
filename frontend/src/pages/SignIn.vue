@@ -4,15 +4,15 @@
       <img src="/src/assets/logo.png"  alt="Logo"/>
     </div>
     <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
-      <input type="e_mail" placeholder="e-mail" class="text-input"/>
-      <input type="Password" placeholder="password" class="text-input"/>
+      <input type="email" placeholder="e-mail" class="text-input-signin"/>
+      <input type="password" placeholder="password" class="text-input-signin"/>
       <button @click="" class="button">SIGN IN</button>
     </div>
   </div>
 </template>
 
 <style>
-.text-input {
+.text-input-signin {
   background-color: white; /* Colore di sfondo iniziale */
   color: #f2a73b; /* Colore del testo */
   border: 4px solid #232526; /* Rimuove il bordo */
@@ -26,7 +26,7 @@
 }
 
 /* Effetto hover */
-.text-input:hover {
+.text-input-signin:hover {
   background-color: #f2a73b; /* Colore di sfondo al passaggio del mouse */
   color: #232526;
   cursor: pointer; /* Cambia il cursore quando ci passi sopra */
