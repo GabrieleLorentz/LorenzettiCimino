@@ -14,8 +14,7 @@ public class InternshipMapper {
                 internship.getSalary(),
                 internship.getQualification_required(),
                 internship.getDescription(),
-                internship.getCompany(),
-                internship.getStudentInternships()
+                internship.getCompany()
         );
     }
 
@@ -28,8 +27,7 @@ public class InternshipMapper {
                 internshipDTO.getSalary(),
                 internshipDTO.getQualification_required(),
                 internshipDTO.getDescription(),
-                internshipDTO.getCompany(),
-                internshipDTO.getStudentInternships()
+                internshipDTO.getCompany()
         );
     }
 }

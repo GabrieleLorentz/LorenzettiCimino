@@ -1,7 +1,6 @@
 package com.example.s_and_c.DTO;
 
 import com.example.s_and_c.Entities.Company;
-import com.example.s_and_c.Entities.StudentInternship;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,5 +22,4 @@ public class InternshipDTO {
     private String qualification_required;
     private String description;
     private Company company;
-    private List<StudentInternship> studentInternships;
 }

@@ -9,7 +9,7 @@
       <input type="password" placeholder="password" class="text-input-student-signup"/>
       <input type="text" placeholder="description" class="text-input-student-signup"/>
       <input type="text" placeholder="VAT" class="text-input-student-signup"/>
-      <button @click="" class="button">SIGN IN</button>
+      <button @click="" class="button">SIGN UP</button>
     </div>
   </div>
 </template>
@@ -35,5 +35,3 @@
   cursor: pointer; /* Cambia il cursore quando ci passi sopra */
 }
 </style>
-<script setup lang="ts">
-</script>

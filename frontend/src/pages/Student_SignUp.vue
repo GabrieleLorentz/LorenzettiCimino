@@ -4,16 +4,62 @@
       <img src="/src/assets/logo_s.png"  alt="Logo_s"/>
     </div>
     <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
-      <input type="text" placeholder="name" class="text-input-student-signup"/>
-      <input type="text" placeholder="surname" class="text-input-student-signup"/>
-      <input type="email" placeholder="e-mail" class="text-input-student-signup"/>
-      <input type="password" placeholder="password" class="text-input-student-signup"/>
-      <input type="text" placeholder="description" class="text-input-student-signup"/>
-      <input type="text" placeholder="CV" class="text-input-student-signup"/>
-      <button @click="" class="button">SIGN IN</button>
+      <input v-model="formData.name" type="text" placeholder="name" class="text-input-student-signup" />
+      <input v-model="formData.surname" type="text" placeholder="surname" class="text-input-student-signup" />
+      <input v-model="formData.email" type="email" placeholder="e-mail" class="text-input-student-signup" />
+      <input v-model="formData.password" type="password" placeholder="password" class="text-input-student-signup" />
+      <input v-model="formData.description" type="text" placeholder="description" class="text-input-student-signup" />
+      <!--<input v-model="formData.cv" type="text" placeholder="CV" class="text-input-student-signup" /> -->
+
+      <button @click="submitForm" class="button">SIGN UP</button>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      formData: {
+        name: '',
+        surname: '',
+        email: '',
+        password: '',
+        description: '',
+        //cv: ''
+      }
+    };
+  },
+  methods: {
+    submitForm() {
+      // Convert formData to JSON
+      const jsonData = JSON.stringify(this.formData);
+      console.log(jsonData);
+      // Esempio di invio al backend usando fetch
+      fetch('http://localhost:8080/api/student', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: jsonData
+      })
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error('Errore durante l\'invio dei dati');
+            }
+          })
+          .then(data => {
+            console.log('Risposta dal server:', data);
+          })
+          .catch(error => {
+            console.error('Errore:', error);
+          });
+    }
+  }
+};
+</script>
 
 <style>
 .text-input-student-signup {

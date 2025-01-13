@@ -32,7 +32,5 @@ public class Internship {
     private String description;
     @OneToOne
     private Company company;
-    @ManyToMany(mappedBy = "internships")
-    private List<Student> students = new ArrayList<>();
 
 }
