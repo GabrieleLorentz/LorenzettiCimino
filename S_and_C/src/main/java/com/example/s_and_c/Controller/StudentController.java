@@ -16,13 +16,6 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    //Build Add student REST API
-    @PostMapping
-    public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO studentDTO) {
-        StudentDTO savedStudent = studentService.createStudent(studentDTO);
-        return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
-    }
-
     @GetMapping({"{email}"})
     public ResponseEntity<StudentDTO> getStudentById(@PathVariable("email") String email) {
         StudentDTO savedStudent = studentService.getStudent(email);
