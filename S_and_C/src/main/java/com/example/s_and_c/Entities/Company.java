@@ -14,15 +14,14 @@ import lombok.Setter;
 @Table(name = "Company")
 public class Company {
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String name;
-    @Column(unique = true, nullable = false)
-    private Long vat_number;
     @Id
     private String email;
-    @Column(unique = false, nullable = false)
+    @Column(nullable = false)
     private String password;
-    @Column(unique = false, nullable = true)
+    @Column(nullable = true)
     private String description;
-
+    @Column(unique = true)
+    private Long vat_number;
 }

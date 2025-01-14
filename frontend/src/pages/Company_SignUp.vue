@@ -4,11 +4,11 @@
       <img src="/src/assets/logo_c.png"  alt="Logo_c"/>
     </div>
     <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
-      <input v-model="formData.name" type="text" placeholder="name" class="text-input-student-signup" />
-      <input v-model="formData.email" type="email" placeholder="e-mail" class="text-input-student-signup" />
-      <input v-model="formData.password" type="password" placeholder="password" class="text-input-student-signup" />
-      <input v-model="formData.description" type="text" placeholder="description" class="text-input-student-signup" />
-      <input v-model="formData.VAT" type="number" placeholder="VAT" class="text-input-student-signup" />
+      <input v-model="formData.name" type="text" placeholder="name" class="text-input-signin" />
+      <input v-model="formData.email" type="email" placeholder="e-mail" class="text-input-signin" />
+      <input v-model="formData.password" type="password" placeholder="password" class="text-input-signin" />
+      <input v-model="formData.description" type="text" placeholder="description" class="text-input-signin" />
+      <input v-model="formData.vat_number" type="number" placeholder="VAT" class="text-input-signin" />
 
       <button @click="submitForm" class="button">SIGN UP</button>
     </div>
@@ -24,7 +24,7 @@ export default {
         email: '',
         password: '',
         description: '',
-        VAT: ''
+        vat_number: ''
       }
     };
   },
@@ -34,11 +34,9 @@ export default {
       const jsonData = JSON.stringify(this.formData);
       console.log(jsonData);
       // Esempio di invio al backend usando fetch
-      fetch('http://localhost:8080/api/Company', {
+      fetch('http://localhost:8080/api/company', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: {'Content-Type': 'application/json'},
         body: jsonData
       })
           .then(response => {
@@ -48,12 +46,8 @@ export default {
               throw new Error('Errore durante l\'invio dei dati');
             }
           })
-          .then(data => {
-            console.log('Risposta dal server:', data);
-          })
-          .catch(error => {
-            console.error('Errore:', error);
-          });
+          .then(data => {console.log('Risposta dal server:', data);})
+          .catch(error => {console.error('Errore:', error);});
     }
   }
 };

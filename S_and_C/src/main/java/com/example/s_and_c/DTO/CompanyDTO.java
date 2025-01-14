@@ -13,8 +13,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CompanyDTO {
     private String name;
-    private Long vat_number;
     private String email;
     private String password;
     private String description;
+    private Long vat_number;
 }

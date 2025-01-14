@@ -8,19 +8,19 @@ public class CompanyMapper {
     public static CompanyDTO mapToCompanyDTO(Company company) {
         return new CompanyDTO(
                 company.getName(),
-                company.getVat_number(),
                 company.getEmail(),
                 company.getPassword(),
-                company.getDescription()
+                company.getDescription(),
+                company.getVat_number()
         );
     }
     public static Company mapToCompany(CompanyDTO companyDTO) {
         return new Company(
                 companyDTO.getName(),
-                companyDTO.getVat_number(),
                 companyDTO.getEmail(),
                 companyDTO.getPassword(),
-                companyDTO.getDescription()
+                companyDTO.getDescription(),
+                companyDTO.getVat_number()
         );
     }
 }

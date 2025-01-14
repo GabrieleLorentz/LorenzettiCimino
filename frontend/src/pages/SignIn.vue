@@ -4,12 +4,47 @@
       <img src="/src/assets/logo.png"  alt="Logo"/>
     </div>
     <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
-      <input type="email" placeholder="e-mail" class="text-input-signin"/>
-      <input type="password" placeholder="password" class="text-input-signin"/>
-      <button @click="" class="button">SIGN IN</button>
+      <input v-model="formData.email" type="email" placeholder="e-mail" class="text-input-signin" />
+      <input v-model="formData.password" type="password" placeholder="password" class="text-input-signin" />
+      <button @click="submitForm" class="button">SIGN IN</button>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      formData: {
+        email: '',
+        password: ''
+      }
+    };
+  },
+  methods: {
+    submitForm() {
+      // Convert formData to JSON
+      const jsonData = JSON.stringify(this.formData);
+      console.log(jsonData);
+      // Esempio di invio al backend usando fetch
+      fetch('http://localhost:8080/api/student/${this.formData.email}', {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'},
+        body: jsonData
+      })
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error('Errore durante l\'invio dei dati');
+            }
+          })
+          .then(data => {console.log('Risposta dal server:', data);})
+          .catch(error => {console.error('Errore:', error);});
+    }
+  }
+};
+</script>
 
 <style>
 .text-input-signin {
@@ -32,3 +67,5 @@
   cursor: pointer; /* Cambia il cursore quando ci passi sopra */
 }
 </style>
+<script setup lang="ts">
+</script>
