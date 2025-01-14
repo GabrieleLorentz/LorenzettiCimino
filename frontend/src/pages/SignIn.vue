@@ -27,8 +27,8 @@ export default {
       const jsonData = JSON.stringify(this.formData);
       console.log(jsonData);
       // Esempio di invio al backend usando fetch
-      fetch('http://localhost:8080/api/student/${this.formData.email}', {
-        method: 'GET',
+      fetch('http://localhost:8080/api/auth/authenticate', {
+        method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: jsonData
       })

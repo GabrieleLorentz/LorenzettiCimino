@@ -22,15 +22,6 @@ public class StudentServiceImpl implements StudentService {
     private InternshipRepository internshipRepository;
 
     @Override
-    public StudentDTO createStudent(StudentDTO studentDTO) {
-
-        Student student = StudentMapper.mapToStudent(studentDTO);
-        Student savedStudent = studentRepository.save(student);
-
-        return StudentMapper.mapToStudentDTO(savedStudent);
-    }
-
-    @Override
     public StudentDTO getStudent(String email) {
         Student student = studentRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Student with id " + email + " not found"));
         return StudentMapper.mapToStudentDTO(student);

@@ -21,10 +21,10 @@ export default {
   data() {
     return {
       formData: {
-        name: '',
-        surname: '',
         email: '',
         password: '',
+        name: '',
+        surname: '',
         description: ''
         //cv: ''
       }
@@ -36,7 +36,7 @@ export default {
       const jsonData = JSON.stringify(this.formData);
       console.log(jsonData);
       // Esempio di invio al backend usando fetch
-      fetch('http://localhost:8080/api/student', {
+      fetch('http://localhost:8080/api/auth/register', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: jsonData
