@@ -25,7 +25,8 @@ export default {
         password: '',
         name: '',
         surname: '',
-        description: ''
+        description: '',
+        vat_number: ''
         //cv: ''
       }
     };
@@ -36,14 +37,19 @@ export default {
       const jsonData = JSON.stringify(this.formData);
       console.log(jsonData);
       // Esempio di invio al backend usando fetch
-      fetch('http://localhost:8080/api/auth/register', {
+      fetch('http://localhost:8080/api/auth/registerStudent', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json',
+          'Accept': 'application/json'},
         body: jsonData
       })
           .then(response => {
             if (response.ok) {
-              return response.json();
+              return response.json().then(data => {
+                sessionStorage.setItem("token", data.token);
+                sessionStorage.setItem("email", data.email);
+                sessionStorage.setItem("role", data.role);
+              });
             } else {
               throw new Error('Errore durante l\'invio dei dati');
             }

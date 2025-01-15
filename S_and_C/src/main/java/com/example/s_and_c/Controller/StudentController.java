@@ -16,8 +16,8 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @GetMapping({"{email}"})
-    public ResponseEntity<StudentDTO> getStudentById(@PathVariable("email") String email) {
+    @GetMapping({"/{email}"})
+    public ResponseEntity<StudentDTO> getStudentById(@RequestParam String email) {
         StudentDTO savedStudent = studentService.getStudent(email);
         return ResponseEntity.ok(savedStudent);
     }

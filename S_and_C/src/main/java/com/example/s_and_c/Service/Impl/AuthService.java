@@ -3,17 +3,23 @@ package com.example.s_and_c.Service.Impl;
 import com.example.s_and_c.Controller.Auth.AuthRequest;
 import com.example.s_and_c.Controller.Auth.AuthenticationResponse;
 import com.example.s_and_c.Controller.Auth.RegisterRequest;
+import com.example.s_and_c.DTO.UserTokenDTO;
+import com.example.s_and_c.Entities.Company;
 import com.example.s_and_c.Entities.Status.Role;
 import com.example.s_and_c.Entities.Student;
+import com.example.s_and_c.Repositories.CompanyRepository;
 import com.example.s_and_c.Repositories.StudentRepository;
+import com.example.s_and_c.config.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +28,10 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final CompanyRepository companyRepository;
+    private final CustomUserDetailsService userDetailsService;
 
-    public AuthenticationResponse register(RegisterRequest registerRequest) {
+    public UserTokenDTO registerStudent(RegisterRequest registerRequest) {
         var student = new Student();
         student.setName(registerRequest.getName());
         student.setSurname(registerRequest.getSurname());
@@ -39,22 +47,39 @@ public class AuthService {
         var jwtToken = jwtService.generateToken(student);
 
         // Restituisci il token nell'AuthenticationResponse
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        return new UserTokenDTO(student.getEmail(),jwtToken,student.getRole());
     }
 
-    public AuthenticationResponse authenticate(AuthRequest authRequest) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                authRequest.getEmail(), authRequest.getPassword()));
-        var student = studentRepository.findByEmail(authRequest.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    public UserTokenDTO registerCompany(RegisterRequest request) {
+        var company = new Company();
+        company.setEmail(request.getEmail());
+        company.setName(request.getName());
+        company.setPassword(passwordEncoder.encode(request.getPassword()));
+        company.setVat_number(request.getVat_number());
+        company.setRole(Role.COMPANY);
+        companyRepository.save(company);
 
-        var jwtToken = jwtService.generateToken(student);
+        System.out.println("Company role set to: " + company.getRole());
 
-        // Restituisci il token nell'AuthenticationResponse
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        var jwtToken = jwtService.generateToken(company);
+        return new UserTokenDTO(company.getEmail(),jwtToken,company.getRole());
+    }
+
+    public UserTokenDTO authenticate(AuthRequest authRequest) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
+            );
+        } catch (BadCredentialsException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid credentials");
+        }
+
+        UserDetails user = userDetailsService.loadUserByUsername(authRequest.getEmail());
+        var jwtToken = jwtService.generateToken(user);
+        System.out.println(" role set to: " + userDetailsService.getRole(user.getUsername()));
+        System.out.println(" email set to: " + user.getUsername());
+        System.out.println(" token set to: " + jwtToken);
+
+        return new UserTokenDTO(user.getUsername(),jwtToken,userDetailsService.getRole(authRequest.getEmail()));
     }
 }

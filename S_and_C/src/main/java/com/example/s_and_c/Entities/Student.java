@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -57,10 +58,7 @@ public class Student implements UserDetails {
         this.description = description;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
+
 
     @Override
     public String getUsername() {
@@ -86,5 +84,9 @@ public class Student implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
 
+    }
 }

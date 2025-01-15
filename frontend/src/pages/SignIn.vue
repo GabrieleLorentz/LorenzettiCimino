@@ -34,9 +34,17 @@ export default {
       })
           .then(response => {
             if (response.ok) {
-              return response.json();
+              return response.json().then(data => {
+                console.log("Dati ricevuti:", data);
+              });
             } else {
-              throw new Error('Errore durante l\'invio dei dati');
+              console.log(response.status);
+              return response.json().then(data => {
+                console.log("Dati ricevuti:", data);
+                sessionStorage.setItem("token", data.token);
+                sessionStorage.setItem("email", data.email);
+                sessionStorage.setItem("role", data.role);
+              });
             }
           })
           .then(data => {console.log('Risposta dal server:', data);})

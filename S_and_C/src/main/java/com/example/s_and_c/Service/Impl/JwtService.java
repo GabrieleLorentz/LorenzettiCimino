@@ -6,6 +6,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.GrantedAuthority;
+
 
 import java.security.Key;
 import java.util.Date;
@@ -22,27 +24,41 @@ public class JwtService {
     }
 
     private Key getSignInKey() {
-        // Converti la chiave segreta in una Key valida
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+        byte[] keyBytes = SECRET_KEY.getBytes();
+        // Assicurati che la chiave sia della lunghezza corretta per HS256
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateToken(UserDetails userDetails) {
+        System.out.println("Generating token");
         return generateToken(new HashMap<>(), userDetails);
     }
 
     public Claims extractAllClaims(String jwtToken) {
-        return Jwts.parser().setSigningKey(getSignInKey())
+        return Jwts.parserBuilder()
+                .setSigningKey(getSignInKey())
                 .build()
-                .parseClaimsJws(jwtToken) // Analizza e valida il token
+                .parseClaimsJws(jwtToken)
                 .getBody();
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())
+        // Aggiungi il ruolo alle claims
+        Map<String, Object> claims = new HashMap<>(extraClaims);
+        claims.put("roles", userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList());
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256).compact();
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
+
+
 
     public boolean validateToken(String jwtToken, UserDetails userDetails) {
         final String email = extractEmail(jwtToken);

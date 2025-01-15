@@ -15,4 +15,5 @@ public class RegisterRequest {
     private String name;
     private String surname;
     private String description;
+    private Long vat_number;
 }
