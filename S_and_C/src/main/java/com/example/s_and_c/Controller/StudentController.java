@@ -1,6 +1,7 @@
 package com.example.s_and_c.Controller;
 
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
+import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
 import com.example.s_and_c.Service.StudentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,9 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @GetMapping({"/{email}"})
-    public ResponseEntity<StudentDTO> getStudentById(@RequestParam String email) {
-        StudentDTO savedStudent = studentService.getStudent(email);
+    @GetMapping({"/personalData"})
+    public ResponseEntity<StudentInternshipDTO> getStudentById(@RequestParam String email) {
+        StudentInternshipDTO savedStudent = studentService.getStudent(email);
         return ResponseEntity.ok(savedStudent);
     }
 
@@ -29,10 +30,10 @@ public class StudentController {
         return ResponseEntity.ok(allStudents);
     }
 
-    @PutMapping("/email")
+    @PutMapping("/updateData")
     //Build update student
     public ResponseEntity<StudentDTO> updateStudent(
-            @PathVariable("email") String email,
+            @RequestParam String email,
             @RequestBody StudentDTO updatedStudentDTO) {
         StudentDTO studentDTO = studentService.updateStudent(email, updatedStudentDTO);
         return ResponseEntity.ok(studentDTO);

@@ -1,7 +1,7 @@
 package com.example.s_and_c.Service.Impl;
 
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
-import com.example.s_and_c.Entities.Internship;
+import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
 import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.StudentMapper;
@@ -22,9 +22,9 @@ public class StudentServiceImpl implements StudentService {
     private InternshipRepository internshipRepository;
 
     @Override
-    public StudentDTO getStudent(String email) {
+    public StudentInternshipDTO getStudent(String email) {
         Student student = studentRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Student with id " + email + " not found"));
-        return StudentMapper.mapToStudentDTO(student);
+        return StudentMapper.mapToStudentInternshipDTO(student);
     }
 
     @Override

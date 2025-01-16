@@ -1,8 +1,7 @@
 package com.example.s_and_c.Service.Impl;
 
-import com.example.s_and_c.Controller.Auth.AuthRequest;
-import com.example.s_and_c.Controller.Auth.AuthenticationResponse;
-import com.example.s_and_c.Controller.Auth.RegisterRequest;
+import com.example.s_and_c.DTO.AuthRequestDTO;
+import com.example.s_and_c.DTO.RegisterRequestDTO;
 import com.example.s_and_c.DTO.UserTokenDTO;
 import com.example.s_and_c.Entities.Company;
 import com.example.s_and_c.Entities.Status.Role;
@@ -16,7 +15,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -31,13 +29,13 @@ public class AuthService {
     private final CompanyRepository companyRepository;
     private final CustomUserDetailsService userDetailsService;
 
-    public UserTokenDTO registerStudent(RegisterRequest registerRequest) {
+    public UserTokenDTO registerStudent(RegisterRequestDTO registerRequestDTO) {
         var student = new Student();
-        student.setName(registerRequest.getName());
-        student.setSurname(registerRequest.getSurname());
-        student.setEmail(registerRequest.getEmail());
-        student.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        student.setDescription(registerRequest.getDescription());
+        student.setName(registerRequestDTO.getName());
+        student.setSurname(registerRequestDTO.getSurname());
+        student.setEmail(registerRequestDTO.getEmail());
+        student.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword()));
+        student.setDescription(registerRequestDTO.getDescription());
         student.setRole(Role.STUDENT);  // Imposta il ruolo a STUDENT
 
         // Salva lo studente nel repository
@@ -50,7 +48,7 @@ public class AuthService {
         return new UserTokenDTO(student.getEmail(),jwtToken,student.getRole());
     }
 
-    public UserTokenDTO registerCompany(RegisterRequest request) {
+    public UserTokenDTO registerCompany(RegisterRequestDTO request) {
         var company = new Company();
         company.setEmail(request.getEmail());
         company.setName(request.getName());
@@ -65,21 +63,21 @@ public class AuthService {
         return new UserTokenDTO(company.getEmail(),jwtToken,company.getRole());
     }
 
-    public UserTokenDTO authenticate(AuthRequest authRequest) {
+    public UserTokenDTO authenticate(AuthRequestDTO authRequestDTO) {
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
+                    new UsernamePasswordAuthenticationToken(authRequestDTO.getEmail(), authRequestDTO.getPassword())
             );
         } catch (BadCredentialsException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid credentials");
         }
 
-        UserDetails user = userDetailsService.loadUserByUsername(authRequest.getEmail());
+        UserDetails user = userDetailsService.loadUserByUsername(authRequestDTO.getEmail());
         var jwtToken = jwtService.generateToken(user);
         System.out.println(" role set to: " + userDetailsService.getRole(user.getUsername()));
         System.out.println(" email set to: " + user.getUsername());
         System.out.println(" token set to: " + jwtToken);
 
-        return new UserTokenDTO(user.getUsername(),jwtToken,userDetailsService.getRole(authRequest.getEmail()));
+        return new UserTokenDTO(user.getUsername(),jwtToken,userDetailsService.getRole(authRequestDTO.getEmail()));
     }
 }

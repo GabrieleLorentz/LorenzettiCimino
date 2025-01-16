@@ -58,6 +58,15 @@ public class Student implements UserDetails {
         this.description = description;
     }
 
+    public Student(String name, String surname, String email, String password, String description, List<Internship> internships) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+        this.description = description;
+        this.internships = internships;
+    }
+
 
 
     @Override

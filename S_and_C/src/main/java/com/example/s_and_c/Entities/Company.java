@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +29,7 @@ public class Company implements UserDetails {
     private String email;
     @Column(nullable = false)
     private String password;
-    @Column(nullable = true)
+    @Column
     private String description;
     @Column(unique = true)
     private Long vat_number;

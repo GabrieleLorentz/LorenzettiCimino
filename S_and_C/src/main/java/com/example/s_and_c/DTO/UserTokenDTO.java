@@ -10,6 +10,4 @@ public class UserTokenDTO {
     private String email;
     private String token;
     private Role role;
-
-
 }

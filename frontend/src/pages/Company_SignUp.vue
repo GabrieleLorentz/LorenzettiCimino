@@ -51,7 +51,7 @@ export default {
               throw new Error('Errore durante l\'invio dei dati');
             }
           })
-          .then(data => {console.log('Risposta dal server:', data);})
+          .then(data => {console.log('Risposta dal server:',data);})
           .catch(error => {console.error('Errore:', error);});
     }
   }
