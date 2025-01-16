@@ -1,6 +1,7 @@
 package com.example.s_and_c.Service;
 
 import com.example.s_and_c.DTO.CompanyDTO;
+import com.example.s_and_c.DTO.InternshipDTO;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ public interface CompanyService {
     CompanyDTO updateCompany(String email, CompanyDTO companyDTO);
 
     void deleteCompany(String email);
+
 }

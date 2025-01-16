@@ -15,11 +15,12 @@ public class InternshipController {
 
     private final InternshipService internshipService;
 
+    /*
     @PostMapping
     public ResponseEntity<InternshipDTO> addInternship(@RequestBody InternshipDTO internshipDTO) {
-        InternshipDTO savedInternship = internshipService.createInternship(internshipDTO);
+        InternshipDTO savedInternship = internshipService.createInternship(internshipDTO, email);
         return new ResponseEntity<>(savedInternship, HttpStatus.CREATED);
-    }
+    }*/
 
     @GetMapping("{id}")
     public ResponseEntity<InternshipDTO> getInternshipById(@PathVariable int id) {

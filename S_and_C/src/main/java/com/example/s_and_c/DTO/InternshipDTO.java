@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -21,5 +20,5 @@ public class InternshipDTO {
     private int Salary;
     private String qualification_required;
     private String description;
-    private Company company;
+
 }

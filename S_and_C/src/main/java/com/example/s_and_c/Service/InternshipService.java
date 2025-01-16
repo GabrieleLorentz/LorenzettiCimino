@@ -1,9 +1,6 @@
 package com.example.s_and_c.Service;
 
-import com.example.s_and_c.DTO.CompanyDTO;
 import com.example.s_and_c.DTO.InternshipDTO;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

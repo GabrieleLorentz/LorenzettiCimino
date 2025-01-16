@@ -1,11 +1,19 @@
 package com.example.s_and_c.Mapper;
 
+import com.example.s_and_c.DTO.CompanyDTO;
 import com.example.s_and_c.DTO.InternshipDTO;
+import com.example.s_and_c.Entities.Company;
 import com.example.s_and_c.Entities.Internship;
+import com.example.s_and_c.Service.CompanyService;
+import com.example.s_and_c.Service.InternshipService;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class InternshipMapper {
 
-    public static InternshipDTO maptoInternshipDTO(Internship internship) {
+    private final CompanyService companyService;
+
+    public InternshipDTO maptoInternshipDTO(Internship internship) {
         return new InternshipDTO(
                 internship.getInternship_id(),
                 internship.getName(),
@@ -13,12 +21,12 @@ public class InternshipMapper {
                 internship.getEnd_date(),
                 internship.getSalary(),
                 internship.getQualification_required(),
-                internship.getDescription(),
-                internship.getCompany()
+                internship.getDescription()
+
         );
     }
 
-    public static Internship maptoInternship(InternshipDTO internshipDTO) {
+    public Internship maptoInternship(InternshipDTO internshipDTO) {
         return new Internship(
                 internshipDTO.getInternship_id(),
                 internshipDTO.getName(),
@@ -27,7 +35,6 @@ public class InternshipMapper {
                 internshipDTO.getSalary(),
                 internshipDTO.getQualification_required(),
                 internshipDTO.getDescription(),
-                internshipDTO.getCompany()
         );
     }
 }
