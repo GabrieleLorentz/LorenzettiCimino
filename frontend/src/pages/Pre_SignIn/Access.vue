@@ -39,9 +39,7 @@ body {
 </style>
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-// Inizializziamo il router
 const router = useRouter();
-// Funzione per navigare verso una pagina specifica
 const goToPage = (path: string) => {
   router.push(path);
 };
