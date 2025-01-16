@@ -6,7 +6,7 @@
     <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
       <button @click="selectOption('student')" :class="{'selected': selectedOption === 'student', 'button1': true}">STUDENT</button>
       <button @click="selectOption('company')" :class="{'selected': selectedOption === 'company', 'button1': true}">COMPANY</button>
-      <button @click="navigate" class="button">SIGN UP</button>
+      <button @click="goToPage" class="button">SIGN UP</button>
     </div>
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
     selectOption(option) {
       this.selectedOption = option; // Aggiorna l'opzione selezionata
     },
-    navigate() {
+    goToPage() {
       if (this.selectedOption === 'student') {
         this.$router.push('/student_signup'); // Naviga alla pagina di signup dello studente
       } else if (this.selectedOption === 'company') {
