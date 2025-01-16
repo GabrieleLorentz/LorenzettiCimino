@@ -54,6 +54,7 @@ public class AuthService {
         company.setName(request.getName());
         company.setPassword(passwordEncoder.encode(request.getPassword()));
         company.setVat_number(request.getVat_number());
+        company.setDescription(request.getDescription());
         company.setRole(Role.COMPANY);
         companyRepository.save(company);
 
