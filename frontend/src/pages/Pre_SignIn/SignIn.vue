@@ -39,6 +39,13 @@ export default {
                 sessionStorage.setItem("token", data.token);
                 sessionStorage.setItem("email", data.email);
                 sessionStorage.setItem("role", data.role);
+
+                if (data.role === 'STUDENT') {
+                  window.location.href = '/student_home';
+                }
+                else if (data.role === 'COMPANY') {
+                  window.location.href = '/company_home';
+                }
               });
             } else {
               console.log(response.status);
