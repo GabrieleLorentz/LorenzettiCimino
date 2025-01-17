@@ -1,7 +1,13 @@
 <template>
   <div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start">
 
-    <R_C_upper_part></R_C_upper_part>
+    <UpperPart subtitle="- Company"
+               :showAddIcon="true"
+               rank="/company_rank_list"
+               publicProfile="/company_public"
+               privateProfile="/company_private"
+
+    />
 
     <hr class="horizontal_line" />
 
@@ -39,7 +45,7 @@
 </style>
 
 <script setup lang="ts">
-import R_C_upper_part from '@/pages/Post_SignIn/Company/R_C_upper_part.vue';
+import UpperPart from '@/pages/Post_SignIn/upper_part.vue';
 
 import { useRouter } from 'vue-router';
 const router = useRouter();
