@@ -71,7 +71,7 @@ public class Company implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("COMPANY"));
+        return Collections.singletonList(new SimpleGrantedAuthority(this.role.toString()));
 
     }
 }

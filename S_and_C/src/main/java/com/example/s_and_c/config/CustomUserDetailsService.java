@@ -6,11 +6,16 @@ import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Repositories.CompanyRepository;
 import com.example.s_and_c.Repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,16 +26,26 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // Prima cerca tra gli studenti
+        // Cerca lo studente
         Optional<Student> student = studentRepository.findByEmail(email);
         if (student.isPresent()) {
-            return student.get();
+            return new User(
+                    email,
+                    student.get().getPassword(),
+                    student.get().getAuthorities() // Usa il metodo getAuthorities di Student
+            );
         }
 
-        // Se non è uno studente, cerca tra le compagnie
+        // Cerca la compagnia
         Optional<Company> company = companyRepository.findByEmail(email);
+
         if (company.isPresent()) {
-            return company.get();
+            System.out.println(company.get().getAuthorities());
+            return new User(
+                    email,
+                    company.get().getPassword(),
+                    company.get().getAuthorities() // Usa il metodo getAuthorities di Company
+            );
         }
 
         throw new UsernameNotFoundException("User not found with email: " + email);
