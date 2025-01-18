@@ -8,25 +8,32 @@ import com.example.s_and_c.Entities.Status.Role;
 import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Repositories.CompanyRepository;
 import com.example.s_and_c.Repositories.StudentRepository;
+import com.example.s_and_c.Service.AuthorizationService;
+import com.example.s_and_c.Utils.JwtTokenProvider;
 import com.example.s_and_c.config.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class AuthService implements AuthorizationService {
     private final StudentRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final CompanyRepository companyRepository;
+    private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailsService userDetailsService;
 
     public UserTokenDTO registerStudent(RegisterRequestDTO registerRequestDTO) {
@@ -45,7 +52,7 @@ public class AuthService {
         var jwtToken = jwtService.generateToken(student);
 
         // Restituisci il token nell'AuthenticationResponse
-        return new UserTokenDTO(student.getEmail(),jwtToken,student.getRole());
+        return new UserTokenDTO(student.getEmail(),jwtToken);
     }
 
     public UserTokenDTO registerCompany(RegisterRequestDTO request) {
@@ -61,24 +68,21 @@ public class AuthService {
         System.out.println("Company role set to: " + company.getRole());
 
         var jwtToken = jwtService.generateToken(company);
-        return new UserTokenDTO(company.getEmail(),jwtToken,company.getRole());
+        return new UserTokenDTO(company.getEmail(),jwtToken);
     }
 
     public UserTokenDTO authenticate(AuthRequestDTO authRequestDTO) {
         try {
-            authenticationManager.authenticate(
+            Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequestDTO.getEmail(), authRequestDTO.getPassword())
             );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String token = jwtTokenProvider.generateToken(authentication);
+            return new UserTokenDTO(authRequestDTO.getEmail(), token);
         } catch (BadCredentialsException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid credentials");
         }
 
-        UserDetails user = userDetailsService.loadUserByUsername(authRequestDTO.getEmail());
-        var jwtToken = jwtService.generateToken(user);
-        System.out.println(" role set to: " + userDetailsService.getRole(user.getUsername()));
-        System.out.println(" email set to: " + user.getUsername());
-        System.out.println(" token set to: " + jwtToken);
-
-        return new UserTokenDTO(user.getUsername(),jwtToken,userDetailsService.getRole(authRequestDTO.getEmail()));
     }
 }
