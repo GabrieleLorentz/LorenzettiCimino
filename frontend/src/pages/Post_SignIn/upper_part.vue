@@ -4,29 +4,48 @@
         <span class="orange">Student</span>
         <span class="black">&</span>
         <span class="orange">Company</span>
-        <span style="margin-left: 7px" class="black">- Company</span>
+        <span v-if="subtitle" style="margin-left: 7px" class="black">{{ subtitle }}</span>
       </div>
       <div style="display: flex; gap: 10px; align-items: center;">
-        <img src="/src/assets/+.svg" alt="+" class="icon3 icon_hover"/>
-        <img @click="goToPage('/company_rank_list.vue')" src="/src/assets/Rank_List.svg" alt="Rank_List" class="icon2 icon_hover"/>
+        <img v-if="showAddIcon" src="/src/assets/+.svg" alt="+" class="icon3 icon_hover"/>
+        <img @click="goToPage(rank)" src="/src/assets/Rank_List.svg" alt="Rank_List" class="icon2 icon_hover"/>
         <img src="/src/assets/campanella.svg" alt="campanella" class="icon2 icon_hover"/>
         <div class="profile-container">
           <img src="/src/assets/profilo.svg" alt="profilo" class="icon1 icon_hover"/>
           <div class="popup">
             <p>PROFILE</p>
-            <span @click="goToPage('/company_public.vue')" class="popup-link" style="margin-top: -25px;">Public</span>
-            <span @click="goToPage('/company_private.vue')" class="popup-link">Private</span>
+            <span @click="goToPage(publicProfile)" class="popup-link" style="margin-top: -25px;">Public</span>
+            <span @click="goToPage(privateProfile)" class="popup-link">Private</span>
           </div>
         </div>
       </div>
     </div>
 </template>
 
-<script setup lang="ts">
-import { useRouter } from 'vue-router';
-const router = useRouter();
-const goToPage = (path: string) => {
-  router.push(path);
+<script>
+export default {
+  props: {
+    subtitle: {
+      type: String,
+    },
+    showAddIcon: {
+      type: Boolean,
+    },
+    rank: {
+      type: String,
+    },
+    publicProfile: {
+      type: String,
+    },
+    privateProfile: {
+      type: String,
+    },
+  },
+  methods: {
+    goToPage(path) {
+      this.$router.push(path);
+    },
+  },
 };
 </script>
 

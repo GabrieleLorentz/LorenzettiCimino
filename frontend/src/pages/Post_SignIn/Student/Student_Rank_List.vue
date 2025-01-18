@@ -1,7 +1,11 @@
 <template>
   <div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start">
-
-    <R_S_upper_part></R_S_upper_part>
+    <UpperPart subtitle="- Student"
+               :showAddIcon="false"
+               rank="/student_rank_list"
+               publicProfile="/student_public"
+               privateProfile="/student_private"
+    />
 
     <hr class="horizontal_line" />
 
@@ -13,5 +17,5 @@
 </template>
 
 <script setup lang="ts">
-import R_S_upper_part from "@/pages/Post_SignIn/Student/R_S_upper_part.vue";
+import UpperPart from "@/pages/Post_SignIn/upper_part.vue";
 </script>
