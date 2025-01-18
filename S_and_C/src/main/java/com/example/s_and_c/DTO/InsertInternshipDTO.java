@@ -1,6 +1,5 @@
 package com.example.s_and_c.DTO;
 
-import com.example.s_and_c.Entities.Company;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InternshipDTO {
+public class InsertInternshipDTO {
     private long internship_id;
     private String name;
     private Date start_date;
@@ -20,5 +19,5 @@ public class InternshipDTO {
     private int Salary;
     private String qualification_required;
     private String description;
-
+    private String company_email;
 }

@@ -31,6 +31,8 @@ public class JwtService {
 
     public String generateToken(UserDetails userDetails) {
         System.out.println("Generating token");
+        System.out.println("Username: " + userDetails.getUsername());
+        System.out.println("Auth: " + userDetails.getAuthorities());
         return generateToken(new HashMap<>(), userDetails);
     }
 
@@ -48,7 +50,8 @@ public class JwtService {
         claims.put("roles", userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList());
-
+        System.out.println(userDetails.getAuthorities());
+        System.out.println(userDetails.getUsername());
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())

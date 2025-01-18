@@ -1,8 +1,7 @@
 package com.example.s_and_c.Controller;
 
 import com.example.s_and_c.DTO.CompanyDTO;
-import com.example.s_and_c.DTO.InternshipDTO;
-import com.example.s_and_c.Entities.Internship;
+import com.example.s_and_c.DTO.InsertInternshipDTO;
 import com.example.s_and_c.Service.CompanyService;
 import com.example.s_and_c.Service.InternshipService;
 import lombok.AllArgsConstructor;
@@ -20,15 +19,15 @@ public class CompanyController {
     private final CompanyService companyService;
     private final InternshipService internshipService;
 
-    @PostMapping
+    /*@PostMapping
     public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {
         CompanyDTO savedCompany = companyService.createCompany(companyDTO);
         return new ResponseEntity<>(savedCompany, HttpStatus.CREATED);
-    }
+    }*/
 
     @PostMapping
-    public ResponseEntity<InternshipDTO> createInternship(@RequestBody InternshipDTO internshipDTO) {
-        InternshipDTO savedInternship = internshipService.createInternship(internshipDTO);
+    public ResponseEntity<List<InsertInternshipDTO>> createInternship(@RequestBody InsertInternshipDTO insertInternshipDTO) {
+        List<InsertInternshipDTO> savedInternship = internshipService.createInternship(insertInternshipDTO);
         return new ResponseEntity<>(savedInternship, HttpStatus.CREATED);
     }
     @GetMapping({"{email}"})
