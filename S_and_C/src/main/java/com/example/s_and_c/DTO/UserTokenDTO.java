@@ -9,6 +9,6 @@ import lombok.Data;
 public class UserTokenDTO {
     private String email;
     private String token;
-    //private String role;
+    private String role;
 
 }

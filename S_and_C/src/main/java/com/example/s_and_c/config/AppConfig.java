@@ -38,8 +38,5 @@ public class AppConfig {
         return new BCryptPasswordEncoder(); // Utilizza BCrypt per crittografare le password
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
+
 }

@@ -31,10 +31,10 @@ public class AuthService implements AuthorizationService {
     private final StudentRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
     private final CompanyRepository companyRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailsService userDetailsService;
+    private final CustomAuthenticationManager authenticationManager;
 
     public UserTokenDTO registerStudent(RegisterRequestDTO registerRequestDTO) {
         var student = new Student();
@@ -52,7 +52,7 @@ public class AuthService implements AuthorizationService {
         var jwtToken = jwtService.generateToken(student);
 
         // Restituisci il token nell'AuthenticationResponse
-        return new UserTokenDTO(student.getEmail(),jwtToken);
+        return new UserTokenDTO(student.getEmail(),jwtToken, student.getRole().toString());
     }
 
     public UserTokenDTO registerCompany(RegisterRequestDTO request) {
@@ -68,7 +68,7 @@ public class AuthService implements AuthorizationService {
         System.out.println("Company role set to: " + company.getRole());
 
         var jwtToken = jwtService.generateToken(company);
-        return new UserTokenDTO(company.getEmail(),jwtToken);
+        return new UserTokenDTO(company.getEmail(),jwtToken, company.getRole().toString());
     }
 
     public UserTokenDTO authenticate(AuthRequestDTO authRequestDTO) {
@@ -77,9 +77,11 @@ public class AuthService implements AuthorizationService {
                     new UsernamePasswordAuthenticationToken(authRequestDTO.getEmail(), authRequestDTO.getPassword())
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
+            UserDetails userDetails = userDetailsService.loadUserByUsername(authRequestDTO.getEmail());
+            // Generate JWT token
             String token = jwtTokenProvider.generateToken(authentication);
-            return new UserTokenDTO(authRequestDTO.getEmail(), token);
+
+            return new UserTokenDTO(authRequestDTO.getEmail(), token, userDetails.getAuthorities().toString());
         } catch (BadCredentialsException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid credentials");
         }
