@@ -1,6 +1,7 @@
 package com.example.s_and_c.Mapper;
 
 import com.example.s_and_c.DTO.CompanyDTO;
+import com.example.s_and_c.DTO.UpdatedCompanyDTO;
 import com.example.s_and_c.Entities.Company;
 
 public class CompanyMapper {
@@ -21,6 +22,27 @@ public class CompanyMapper {
                 companyDTO.getPassword(),
                 companyDTO.getDescription(),
                 companyDTO.getVat_number()
+        );
+    }
+
+    public static UpdatedCompanyDTO mapToUpdatedCompanyDTO(Company company) {
+        return new UpdatedCompanyDTO(
+                company.getName(),
+                company.getEmail(),
+                company.getPassword(),
+                company.getDescription(),
+                company.getVat_number()
+        );
+    }
+
+    public static UpdatedCompanyDTO mapToUpdatedCompanyDTO(Company company, String token) {
+        return new UpdatedCompanyDTO(
+                company.getName(),
+                company.getEmail(),
+                company.getPassword(),
+                company.getDescription(),
+                company.getVat_number(),
+                token
         );
     }
 }

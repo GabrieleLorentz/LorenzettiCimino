@@ -1,8 +1,6 @@
 package com.example.s_and_c.Controller;
 
-import com.example.s_and_c.DTO.CompanyDTO;
-import com.example.s_and_c.DTO.InsertInternshipDTO;
-import com.example.s_and_c.DTO.InternshipDTO;
+import com.example.s_and_c.DTO.*;
 import com.example.s_and_c.Entities.Company;
 import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Repositories.CompanyRepository;
@@ -59,11 +57,15 @@ public class CompanyController {
         return ResponseEntity.ok(allCompanies);
     }
 
-    @PutMapping("/email")
-    public ResponseEntity<CompanyDTO> updateCompany(
-            @PathVariable("email") String email,
+    @PostMapping("/updateData")
+    public ResponseEntity<UpdatedCompanyDTO> updateCompany(
             @RequestBody CompanyDTO updatedCompanyDTO) {
-        CompanyDTO companyDTO = companyService.updateCompany(email, updatedCompanyDTO);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UpdatedCompanyDTO companyDTO = companyService.updateCompany(auth.getName(), updatedCompanyDTO);
+
+        if(companyDTO == null) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok(companyDTO);
     }
 
