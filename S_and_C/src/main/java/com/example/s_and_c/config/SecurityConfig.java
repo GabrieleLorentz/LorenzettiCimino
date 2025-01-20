@@ -27,7 +27,6 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter authenticationFilter;
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
-    private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -36,8 +35,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // Disabilita CSRF
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/student/**").hasAuthority("[STUDENT]")
-                        .requestMatchers("/api/company/**").hasAuthority("[COMPANY]")
+                        .requestMatchers("/api/student/**").hasAuthority("STUDENT")
+                        .requestMatchers("/api/company/**").hasAuthority("COMPANY")
                         .anyRequest().authenticated()
                 ).httpBasic(Customizer.withDefaults());
 

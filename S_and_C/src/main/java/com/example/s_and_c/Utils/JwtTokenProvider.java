@@ -1,4 +1,4 @@
-package com.example.s_and_c.Utils;
+/*package com.example.s_and_c.Utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -60,4 +60,4 @@ public class JwtTokenProvider {
             return false;
         }
     }
-}
+}*/

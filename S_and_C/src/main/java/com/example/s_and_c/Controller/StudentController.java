@@ -6,6 +6,9 @@ import com.example.s_and_c.Service.StudentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,10 +20,26 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @GetMapping({"/personalData"})
-    public ResponseEntity<StudentInternshipDTO> getStudentById(@RequestParam String email) {
-        StudentInternshipDTO savedStudent = studentService.getStudent(email);
-        return ResponseEntity.ok(savedStudent);
+    @GetMapping({"/personalData/{email}"})
+    public ResponseEntity<StudentInternshipDTO> getStudentById(@PathVariable String email) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(auth.getPrincipal().toString());
+        String authEmail = auth.getName();
+        if(!authEmail.equals(email)) {
+            return ResponseEntity.badRequest().build();
+        }
+        try {
+            StudentInternshipDTO student = studentService.getStudent(email);
+            if (student == null) {
+                return ResponseEntity.notFound().build();
+            }
+            System.out.println(student);
+            return ResponseEntity.ok(student);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @GetMapping

@@ -9,21 +9,19 @@ import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Repositories.CompanyRepository;
 import com.example.s_and_c.Repositories.StudentRepository;
 import com.example.s_and_c.Service.AuthorizationService;
-import com.example.s_and_c.Utils.JwtTokenProvider;
 import com.example.s_and_c.config.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +30,6 @@ public class AuthService implements AuthorizationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final CompanyRepository companyRepository;
-    private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailsService userDetailsService;
     private final CustomAuthenticationManager authenticationManager;
 
@@ -56,18 +53,26 @@ public class AuthService implements AuthorizationService {
     }
 
     public UserTokenDTO registerCompany(RegisterRequestDTO request) {
-        var company = new Company();
-        company.setEmail(request.getEmail());
-        company.setName(request.getName());
-        company.setPassword(passwordEncoder.encode(request.getPassword()));
-        company.setVat_number(request.getVat_number());
-        company.setDescription(request.getDescription());
-        company.setRole(Role.COMPANY);
-        companyRepository.save(company);
 
-        System.out.println("Company role set to: " + company.getRole());
-
-        var jwtToken = jwtService.generateToken(company);
+        Company company = companyRepository.findByEmail(request.getEmail()).orElse(null);
+        if(company == null) {
+            company = new Company();
+            company.setEmail(request.getEmail());
+            company.setName(request.getName());
+            company.setPassword(passwordEncoder.encode(request.getPassword()));
+            company.setVat_number(request.getVat_number());
+            company.setDescription(request.getDescription());
+            company.setRole(Role.COMPANY);
+            companyRepository.save(company);
+        }
+        else {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Company already exists");
+            }
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        var jwtToken = jwtService.generateToken(authentication);
         return new UserTokenDTO(company.getEmail(),jwtToken, company.getRole().toString());
     }
 
@@ -76,10 +81,11 @@ public class AuthService implements AuthorizationService {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequestDTO.getEmail(), authRequestDTO.getPassword())
             );
+            System.out.println(authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UserDetails userDetails = userDetailsService.loadUserByUsername(authRequestDTO.getEmail());
             // Generate JWT token
-            String token = jwtTokenProvider.generateToken(authentication);
+            String token = jwtService.generateToken(authentication);
 
             return new UserTokenDTO(authRequestDTO.getEmail(), token, userDetails.getAuthorities().toString());
         } catch (BadCredentialsException e) {
