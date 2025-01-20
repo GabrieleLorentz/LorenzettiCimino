@@ -1,6 +1,7 @@
 package com.example.s_and_c.Mapper;
 
 import com.example.s_and_c.DTO.InsertInternshipDTO;
+import com.example.s_and_c.DTO.InternshipDTO;
 import com.example.s_and_c.Entities.Company;
 import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Service.CompanyService;
@@ -11,8 +12,8 @@ public class InternshipMapper {
 
     private final CompanyService companyService;
 
-    public static InsertInternshipDTO maptoInternshipDTO(Internship internship) {
-        return new InsertInternshipDTO(
+    public static InternshipDTO maptoInternshipDTO(Internship internship) {
+        return new InternshipDTO(
                 internship.getInternship_id(),
                 internship.getName(),
                 internship.getStart_date(),
@@ -26,7 +27,6 @@ public class InternshipMapper {
 
     public static Internship maptoInternship(InsertInternshipDTO insertInternshipDTO, Company company) {
         return new Internship(
-                insertInternshipDTO.getInternship_id(),
                 insertInternshipDTO.getName(),
                 insertInternshipDTO.getStart_date(),
                 insertInternshipDTO.getEnd_date(),

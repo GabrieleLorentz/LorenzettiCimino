@@ -1,18 +1,20 @@
 package com.example.s_and_c.Service;
 
 import com.example.s_and_c.DTO.InsertInternshipDTO;
+import com.example.s_and_c.DTO.InternshipDTO;
 
 import java.util.List;
 
 
 public interface InternshipService {
-    List<InsertInternshipDTO> createInternship(InsertInternshipDTO insertInternshipDTO);
 
-    InsertInternshipDTO getInternship(int id);
+    List<InternshipDTO> createInternship(String email, InsertInternshipDTO insertInternshipDTO);
 
-    List<InsertInternshipDTO> getAllInternships();
+    InternshipDTO getInternship(int id);
 
-    InsertInternshipDTO updateInternship(int id, InsertInternshipDTO insertInternshipDTODTO);
+    List<InternshipDTO> getAllInternships();
+
+    InternshipDTO updateInternship(int id, InsertInternshipDTO insertInternshipDTODTO);
 
     void deleteInternship(int id);
 }

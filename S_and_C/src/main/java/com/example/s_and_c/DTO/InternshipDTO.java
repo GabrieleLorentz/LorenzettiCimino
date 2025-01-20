@@ -11,11 +11,13 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InsertInternshipDTO {
+public class InternshipDTO {
+    private long id;
     private String name;
     private Date start_date;
     private Date End_date;
     private int Salary;
     private String qualification_required;
     private String description;
+    private String company_email;
 }

@@ -33,4 +33,13 @@ public class Internship {
     @OneToOne
     private Company company;
 
+    public Internship(String name, Date start_date, Date end_date, int salary, String qualification_required, String description, Company company) {
+        this.name = name;
+        this.start_date = start_date;
+        this.end_date = end_date;
+        Salary = salary;
+        this.qualification_required = qualification_required;
+        this.description = description;
+        this.company = company;
+    }
 }

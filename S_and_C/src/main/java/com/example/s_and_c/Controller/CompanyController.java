@@ -2,6 +2,10 @@ package com.example.s_and_c.Controller;
 
 import com.example.s_and_c.DTO.CompanyDTO;
 import com.example.s_and_c.DTO.InsertInternshipDTO;
+import com.example.s_and_c.DTO.InternshipDTO;
+import com.example.s_and_c.Entities.Company;
+import com.example.s_and_c.Entities.Internship;
+import com.example.s_and_c.Repositories.CompanyRepository;
 import com.example.s_and_c.Service.CompanyService;
 import com.example.s_and_c.Service.InternshipService;
 import lombok.AllArgsConstructor;
@@ -20,6 +24,7 @@ public class CompanyController {
 
     private final CompanyService companyService;
     private final InternshipService internshipService;
+    private final CompanyRepository companyRepository;
 
     /*@PostMapping
     public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {
@@ -27,12 +32,13 @@ public class CompanyController {
         return new ResponseEntity<>(savedCompany, HttpStatus.CREATED);
     }*/
 
-    @PostMapping
-    public ResponseEntity<List<InsertInternshipDTO>> createInternship(@RequestBody InsertInternshipDTO insertInternshipDTO) {
-
-        List<InsertInternshipDTO> savedInternship = internshipService.createInternship(insertInternshipDTO);
+    @PostMapping("/insertInternship")
+    public ResponseEntity<List<InternshipDTO>> createInternship(@RequestBody InsertInternshipDTO insertInternshipDTO) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<InternshipDTO> savedInternship = internshipService.createInternship(auth.getName(), insertInternshipDTO);
         return new ResponseEntity<>(savedInternship, HttpStatus.CREATED);
     }
+
     @GetMapping({"{email}"})
     public ResponseEntity<CompanyDTO> getCompanyById(@PathVariable ("email") String email) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

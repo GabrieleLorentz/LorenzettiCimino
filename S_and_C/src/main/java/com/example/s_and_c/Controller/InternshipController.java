@@ -21,6 +21,7 @@ public class InternshipController {
         return new ResponseEntity<>(savedInternship, HttpStatus.CREATED);
     }*/
 
+    /*
     @GetMapping("{id}")
     public ResponseEntity<InsertInternshipDTO> getInternshipById(@PathVariable int id) {
         InsertInternshipDTO savedInternship = internshipService.getInternship(id);
@@ -40,5 +41,5 @@ public class InternshipController {
             @PathVariable("id") int id) {
         internshipService.deleteInternship(id);
         return ResponseEntity.ok("Internship deleted succesfully");
-    }
+    }*/
 }

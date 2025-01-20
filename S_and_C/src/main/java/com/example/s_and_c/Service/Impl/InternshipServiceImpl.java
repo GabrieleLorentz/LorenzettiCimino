@@ -2,6 +2,7 @@ package com.example.s_and_c.Service.Impl;
 
 
 import com.example.s_and_c.DTO.InsertInternshipDTO;
+import com.example.s_and_c.DTO.InternshipDTO;
 import com.example.s_and_c.Entities.Company;
 import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
@@ -13,7 +14,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,39 +24,38 @@ public class InternshipServiceImpl implements InternshipService {
 
 
     @Override
-    public List<InsertInternshipDTO> createInternship(InsertInternshipDTO insertInternshipDTO) {
+    public List<InternshipDTO> createInternship(String email, InsertInternshipDTO insertInternshipDTO) {
 
-        Optional<Company> insertingCompany = companyRepository.findByEmail(insertInternshipDTO.getCompany_email());
-        Company insCompany = insertingCompany.orElse(null);
-        if (insCompany != null) {
-            Internship internship = InternshipMapper.maptoInternship(insertInternshipDTO, insCompany);
+        Company insertingCompany = companyRepository.findByEmail(email).orElse(null);
+        if (insertingCompany != null) {
+            Internship internship = InternshipMapper.maptoInternship(insertInternshipDTO, insertingCompany);
             internshipRepository.save(internship);
         }
         else throw new ResourceNotFoundException("Company not found, invalid request");
 
-        return getAllInternshipsByEmail(insCompany);
+        return getAllInternshipsByEmail(insertingCompany);
     }
 
-    private List<InsertInternshipDTO> getAllInternshipsByEmail(Company insCompany) {
+    private List<InternshipDTO> getAllInternshipsByEmail(Company insCompany) {
         List<Internship> internships = internshipRepository.findByCompany(insCompany);
         return internships.stream().map(InternshipMapper::maptoInternshipDTO).collect(Collectors.toList());
 
     }
 
     @Override
-    public InsertInternshipDTO getInternship(int id) {
+    public InternshipDTO getInternship(int id) {
         Internship internship = internshipRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Internship not found"));
         return InternshipMapper.maptoInternshipDTO(internship);
     }
 
     @Override
-    public List<InsertInternshipDTO> getAllInternships() {
+    public List<InternshipDTO> getAllInternships() {
         List<Internship> internships = internshipRepository.findAll();
         return internships.stream().map(InternshipMapper::maptoInternshipDTO).collect(Collectors.toList());
     }
 
     @Override
-    public InsertInternshipDTO updateInternship(int id, InsertInternshipDTO insertInternshipDTODTO) {
+    public InternshipDTO updateInternship(int id, InsertInternshipDTO insertInternshipDTODTO) {
         Internship internship = internshipRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Internship not found"));
 
         internship.setName(insertInternshipDTODTO.getName());
