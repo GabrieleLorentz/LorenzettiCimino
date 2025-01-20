@@ -23,7 +23,6 @@ public class StudentController {
     @GetMapping({"/personalData/{email}"})
     public ResponseEntity<StudentInternshipDTO> getStudentById(@PathVariable String email) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(auth.getPrincipal().toString());
         String authEmail = auth.getName();
         if(!authEmail.equals(email)) {
             return ResponseEntity.badRequest().build();

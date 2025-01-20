@@ -7,6 +7,8 @@ import com.example.s_and_c.Service.InternshipService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,12 +29,21 @@ public class CompanyController {
 
     @PostMapping
     public ResponseEntity<List<InsertInternshipDTO>> createInternship(@RequestBody InsertInternshipDTO insertInternshipDTO) {
+
         List<InsertInternshipDTO> savedInternship = internshipService.createInternship(insertInternshipDTO);
         return new ResponseEntity<>(savedInternship, HttpStatus.CREATED);
     }
     @GetMapping({"{email}"})
     public ResponseEntity<CompanyDTO> getCompanyById(@PathVariable ("email") String email) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+        if(!authEmail.equals(email)) {
+            return ResponseEntity.badRequest().build();
+        }
         CompanyDTO savedCompany = companyService.getCompany(email);
+        if (savedCompany == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(savedCompany);
     }
 
