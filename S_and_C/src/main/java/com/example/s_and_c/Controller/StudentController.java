@@ -2,6 +2,7 @@ package com.example.s_and_c.Controller;
 
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
+import com.example.s_and_c.DTO.UpdatedStudentDTO;
 import com.example.s_and_c.Service.StudentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/student")
 public class StudentController {
+
 
     private final StudentService studentService;
 
@@ -48,12 +51,15 @@ public class StudentController {
         return ResponseEntity.ok(allStudents);
     }
 
-    @PutMapping("/updateData")
+    @PostMapping("/updateData")
     //Build update student
-    public ResponseEntity<StudentDTO> updateStudent(
-            @RequestParam String email,
+    public ResponseEntity<UpdatedStudentDTO> updateStudent(
             @RequestBody StudentDTO updatedStudentDTO) {
-        StudentDTO studentDTO = studentService.updateStudent(email, updatedStudentDTO);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UpdatedStudentDTO studentDTO = studentService.updateStudent(auth.getName(), updatedStudentDTO);
+        if (studentDTO == null) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok(studentDTO);
     }
 
