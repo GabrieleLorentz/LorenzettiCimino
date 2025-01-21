@@ -64,6 +64,8 @@ export default {
                 sessionStorage.setItem("token", data.token);
                 sessionStorage.setItem("email", data.email);
                 sessionStorage.setItem("role", data.role);
+
+                this.$router.push('/student_home');
               });
             } else {
               throw new Error('Errore durante l\'invio dei dati');
