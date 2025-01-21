@@ -23,15 +23,15 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @GetMapping({"/personalData/{email}"})
-    public ResponseEntity<StudentInternshipDTO> getStudentById(@PathVariable String email) {
+    @GetMapping({"/personalData"})
+    public ResponseEntity<StudentInternshipDTO> getStudentById(/*@PathVariable String email*/) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
-        if(!authEmail.equals(email)) {
+        /*if(!authEmail.equals(email)) {
             return ResponseEntity.badRequest().build();
-        }
+        }*/
         try {
-            StudentInternshipDTO student = studentService.getStudent(email);
+            StudentInternshipDTO student = studentService.getStudent(authEmail);
             if (student == null) {
                 return ResponseEntity.notFound().build();
             }

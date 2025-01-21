@@ -35,7 +35,7 @@ public class Student implements UserDetails {
     @ManyToMany
     @JoinTable(//da risolvere
             name = "student_internship", // Nome della tabella di join
-            joinColumns = @JoinColumn(name = "student_email"), // FK verso `students`
+            joinColumns = @JoinColumn(name = "email"), // FK verso `students`
             inverseJoinColumns = @JoinColumn(name = "internship_id") // FK verso `internships`
     )
     private List<Internship> internships = new ArrayList<>();
