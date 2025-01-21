@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -14,8 +15,8 @@ import java.util.Date;
 public class InternshipDTO {
     private long id;
     private String name;
-    private Date start_date;
-    private Date End_date;
+    private LocalDate start_date;
+    private LocalDate End_date;
     private int Salary;
     private String qualification_required;
     private String description;

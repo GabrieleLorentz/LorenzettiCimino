@@ -66,8 +66,8 @@ public class InternshipServiceImpl implements InternshipService {
 
         internship.setName(insertInternshipDTODTO.getName());
         internship.setDescription(insertInternshipDTODTO.getDescription());
-        internship.setStart_date(insertInternshipDTODTO.getStart_date());
-        internship.setEnd_date(insertInternshipDTODTO.getEnd_date());
+        internship.setStartDate(insertInternshipDTODTO.getStart_date());
+        internship.setEndDate(insertInternshipDTODTO.getEnd_date());
         internship.setSalary(insertInternshipDTODTO.getSalary());
         Internship updatedInternship = internshipRepository.save(internship);
 
@@ -115,11 +115,11 @@ public class InternshipServiceImpl implements InternshipService {
         }
         else if (!hasKeyword && !hasCompany && hasMaxEnd && !hasMinStart && !hasQualification) {
             // Solo max end date
-            internships = internshipRepository.findByEnd_dateLessThanEqual(maxEndLocal);
+            internships = internshipRepository.findByEndDateIsLessThanEqual(maxEndLocal);
         }
         else if (!hasKeyword && !hasCompany && !hasMaxEnd && hasMinStart && !hasQualification) {
             // Solo min start date
-            internships = internshipRepository.findByStart_dateGreaterThanEqual(minStartLocal);
+            internships = internshipRepository.findByStartDateGreaterThanEqual(minStartLocal);
         }
         else if (!hasKeyword && !hasCompany && !hasMaxEnd && !hasMinStart && hasQualification) {
             // Solo qualification

@@ -18,8 +18,8 @@ public interface InternshipRepository extends JpaRepository<Internship, Integer>
     @Query("SELECT DISTINCT i FROM Internship i JOIN i.qualification_required q WHERE LOWER(q) LIKE LOWER(CONCAT('%', :qualification, '%'))")
     List<Internship> findByQualificationContainingIgnoreCase(List<String> qualification);
 
-    List<Internship> findByEnd_dateLessThanEqual(LocalDate maxEnd);
-    List<Internship> findByStart_dateGreaterThanEqual(LocalDate minStart);
+    List<Internship> findByEndDateIsLessThanEqual(LocalDate maxEnd);
+    List<Internship> findByStartDateGreaterThanEqual(LocalDate minStart);
 
     // Keyword + Company
     @Query("SELECT i FROM Internship i WHERE " +
@@ -33,8 +33,8 @@ public interface InternshipRepository extends JpaRepository<Internship, Integer>
     // Keyword + Date ranges
     @Query("SELECT i FROM Internship i WHERE " +
             "LOWER(i.name) LIKE LOWER(CONCAT('%', :keyword, '%')) AND " +
-            "(:maxEnd IS NULL OR i.end_date <= :maxEnd) AND " +
-            "(:minStart IS NULL OR i.start_date >= :minStart)")
+            "(:maxEnd IS NULL OR i.endDate <= :maxEnd) AND " +
+            "(:minStart IS NULL OR i.startDate >= :minStart)")
     List<Internship> findByKeywordAndDates(
             @Param("keyword") String keyword,
             @Param("maxEnd") LocalDate maxEnd,
@@ -53,8 +53,8 @@ public interface InternshipRepository extends JpaRepository<Internship, Integer>
     // Company + Date ranges
     @Query("SELECT i FROM Internship i WHERE " +
             "LOWER(i.company.name) LIKE LOWER(CONCAT('%', :companyName, '%')) AND " +
-            "(:maxEnd IS NULL OR i.end_date <= :maxEnd) AND " +
-            "(:minStart IS NULL OR i.start_date >= :minStart)")
+            "(:maxEnd IS NULL OR i.endDate <= :maxEnd) AND " +
+            "(:minStart IS NULL OR i.startDate >= :minStart)")
     List<Internship> findByCompanyAndDates(
             @Param("companyName") String companyName,
             @Param("maxEnd") LocalDate maxEnd,
@@ -72,8 +72,8 @@ public interface InternshipRepository extends JpaRepository<Internship, Integer>
 
     // Dates + Qualification
     @Query("SELECT DISTINCT i FROM Internship i JOIN i.qualification_required q WHERE " +
-            "(:maxEnd IS NULL OR i.end_date <= :maxEnd) AND " +
-            "(:minStart IS NULL OR i.start_date >= :minStart) AND " +
+            "(:maxEnd IS NULL OR i.endDate <= :maxEnd) AND " +
+            "(:minStart IS NULL OR i.startDate >= :minStart) AND " +
             "LOWER(q) LIKE LOWER(CONCAT('%', :qualification, '%'))")
     List<Internship> findByDatesAndQualification(
             @Param("maxEnd") LocalDate maxEnd,
@@ -85,8 +85,8 @@ public interface InternshipRepository extends JpaRepository<Internship, Integer>
     @Query("SELECT i FROM Internship i WHERE " +
             "LOWER(i.name) LIKE LOWER(CONCAT('%', :keyword, '%')) AND " +
             "LOWER(i.company.name) LIKE LOWER(CONCAT('%', :companyName, '%')) AND " +
-            "(:maxEnd IS NULL OR i.end_date <= :maxEnd) AND " +
-            "(:minStart IS NULL OR i.start_date >= :minStart)")
+            "(:maxEnd IS NULL OR i.endDate <= :maxEnd) AND " +
+            "(:minStart IS NULL OR i.startDate >= :minStart)")
     List<Internship> findByKeywordAndCompanyAndDates(
             @Param("keyword") String keyword,
             @Param("companyName") String companyName,
@@ -108,8 +108,8 @@ public interface InternshipRepository extends JpaRepository<Internship, Integer>
     // Company + Dates + Qualification
     @Query("SELECT DISTINCT i FROM Internship i JOIN i.qualification_required q WHERE " +
             "LOWER(i.company.name) LIKE LOWER(CONCAT('%', :companyName, '%')) AND " +
-            "(:maxEnd IS NULL OR i.end_date <= :maxEnd) AND " +
-            "(:minStart IS NULL OR i.start_date >= :minStart) AND " +
+            "(:maxEnd IS NULL OR i.endDate <= :maxEnd) AND " +
+            "(:minStart IS NULL OR i.startDate >= :minStart) AND " +
             "LOWER(q) LIKE LOWER(CONCAT('%', :qualification, '%'))")
     List<Internship> findByCompanyAndDatesAndQualification(
             @Param("companyName") String companyName,
@@ -122,8 +122,8 @@ public interface InternshipRepository extends JpaRepository<Internship, Integer>
     @Query("SELECT DISTINCT i FROM Internship i LEFT JOIN i.qualification_required q WHERE " +
             "(:keyword IS NULL OR LOWER(i.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) AND " +
             "(:companyName IS NULL OR LOWER(i.company.name) LIKE LOWER(CONCAT('%', :companyName, '%'))) AND " +
-            "(:maxEnd IS NULL OR i.end_date <= :maxEnd) AND " +
-            "(:minStart IS NULL OR i.start_date >= :minStart) AND " +
+            "(:maxEnd IS NULL OR i.endDate <= :maxEnd) AND " +
+            "(:minStart IS NULL OR i.startDate >= :minStart) AND " +
             "(:qualification IS NULL OR LOWER(q) LIKE LOWER(CONCAT('%', :qualification, '%')))")
     List<Internship> findByAllCriteria(
             @Param("keyword") String keyword,

@@ -16,8 +16,8 @@ public class InternshipMapper {
         return new InternshipDTO(
                 internship.getInternship_id(),
                 internship.getName(),
-                internship.getStart_date(),
-                internship.getEnd_date(),
+                internship.getStartDate(),
+                internship.getEndDate(),
                 internship.getSalary(),
                 internship.getQualification_required(),
                 internship.getDescription(),

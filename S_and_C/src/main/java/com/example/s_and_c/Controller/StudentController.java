@@ -5,6 +5,10 @@ import com.example.s_and_c.DTO.SearchDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
 import com.example.s_and_c.DTO.UpdatedStudentDTO;
+import com.example.s_and_c.Entities.Internship;
+import com.example.s_and_c.Entities.Student;
+import com.example.s_and_c.Repositories.InternshipRepository;
+import com.example.s_and_c.Repositories.StudentRepository;
 import com.example.s_and_c.Service.InternshipService;
 import com.example.s_and_c.Service.StudentService;
 import lombok.AllArgsConstructor;
@@ -26,6 +30,8 @@ public class StudentController {
 
     private final StudentService studentService;
     private final InternshipService internshipService;
+    private final InternshipRepository internshipRepository;
+    private final StudentRepository studentRepository;
 
     @GetMapping({"/personalData"})
     public ResponseEntity<StudentInternshipDTO> getStudentById() {
@@ -58,6 +64,7 @@ public class StudentController {
             @RequestBody StudentDTO updatedStudentDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UpdatedStudentDTO studentDTO = studentService.updateStudent(auth.getName(), updatedStudentDTO);
+        //aggiungere il controllo in caso di cambio dati, che sia sistemato anche nelle internship
         if (studentDTO == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -74,6 +81,24 @@ public class StudentController {
             return ResponseEntity.noContent().build();
         }
         else return ResponseEntity.ok(internshipDTOList);
+
+    }
+
+    @PostMapping("requestInternship")
+    public ResponseEntity<InternshipDTO> requestInternship(@RequestBody int internship_id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+        Internship internship = internshipRepository.findById(internship_id).orElse(null);
+        if(internship == null){
+            return ResponseEntity.badRequest().build();
+        }
+        Student student = studentRepository.findByEmail(authEmail).orElse(null);
+        if(student == null){
+            return ResponseEntity.badRequest().build();
+        }
+        internship.addStudent(student);
+        // notifica la company
+        return ResponseEntity.ok().build();
 
     }
 

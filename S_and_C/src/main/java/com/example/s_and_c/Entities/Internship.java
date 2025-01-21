@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -24,23 +23,29 @@ public class Internship {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private LocalDate start_date;
+    private LocalDate startDate;
     @Column(nullable = false)
-    private LocalDate end_date;
+    private LocalDate endDate;
     @Column(nullable = false)
     private int Salary;
     private String qualification_required;
     private String description;
     @OneToOne
     private Company company;
+    @OneToMany
+    private List<Student> appliedStudents = new ArrayList<>();
 
-    public Internship(String name, LocalDate start_date, LocalDate end_date, int salary, String qualification_required, String description, Company company) {
+    public Internship(String name, LocalDate startDate, LocalDate endDate, int salary, String qualification_required, String description, Company company) {
         this.name = name;
-        this.start_date = start_date;
-        this.end_date = end_date;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.Salary = salary;
         this.qualification_required = qualification_required;
         this.description = description;
         this.company = company;
+    }
+
+    public void addStudent(Student student) {
+        appliedStudents.add(student);
     }
 }
