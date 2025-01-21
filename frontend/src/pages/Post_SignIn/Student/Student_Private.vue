@@ -155,7 +155,6 @@ function receiveData() {
           password: localStorage.getItem("password"),
           description: data.description
         };
-        // Copy data to editedData
         editedData.value = { ...originalData.value };
       })
       .catch(error => {

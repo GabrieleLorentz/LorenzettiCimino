@@ -61,9 +61,9 @@ export default {
           .then(response => {
             if (response.ok) {
               return response.json().then(data => {
-                sessionStorage.setItem("token", data.token);
-                sessionStorage.setItem("email", data.email);
-                sessionStorage.setItem("role", data.role);
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("email", data.email);
+                localStorage.setItem("role", data.role);
 
                 this.$router.push('/student_home');
               });
