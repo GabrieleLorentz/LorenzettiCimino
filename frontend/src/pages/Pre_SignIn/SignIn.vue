@@ -42,7 +42,7 @@ export default {
                 localStorage.setItem("password", this.formData.password);
 
                 if (data.role === '[STUDENT]') {
-                  window.location.href = '/student_home';
+                  window.location.href = '/student_home';  //funziona
                 }
                 else if (data.role === '[COMPANY]') {
                   window.location.href = '/company_home';
