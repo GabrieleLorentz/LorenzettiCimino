@@ -1,4 +1,4 @@
-package com.example.s_and_c.Controller;
+/*package com.example.s_and_c.Controller;
 
 
 import com.example.s_and_c.DTO.InsertInternshipDTO;
@@ -41,5 +41,6 @@ public class InternshipController {
             @PathVariable("id") int id) {
         internshipService.deleteInternship(id);
         return ResponseEntity.ok("Internship deleted succesfully");
-    }*/
+    }
 }
+*/

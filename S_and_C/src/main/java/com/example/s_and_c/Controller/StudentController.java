@@ -1,8 +1,11 @@
 package com.example.s_and_c.Controller;
 
+import com.example.s_and_c.DTO.InternshipDTO;
+import com.example.s_and_c.DTO.SearchDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
 import com.example.s_and_c.DTO.UpdatedStudentDTO;
+import com.example.s_and_c.Service.InternshipService;
 import com.example.s_and_c.Service.StudentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,14 +25,12 @@ public class StudentController {
 
 
     private final StudentService studentService;
+    private final InternshipService internshipService;
 
     @GetMapping({"/personalData"})
-    public ResponseEntity<StudentInternshipDTO> getStudentById(/*@PathVariable String email*/) {
+    public ResponseEntity<StudentInternshipDTO> getStudentById() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
-        /*if(!authEmail.equals(email)) {
-            return ResponseEntity.badRequest().build();
-        }*/
         try {
             StudentInternshipDTO student = studentService.getStudent(authEmail);
             if (student == null) {
@@ -62,6 +63,20 @@ public class StudentController {
         }
         return ResponseEntity.ok(studentDTO);
     }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<InternshipDTO>> searchInternships(
+            @RequestBody SearchDTO searchDTO){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+        List<InternshipDTO> internshipDTOList = internshipService.findMatch(searchDTO);
+        if(internshipDTOList.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        else return ResponseEntity.ok(internshipDTOList);
+
+    }
+
 
     @DeleteMapping("/{email}")
     public ResponseEntity<String> deleteStudent(

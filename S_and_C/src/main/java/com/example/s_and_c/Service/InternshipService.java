@@ -2,6 +2,7 @@ package com.example.s_and_c.Service;
 
 import com.example.s_and_c.DTO.InsertInternshipDTO;
 import com.example.s_and_c.DTO.InternshipDTO;
+import com.example.s_and_c.DTO.SearchDTO;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface InternshipService {
     InternshipDTO updateInternship(int id, InsertInternshipDTO insertInternshipDTODTO);
 
     void deleteInternship(int id);
+
+    List<InternshipDTO> findMatch(SearchDTO searchDTO);
 }
