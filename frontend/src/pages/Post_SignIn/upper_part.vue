@@ -1,44 +1,51 @@
 <template>
-    <div style="width: calc(100% - 20px); display: flex; justify-content: space-between; align-items: center;  margin-left: 10px; margin-right: 10px;">
-      <div style="display: flex; align-items: center;">
-        <span class="orange">Student</span>
-        <span class="black">&</span>
-        <span class="orange">Company</span>
-        <span v-if="subtitle" style="margin-left: 7px" class="black">{{ subtitle }}</span>
-      </div>
-      <div style="display: flex; gap: 10px; align-items: center;">
-        <img v-if="showAddIcon" src="/src/assets/+.svg" alt="+" class="icon3 icon_hover"/>
-        <img @click="goToPage(rank)" src="/src/assets/Rank_List.svg" alt="Rank_List" class="icon2 icon_hover"/>
-        <img src="/src/assets/campanella.svg" alt="campanella" class="icon2 icon_hover"/>
-        <div class="profile-container">
-          <img src="/src/assets/profilo.svg" alt="profilo" class="icon1 icon_hover"/>
-          <div class="popup">
-            <p>PROFILE</p>
-            <span @click="goToPage(publicProfile)" class="popup-link" style="margin-top: -25px;">Public</span>
-            <span @click="goToPage(privateProfile)" class="popup-link">Private</span>
-          </div>
+  <div style="width: calc(100% - 20px); display: flex; justify-content: space-between; align-items: center;  margin-left: 10px; margin-right: 10px;">
+    <div style="display: flex; align-items: center;">
+      <span class="orange">Student</span>
+      <span class="black">&</span>
+      <span class="orange">Company</span>
+      <span v-if="subtitle" style="margin-left: 7px" class="black">{{ subtitle }}</span>
+    </div>
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <img v-if="showAddIcon" src="/src/assets/+.svg" alt="+" class="icon3 icon_hover"/>
+      <img @click="goToPage('/rank_list')" src="/src/assets/Rank_List.svg" alt="Rank_List" class="icon2 icon_hover"/>
+      <img src="/src/assets/campanella.svg" alt="campanella" class="icon2 icon_hover"/>
+      <div class="profile-container">
+        <img src="/src/assets/profilo.svg" alt="profilo" class="icon1 icon_hover"/>
+        <div class="popup">
+          <p>PROFILE</p>
+          <span @click="goToPage(publicProfile)" class="popup-link" style="margin-top: -25px;">Public</span>
+          <span @click="goToPage(privateProfile)" class="popup-link">Private</span>
         </div>
       </div>
+      <img @click="goToPage(home)" src="/src/assets/home.svg" alt="home" class="icon1 icon_hover"/>
     </div>
+  </div>
+  <hr class="horizontal_line" />
 </template>
 
 <script>
 export default {
-  props: {
-    subtitle: {
-      type: String,
+  data() {
+    return {
+      role: localStorage.getItem("role"),
+    };
+  },
+  computed: {
+    subtitle() {
+      return this.role === "[STUDENT]" ? "- Student" : "- Company";
     },
-    showAddIcon: {
-      type: Boolean,
+    showAddIcon() {
+      return this.role !== "[STUDENT]";
     },
-    rank: {
-      type: String,
+    home(){
+      return this.role === "[STUDENT]" ? "/student_home" : "/company_home";
     },
-    publicProfile: {
-      type: String,
+    publicProfile() {
+      return this.role === "[STUDENT]" ? "/student_public" : "/company_public";
     },
-    privateProfile: {
-      type: String,
+    privateProfile() {
+      return this.role === "[STUDENT]" ? "/student_private" : "/company_private";
     },
   },
   methods: {
@@ -48,6 +55,7 @@ export default {
   },
 };
 </script>
+
 
 <style>
 .orange {
@@ -118,5 +126,11 @@ export default {
   text-align: center;
   text-decoration: underline;
   margin-top: -3px;
+}
+.horizontal_line{
+  width: 100%;
+  height: 2px;
+  background-color: black;
+  border: none;
 }
 </style>

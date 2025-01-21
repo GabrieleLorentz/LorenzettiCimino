@@ -7,7 +7,7 @@
       <input v-model="formData.name" type="text" placeholder="name" class="text-input-signin" />
       <input v-model="formData.email" type="email" placeholder="e-mail" class="text-input-signin" />
       <input v-model="formData.password" type="password" placeholder="password" class="text-input-signin" />
-      <input v-model="formData.description" type="text" placeholder="description" class="text-input-signin" />
+      <textarea v-model="formData.description" placeholder="description" class="description-input-signin"></textarea>
       <input v-model="formData.vat_number" type="number" placeholder="VAT" class="text-input-signin" />
 
       <button @click="submitForm" class="button">SIGN UP</button>

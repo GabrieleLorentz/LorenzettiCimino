@@ -1,14 +1,7 @@
 <template>
   <div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start">
 
-    <UpperPart subtitle="- Student"
-               :showAddIcon="false"
-               rank="/student_rank_list"
-               publicProfile="/student_public"
-               privateProfile="/student_private"
-    />
-
-    <hr class="horizontal_line" />
+    <UpperPart></UpperPart>
 
     <div style="width: 100%; display: flex;">
       <div style="flex: 1; padding: 20px;">

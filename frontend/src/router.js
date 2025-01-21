@@ -12,8 +12,7 @@ import Company_Public from "@/pages/Post_SignIn/Company/Company_Public.vue";
 import Company_Private from "@/pages/Post_SignIn/Company/Company_Private.vue";
 import Student_Public from "@/pages/Post_SignIn/Student/Student_Public.vue";
 import Student_Private from "@/pages/Post_SignIn/Student/Student_Private.vue";
-import Student_Rank_List from "@/pages/Post_SignIn/Student/Student_Rank_List.vue";
-import Company_Rank_List from "@/pages/Post_SignIn/Company/Company_Rank_List.vue";
+import Rank_List from "@/pages/Post_SignIn/Rank_List.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -29,8 +28,7 @@ const router = createRouter({
         {path: '/company_private', component: Company_Private},
         {path: '/student_public', component: Student_Public},
         {path: '/student_private', component: Student_Private},
-        {path: '/student_rank_list', component: Student_Rank_List},
-        {path: '/company_rank_list', component: Company_Rank_List}
+        {path: '/rank_list', component: Rank_List}
     ]
 })
 

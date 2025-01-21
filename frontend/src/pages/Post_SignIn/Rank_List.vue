@@ -1,18 +1,12 @@
 <template>
   <div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start">
-    <UpperPart subtitle="- Student"
-               :showAddIcon="false"
-               rank="/student_rank_list"
-               publicProfile="/student_public"
-               privateProfile="/student_private"
-    />
-
-    <hr class="horizontal_line" />
+    <UpperPart></UpperPart>
 
     <div style="width: 100%; display: flex; justify-content: center;">
       <span class="black">RANKED LIST OF</span>
       <span style="margin-left: 7px;" class="orange">COMPANY</span>
     </div>
+
   </div>
 </template>
 

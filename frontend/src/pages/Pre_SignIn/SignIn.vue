@@ -36,14 +36,15 @@ export default {
             if (response.ok) {
               return response.json().then(data => {
                 console.log("Dati ricevuti:", data);
-                sessionStorage.setItem("token", data.token);
-                sessionStorage.setItem("email", data.email);
-                sessionStorage.setItem("role", data.role);
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("email", data.email);
+                localStorage.setItem("role", data.role);
+                localStorage.setItem("password", this.formData.password);
 
-                if (data.role === 'STUDENT') {
+                if (data.role === '[STUDENT]') {
                   window.location.href = '/student_home';
                 }
-                else if (data.role === 'COMPANY') {
+                else if (data.role === '[COMPANY]') {
                   window.location.href = '/company_home';
                 }
               });
@@ -62,9 +63,9 @@ export default {
 .text-input-signin {
   background-color: white; /* Colore di sfondo iniziale */
   color: #f2a73b; /* Colore del testo */
-  border: 4px solid #232526; /* Rimuove il bordo */
-  width: 85%;
-  font-size: 50px;
+  border: 4px solid #232526;
+  width: 90%;
+  font-size: 40px;
   padding: 15px;
   border-radius: 30px; /* Angoli arrotondati */
   transition: background-color 0.4s ease, color 0.4s ease; /* Transizione morbida per il cambiamento del colore */

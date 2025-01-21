@@ -8,13 +8,28 @@
       <input v-model="formData.surname" type="text" placeholder="surname" class="text-input-signin" />
       <input v-model="formData.email" type="email" placeholder="e-mail" class="text-input-signin" />
       <input v-model="formData.password" type="password" placeholder="password" class="text-input-signin" />
-      <input v-model="formData.description" type="text" placeholder="description" class="text-input-signin" />
+      <textarea v-model="formData.description" placeholder="description" class="description-input-signin"></textarea>
       <!--<input v-model="formData.cv" type="text" placeholder="CV" class="text-input-student-signup" /> -->
 
       <button @click="submitForm" class="button">SIGN UP</button>
     </div>
   </div>
 </template>
+
+<style>
+.description-input-signin {
+  background-color: white; /* Colore di sfondo iniziale */
+  color: #f2a73b; /* Colore del testo */
+  border: 4px solid #232526;
+  width: 90%;
+  font-size: 25px;
+  padding: 15px;
+  border-radius: 30px; /* Angoli arrotondati */
+  transition: background-color 0.4s ease, color 0.4s ease; /* Transizione morbida per il cambiamento del colore */
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+</style>
 
 <script>
 export default {
