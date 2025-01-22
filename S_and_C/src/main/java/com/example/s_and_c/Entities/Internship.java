@@ -48,4 +48,8 @@ public class Internship {
     public void addStudent(Student student) {
         appliedStudents.add(student);
     }
+
+    public void deleteStudent(Student student) {
+        appliedStudents.remove(student);
+    }
 }

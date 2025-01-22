@@ -1,15 +1,14 @@
 package com.example.s_and_c.Service.Impl;
 
 import com.example.s_and_c.DTO.AuthRequestDTO;
-import com.example.s_and_c.DTO.RegisterRequestDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
 import com.example.s_and_c.DTO.UpdatedStudentDTO;
 import com.example.s_and_c.DTO.UserTokenDTO;
+import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.StudentMapper;
-import com.example.s_and_c.Repositories.InternshipRepository;
 import com.example.s_and_c.Repositories.StudentRepository;
 import com.example.s_and_c.Service.StudentService;
 import jakarta.transaction.Transactional;
@@ -19,7 +18,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.beans.Transient;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +27,6 @@ public class StudentServiceImpl implements StudentService {
 
     private final AuthService authService;
     private StudentRepository studentRepository;
-    private InternshipRepository internshipRepository;
     private final PasswordEncoder passwordEncoder;
     @Override
     public StudentInternshipDTO getStudent(String email) {
@@ -58,11 +55,19 @@ public class StudentServiceImpl implements StudentService {
                 newStudent.setDescription(studentDTO.getDescription());
                 newStudent.setPassword(passwordEncoder.encode(studentDTO.getPassword()));
 
+                for(Internship internship : student.getInternships()) {
+
+                    internship.addStudent(newStudent);
+                    internship.deleteStudent(student);
+                }
+                studentRepository.save(newStudent);
+
+
                 studentRepository.delete(student);
 
                 UserTokenDTO user = authService.authenticate(new AuthRequestDTO(newStudent.getEmail(), studentDTO.getPassword()));
                 String token = user.getToken();
-                return StudentMapper.mapToUpdatedStudentDTO(studentRepository.save(newStudent), token);
+                return StudentMapper.mapToUpdatedStudentDTO(newStudent, token);
             }
 
             if (!studentDTO.getName().equals(student.getName())) {
@@ -89,18 +94,17 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void deleteStudent(String email) {
-        Student student = studentRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Student with id " + email + " not found"));
 
         studentRepository.deleteStudentByEmail(email);
     }
 
-    private StudentDTO mapInternshipToDTO(Student student) {
+    /*private StudentDTO mapInternshipToDTO(Student student) {
         StudentDTO studentDTO = new StudentDTO();
         studentDTO.setEmail(student.getEmail());
         studentDTO.setName(student.getName());
         studentDTO.setSurname(student.getSurname());
         studentDTO.setDescription(student.getDescription());
         return studentDTO;
-    }
+    }*/
 
 }
