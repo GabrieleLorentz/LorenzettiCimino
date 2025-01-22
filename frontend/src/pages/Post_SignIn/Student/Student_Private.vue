@@ -84,10 +84,12 @@
   font-weight: bold;
   text-align: center;
   margin-bottom: 20px;
+  transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
 }
 .save:hover {
   background-color: #f2a73b;
-  color: #232526;
+  color: black;
+  border: 3px solid black;
   cursor: pointer;
 }
 .save:disabled {

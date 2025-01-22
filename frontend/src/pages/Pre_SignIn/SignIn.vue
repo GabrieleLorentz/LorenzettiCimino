@@ -68,7 +68,7 @@ export default {
   font-size: 40px;
   padding: 15px;
   border-radius: 30px; /* Angoli arrotondati */
-  transition: background-color 0.4s ease, color 0.4s ease; /* Transizione morbida per il cambiamento del colore */
+  transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease; /* Transizione morbida per il cambiamento del colore */
   font-weight: bold;
   margin-bottom: 10px;
 }

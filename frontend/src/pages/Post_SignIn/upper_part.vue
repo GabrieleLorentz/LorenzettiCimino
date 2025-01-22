@@ -7,7 +7,7 @@
       <span v-if="subtitle" style="margin-left: 7px" class="black">{{ subtitle }}</span>
     </div>
     <div style="display: flex; gap: 10px; align-items: center;">
-      <img v-if="showAddIcon" src="/src/assets/+.svg" alt="+" class="icon3 icon_hover"/>
+      <AddInt v-if="showAddIcon" ></AddInt>
       <img @click="goToPage('/rank_list')" src="/src/assets/Rank_List.svg" alt="Rank_List" class="icon2 icon_hover"/>
       <img src="/src/assets/campanella.svg" alt="campanella" class="icon2 icon_hover"/>
       <div class="profile-container">
@@ -25,7 +25,10 @@
 </template>
 
 <script>
+import AddInt from "@/pages/Post_SignIn/AddInt.vue";
+
 export default {
+  components: {AddInt},
   data() {
     return {
       role: localStorage.getItem("role"),
@@ -77,11 +80,6 @@ export default {
   height: 40px;
   cursor: pointer;
 }
-.icon3 {
-  width: 45px;
-  height: 45px;
-  cursor: pointer;
-}
 .icon_hover:hover{
   cursor: pointer;
   transition: filter 0.2s ease;
@@ -90,6 +88,9 @@ export default {
 .profile-container {
   position: relative;
   display: inline-block;
+}
+.profile-container:hover .popup {
+  display: block;
 }
 .popup {
   display: none;
@@ -100,11 +101,8 @@ export default {
   border: 2px solid black;
   border-radius: 15px;
   padding: 4px;
-  /*min-width: 120px;*/
+  /*min-width: 120px;
   /*z-index: 1000;*/
-}
-.profile-container:hover .popup {
-  display: block;
 }
 .popup-link {
   display: block;
