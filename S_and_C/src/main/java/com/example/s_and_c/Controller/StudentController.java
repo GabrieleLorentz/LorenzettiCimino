@@ -12,12 +12,9 @@ import com.example.s_and_c.Repositories.StudentRepository;
 import com.example.s_and_c.Service.InternshipService;
 import com.example.s_and_c.Service.StudentService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -74,8 +71,8 @@ public class StudentController {
     @PostMapping("/search")
     public ResponseEntity<List<InternshipDTO>> searchInternships(
             @RequestBody SearchDTO searchDTO){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String authEmail = auth.getName();
+        /*Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();*/
         List<InternshipDTO> internshipDTOList = internshipService.findMatch(searchDTO);
         if(internshipDTOList.isEmpty()){
             return ResponseEntity.noContent().build();

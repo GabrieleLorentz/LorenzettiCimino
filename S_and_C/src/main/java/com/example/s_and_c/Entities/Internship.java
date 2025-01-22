@@ -30,10 +30,17 @@ public class Internship {
     private int Salary;
     private String qualification_required;
     private String description;
-    @OneToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "company_email",nullable = false)
     private Company company;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "internship_students",
+            joinColumns = @JoinColumn(name = "internship_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
     private List<Student> appliedStudents = new ArrayList<>();
+
 
     public Internship(String name, LocalDate startDate, LocalDate endDate, int salary, String qualification_required, String description, Company company) {
         this.name = name;

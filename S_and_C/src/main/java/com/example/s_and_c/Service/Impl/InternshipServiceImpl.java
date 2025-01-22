@@ -32,12 +32,10 @@ public class InternshipServiceImpl implements InternshipService {
     @Override
     public List<InternshipDTO> createInternship(String email, InsertInternshipDTO insertInternshipDTO) {
 
-        Company insertingCompany = companyRepository.findByEmail(email).orElse(null);
-        if (insertingCompany != null) {
-            Internship internship = InternshipMapper.maptoInternship(insertInternshipDTO, insertingCompany);
-            internshipRepository.save(internship);
-        }
-        else throw new ResourceNotFoundException("Company not found, invalid request");
+        Company insertingCompany = companyRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Company not found"));
+
+        Internship internship = InternshipMapper.maptoInternship(insertInternshipDTO, insertingCompany);
+        internshipRepository.save(internship);
 
         return getAllInternshipsByEmail(insertingCompany);
     }

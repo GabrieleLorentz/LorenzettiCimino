@@ -34,15 +34,17 @@ public class InternshipMapper {
         );
     }
 
-    public static Internship maptoInternship(InsertInternshipDTO insertInternshipDTO, Company company) {
-        return new Internship(
-                insertInternshipDTO.getName(),
-                insertInternshipDTO.getStart_date(),
-                insertInternshipDTO.getEnd_date(),
-                insertInternshipDTO.getSalary(),
-                insertInternshipDTO.getQualification_required(),
-                insertInternshipDTO.getDescription(),
-                company
-        );
+    public static Internship maptoInternship(InsertInternshipDTO dto, Company company) {
+        Internship internship = new Internship();
+        internship.setName(dto.getName());
+        internship.setStartDate(dto.getStart_date());
+        internship.setEndDate(dto.getEnd_date());
+        internship.setSalary(dto.getSalary());
+        internship.setQualification_required(dto.getQualification_required());
+        internship.setDescription(dto.getDescription());
+        internship.setCompany(company);
+        company.getInternships().add(internship);
+
+        return internship;
     }
 }

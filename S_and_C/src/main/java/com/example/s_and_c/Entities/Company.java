@@ -35,6 +35,8 @@ public class Company implements UserDetails {
     private Long vat_number;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private List<Internship> internships = new ArrayList<>();
 
     public Company(String name, String email, String password, String description, Long vat_number) {
         this.name = name;
