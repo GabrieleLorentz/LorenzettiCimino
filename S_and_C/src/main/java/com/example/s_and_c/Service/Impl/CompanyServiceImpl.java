@@ -5,12 +5,11 @@ import com.example.s_and_c.DTO.CompanyDTO;
 import com.example.s_and_c.DTO.UpdatedCompanyDTO;
 import com.example.s_and_c.DTO.UserTokenDTO;
 import com.example.s_and_c.Entities.Company;
-import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.CompanyMapper;
 import com.example.s_and_c.Repositories.CompanyRepository;
-import com.example.s_and_c.Repositories.InternshipRepository;
 import com.example.s_and_c.Service.CompanyService;
+import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -26,9 +25,10 @@ import java.util.stream.Collectors;
 public class CompanyServiceImpl implements CompanyService {
 
     private final PasswordEncoder passwordEncoder;
-    private final InternshipRepository internshipRepository;
     private CompanyRepository companyRepository;
     private final AuthService authService;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public CompanyDTO createCompany(CompanyDTO companyDTO) {
@@ -51,29 +51,36 @@ public class CompanyServiceImpl implements CompanyService {
         return companies.stream().map(CompanyMapper::mapToCompanyDTO).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public UpdatedCompanyDTO updateCompany(String email, @NotNull CompanyDTO companyDTO) {
         Company company = companyRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Company with email " + email + " not found"));
-        List<Internship> internships = internshipRepository.findByCompany(company);
 
         try {
             if (!companyDTO.getEmail().equals(company.getEmail())) {
-                    Company newCompany = new Company();
+                Company newCompany = new Company();
                 newCompany.setEmail(companyDTO.getEmail());
                 newCompany.setName(companyDTO.getName());
                 newCompany.setVat_number(companyDTO.getVat_number());
                 newCompany.setDescription(companyDTO.getDescription());
                 String rawPassword = companyDTO.getPassword();
                 newCompany.setPassword(passwordEncoder.encode(rawPassword));
+                newCompany.setRole(company.getRole());
 
-                companyRepository.save(newCompany);
+                entityManager.persist(newCompany);
+                entityManager.flush();
 
-                for (Internship internship : internships) {
-                    internship.setCompany(newCompany);
-                    internshipRepository.save(internship);
-                }
-                companyRepository.delete(company);
+                // 3. Aggiorna i riferimenti nelle internship
+                Query query = entityManager.createQuery(
+                        "UPDATE Internship i SET i.company = :newCompany WHERE i.company = :oldCompany");
+                query.setParameter("newCompany", newCompany);
+                query.setParameter("oldCompany", company);
+                query.executeUpdate();
+
+                // 4. Rimuovi la vecchia company
+                entityManager.remove(company);
+                entityManager.flush();
                 UserTokenDTO user = authService.authenticate(
                         new AuthRequestDTO(newCompany.getEmail(), rawPassword)
                 );
@@ -82,7 +89,6 @@ public class CompanyServiceImpl implements CompanyService {
                 return CompanyMapper.mapToUpdatedCompanyDTO(newCompany, token);
             }
 
-            // Aggiornamento campi standard
             if (!companyDTO.getName().equals(company.getName())) {
                 company.setName(companyDTO.getName());
             }
@@ -116,7 +122,6 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public void deleteCompany(String email){
-        Company company = companyRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Company with id " + email + " not found"));
 
         companyRepository.deleteCompanyByEmail(email);
     }

@@ -1,7 +1,6 @@
 package com.example.s_and_c.Controller;
 
 import com.example.s_and_c.DTO.*;
-import com.example.s_and_c.Repositories.CompanyRepository;
 import com.example.s_and_c.Service.CompanyService;
 import com.example.s_and_c.Service.InternshipService;
 import lombok.AllArgsConstructor;
@@ -51,7 +50,7 @@ public class CompanyController {
         return new ResponseEntity<>(savedInternship, HttpStatus.CREATED);
     }
 
-    @GetMapping("myInternship")
+    @GetMapping("/myInternship")
     public ResponseEntity<List<InternshipDTO>> getMyInternship() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<InternshipDTO> savedInternship = internshipService.getMyInternship(auth.getName());
