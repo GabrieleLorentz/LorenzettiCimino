@@ -5,12 +5,16 @@ import com.example.s_and_c.DTO.CompanyDTO;
 import com.example.s_and_c.DTO.UpdatedCompanyDTO;
 import com.example.s_and_c.DTO.UserTokenDTO;
 import com.example.s_and_c.Entities.Company;
+import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.CompanyMapper;
 import com.example.s_and_c.Repositories.CompanyRepository;
+import com.example.s_and_c.Repositories.InternshipRepository;
 import com.example.s_and_c.Service.CompanyService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +26,7 @@ import java.util.stream.Collectors;
 public class CompanyServiceImpl implements CompanyService {
 
     private final PasswordEncoder passwordEncoder;
+    private final InternshipRepository internshipRepository;
     private CompanyRepository companyRepository;
     private final AuthService authService;
 
@@ -47,35 +52,66 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public UpdatedCompanyDTO updateCompany(String email,@NotNull CompanyDTO companyDTO) {
-        Company company = companyRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Company with id " + email + " not found"));
+    public UpdatedCompanyDTO updateCompany(String email, @NotNull CompanyDTO companyDTO) {
+        Company company = companyRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Company with email " + email + " not found"));
+        List<Internship> internships = internshipRepository.findByCompany(company);
 
-        Company newEmailNotExists = companyRepository.findByEmail(companyDTO.getEmail()).orElse(null);
-        if (newEmailNotExists != null && !newEmailNotExists.getEmail().equals(company.getEmail())) {
-            System.out.println(companyDTO);
-            if (!companyDTO.getEmail().equals(company.getEmail()) || !company.getPassword().equals(passwordEncoder.encode(companyDTO.getPassword()))) {
+        try {
+            if (!companyDTO.getEmail().equals(company.getEmail())) {
+                    Company newCompany = new Company();
+                newCompany.setEmail(companyDTO.getEmail());
+                newCompany.setName(companyDTO.getName());
+                newCompany.setVat_number(companyDTO.getVat_number());
+                newCompany.setDescription(companyDTO.getDescription());
+                String rawPassword = companyDTO.getPassword();
+                newCompany.setPassword(passwordEncoder.encode(rawPassword));
 
-                company.setName(companyDTO.getName());
-                company.setEmail(companyDTO.getEmail());
-                company.setPassword(passwordEncoder.encode(companyDTO.getPassword()));
-                company.setDescription(companyDTO.getDescription());
-                company.setVat_number(companyDTO.getVat_number());
-                Company updatedCompany = companyRepository.save(company);
-                UserTokenDTO userTokenDTO = authService.authenticate(new AuthRequestDTO(company.getEmail(), companyDTO.getPassword()));
-                return CompanyMapper.mapToUpdatedCompanyDTO(updatedCompany, userTokenDTO.getToken());
+                companyRepository.save(newCompany);
+
+                for (Internship internship : internships) {
+                    internship.setCompany(newCompany);
+                    internshipRepository.save(internship);
+                }
+                companyRepository.delete(company);
+                UserTokenDTO user = authService.authenticate(
+                        new AuthRequestDTO(newCompany.getEmail(), rawPassword)
+                );
+
+                String token = user.getToken();
+                return CompanyMapper.mapToUpdatedCompanyDTO(newCompany, token);
             }
-            else {
+
+            // Aggiornamento campi standard
+            if (!companyDTO.getName().equals(company.getName())) {
                 company.setName(companyDTO.getName());
-                company.setDescription(companyDTO.getDescription());
+            }
+            if (!companyDTO.getVat_number().equals(company.getVat_number())) {
                 company.setVat_number(companyDTO.getVat_number());
-                Company updatedCompany = companyRepository.save(company);
-                return CompanyMapper.mapToUpdatedCompanyDTO(updatedCompany);
+            }
+            if (!companyDTO.getDescription().equals(company.getDescription())) {
+                company.setDescription(companyDTO.getDescription());
             }
 
+            if (!passwordEncoder.matches(companyDTO.getPassword(), company.getPassword())) {
+                String rawPassword = companyDTO.getPassword();
+                company.setPassword(passwordEncoder.encode(rawPassword));
+
+                UserTokenDTO user = authService.authenticate(
+                        new AuthRequestDTO(company.getEmail(), rawPassword)
+                );
+                String token = user.getToken();
+                return CompanyMapper.mapToUpdatedCompanyDTO(companyRepository.save(company), token);
+            }
+
+            return CompanyMapper.mapToUpdatedCompanyDTO(companyRepository.save(company));
+
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("Inserted Data violate constraint");
         }
-        else return null;
-
     }
+
+
 
 
     @Override

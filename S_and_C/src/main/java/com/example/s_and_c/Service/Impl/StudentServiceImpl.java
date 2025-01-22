@@ -12,11 +12,14 @@ import com.example.s_and_c.Mapper.StudentMapper;
 import com.example.s_and_c.Repositories.InternshipRepository;
 import com.example.s_and_c.Repositories.StudentRepository;
 import com.example.s_and_c.Service.StudentService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.beans.Transient;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,38 +43,48 @@ public class StudentServiceImpl implements StudentService {
         return students.stream().map(StudentMapper::mapToStudentDTO).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public UpdatedStudentDTO updateStudent(String email, @NotNull StudentDTO studentDTO) {
-        Student student = studentRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Student with id " + email + " not found"));
-        System.out.println("qui ci arriva");
-        Student newEmailNotExist = studentRepository.findByEmail(studentDTO.getEmail()).orElse(null);
-        if (newEmailNotExist!=null && studentDTO.getEmail().equals(newEmailNotExist.getEmail())) {
-            System.out.println("qui pure");
-            if(!studentDTO.getEmail().equals(student.getEmail()) || !student.getPassword().equals(passwordEncoder.encode(studentDTO.getPassword()))) {
+        Student student = studentRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Student with id " + email + " not found"));
+
+        try {
+            if (!studentDTO.getEmail().equals(student.getEmail())) {
+                Student newStudent = new Student();
+                newStudent.setEmail(studentDTO.getEmail());
+                newStudent.setName(studentDTO.getName());
+                newStudent.setSurname(studentDTO.getSurname());
+                newStudent.setDescription(studentDTO.getDescription());
+                newStudent.setPassword(passwordEncoder.encode(studentDTO.getPassword()));
+
+                studentRepository.delete(student);
+
+                UserTokenDTO user = authService.authenticate(new AuthRequestDTO(newStudent.getEmail(), studentDTO.getPassword()));
+                String token = user.getToken();
+                return StudentMapper.mapToUpdatedStudentDTO(studentRepository.save(newStudent), token);
+            }
+
+            if (!studentDTO.getName().equals(student.getName())) {
                 student.setName(studentDTO.getName());
-                student.setEmail(studentDTO.getEmail());
-                student.setPassword(passwordEncoder.encode(studentDTO.getPassword()));
-                student.setDescription(studentDTO.getDescription());
+            }
+            if (!studentDTO.getSurname().equals(student.getSurname())) {
                 student.setSurname(studentDTO.getSurname());
-                Student updatedStudent = studentRepository.save(student);
-                UserTokenDTO userTokenDTO = authService.authenticate(new AuthRequestDTO(student.getEmail(),studentDTO.getPassword()));
-
-                return StudentMapper.mapToUpdatedStudentDTO(updatedStudent, userTokenDTO.getToken());
-
             }
-            else
-            {
-                student.setName(studentDTO.getName());
+            if (!studentDTO.getDescription().equals(student.getDescription())) {
                 student.setDescription(studentDTO.getDescription());
-                student.setSurname(studentDTO.getSurname());
-
-                Student updatedStudent = studentRepository.save(student);
-                return StudentMapper.mapToUpdatedStudentDTO(updatedStudent);
             }
-
+            String password = passwordEncoder.encode(studentDTO.getPassword());
+            if (!student.getPassword().equals(password)) {
+                student.setPassword(password);
+                UserTokenDTO user = authService.authenticate(new AuthRequestDTO(student.getEmail(), password));
+                String token = user.getToken();
+                return StudentMapper.mapToUpdatedStudentDTO(studentRepository.save(student), token);
             }
-        else
-            return null;
+            return StudentMapper.mapToUpdatedStudentDTO(studentRepository.save(student));
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("Inserted Data violate constraint");
+        }
     }
 
     @Override

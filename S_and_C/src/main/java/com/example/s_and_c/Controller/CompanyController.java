@@ -1,9 +1,6 @@
 package com.example.s_and_c.Controller;
 
 import com.example.s_and_c.DTO.*;
-import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
-import com.example.s_and_c.Entities.Company;
-import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Repositories.CompanyRepository;
 import com.example.s_and_c.Service.CompanyService;
 import com.example.s_and_c.Service.InternshipService;
@@ -23,7 +20,6 @@ public class CompanyController {
 
     private final CompanyService companyService;
     private final InternshipService internshipService;
-    private final CompanyRepository companyRepository;
 
     /*@PostMapping
     public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {

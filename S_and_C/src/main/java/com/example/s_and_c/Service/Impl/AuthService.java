@@ -34,6 +34,11 @@ public class AuthService implements AuthorizationService {
     private final CustomAuthenticationManager authenticationManager;
 
     public UserTokenDTO registerStudent(RegisterRequestDTO registerRequestDTO) {
+
+        if (companyRepository.findByEmail(registerRequestDTO.getEmail()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
+        }
+
         var student = new Student();
         student.setName(registerRequestDTO.getName());
         student.setSurname(registerRequestDTO.getSurname());
@@ -53,6 +58,10 @@ public class AuthService implements AuthorizationService {
     }
 
     public UserTokenDTO registerCompany(RegisterRequestDTO request) {
+
+        if (studentRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
+        }
 
         Company company = companyRepository.findByEmail(request.getEmail()).orElse(null);
         if(company == null) {
