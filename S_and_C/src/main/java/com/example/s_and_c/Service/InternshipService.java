@@ -20,4 +20,6 @@ public interface InternshipService {
     void deleteInternship(int id);
 
     List<InternshipDTO> findMatch(SearchDTO searchDTO);
+
+    List<InternshipDTO> getMyInternship(String name);
 }

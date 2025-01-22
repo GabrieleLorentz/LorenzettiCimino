@@ -214,4 +214,15 @@ public class InternshipServiceImpl implements InternshipService {
 
         return results;
     }
+
+    @Override
+    public List<InternshipDTO> getMyInternship(String email) {
+        Company company = companyRepository.findByEmail(email).orElse(null);
+        if(company != null) {
+            List<Internship> internships = internshipRepository.findByCompany(company);
+            return internships.stream().map(InternshipMapper::maptoInternshipDTO).collect(Collectors.toList());
+        }else
+            return null;
+
+    }
 }

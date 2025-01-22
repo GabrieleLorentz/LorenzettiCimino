@@ -55,6 +55,13 @@ public class CompanyController {
         return new ResponseEntity<>(savedInternship, HttpStatus.CREATED);
     }
 
+    @GetMapping("myInternship")
+    public ResponseEntity<List<InternshipDTO>> getMyInternship() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<InternshipDTO> savedInternship = internshipService.getMyInternship(auth.getName());
+        return new ResponseEntity<>(savedInternship, HttpStatus.OK);
+    }
+
     @GetMapping({"{email}"})
     public ResponseEntity<CompanyDTO> getCompanyById(@PathVariable ("email") String email) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
