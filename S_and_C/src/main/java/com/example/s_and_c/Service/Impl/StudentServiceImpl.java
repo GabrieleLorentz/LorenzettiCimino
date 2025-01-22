@@ -42,11 +42,11 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public UpdatedStudentDTO updateStudent(String email, @NotNull StudentDTO studentDTO) {
-        Student student = studentRepository.findByEmail(studentDTO.getEmail()).orElseThrow(()-> new ResourceNotFoundException("Student with id " + email + " not found"));
-
+        Student student = studentRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Student with id " + email + " not found"));
+        System.out.println("qui ci arriva");
         Student newEmailNotExist = studentRepository.findByEmail(studentDTO.getEmail()).orElse(null);
         if (newEmailNotExist!=null && studentDTO.getEmail().equals(newEmailNotExist.getEmail())) {
-
+            System.out.println("qui pure");
             if(!studentDTO.getEmail().equals(student.getEmail()) || !student.getPassword().equals(passwordEncoder.encode(studentDTO.getPassword()))) {
                 student.setName(studentDTO.getName());
                 student.setEmail(studentDTO.getEmail());

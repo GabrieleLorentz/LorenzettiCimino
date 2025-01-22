@@ -10,6 +10,7 @@ import com.example.s_and_c.Mapper.CompanyMapper;
 import com.example.s_and_c.Repositories.CompanyRepository;
 import com.example.s_and_c.Service.CompanyService;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,15 +47,17 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public UpdatedCompanyDTO updateCompany(String email, CompanyDTO companyDTO) {
-        Company company = companyRepository.findByEmail(companyDTO.getEmail()).orElseThrow(()-> new ResourceNotFoundException("Company with id " + email + " not found"));
+    public UpdatedCompanyDTO updateCompany(String email,@NotNull CompanyDTO companyDTO) {
+        Company company = companyRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Company with id " + email + " not found"));
 
         Company newEmailNotExists = companyRepository.findByEmail(companyDTO.getEmail()).orElse(null);
-        if (newEmailNotExists != null && newEmailNotExists.getEmail().equals(company.getEmail())) {
+        if (newEmailNotExists != null && !newEmailNotExists.getEmail().equals(company.getEmail())) {
+            System.out.println(companyDTO);
             if (!companyDTO.getEmail().equals(company.getEmail()) || !company.getPassword().equals(passwordEncoder.encode(companyDTO.getPassword()))) {
+
                 company.setName(companyDTO.getName());
                 company.setEmail(companyDTO.getEmail());
-                company.setPassword(companyDTO.getPassword());
+                company.setPassword(passwordEncoder.encode(companyDTO.getPassword()));
                 company.setDescription(companyDTO.getDescription());
                 company.setVat_number(companyDTO.getVat_number());
                 Company updatedCompany = companyRepository.save(company);
@@ -73,6 +76,7 @@ public class CompanyServiceImpl implements CompanyService {
         else return null;
 
     }
+
 
     @Override
     public void deleteCompany(String email){

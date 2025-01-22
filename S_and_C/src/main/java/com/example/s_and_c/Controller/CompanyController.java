@@ -1,6 +1,7 @@
 package com.example.s_and_c.Controller;
 
 import com.example.s_and_c.DTO.*;
+import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
 import com.example.s_and_c.Entities.Company;
 import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Repositories.CompanyRepository;
@@ -29,6 +30,23 @@ public class CompanyController {
         CompanyDTO savedCompany = companyService.createCompany(companyDTO);
         return new ResponseEntity<>(savedCompany, HttpStatus.CREATED);
     }*/
+    @GetMapping({"/personalData"})
+    public ResponseEntity<CompanyDTO> getStudentById() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+        try {
+            CompanyDTO company = companyService.getCompany(authEmail);
+            if (company == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok(company);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
     @PostMapping("/insertInternship")
     public ResponseEntity<List<InternshipDTO>> createInternship(@RequestBody InsertInternshipDTO insertInternshipDTO) {
