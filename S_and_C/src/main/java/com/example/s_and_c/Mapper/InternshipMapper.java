@@ -2,10 +2,15 @@ package com.example.s_and_c.Mapper;
 
 import com.example.s_and_c.DTO.InsertInternshipDTO;
 import com.example.s_and_c.DTO.InternshipDTO;
+import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.Entities.Company;
 import com.example.s_and_c.Entities.Internship;
+import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Service.CompanyService;
 import lombok.RequiredArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class InternshipMapper {
@@ -13,6 +18,9 @@ public class InternshipMapper {
     private final CompanyService companyService;
 
     public static InternshipDTO maptoInternshipDTO(Internship internship) {
+        List<StudentDTO> appliedStudents = new ArrayList<>();
+        for(Student student: internship.getAppliedStudents())
+            appliedStudents.add(StudentMapper.mapToStudentDTO(student));
         return new InternshipDTO(
                 internship.getInternship_id(),
                 internship.getName(),
@@ -21,7 +29,8 @@ public class InternshipMapper {
                 internship.getSalary(),
                 internship.getQualification_required(),
                 internship.getDescription(),
-                internship.getCompany().getEmail()
+                internship.getCompany().getEmail(),
+                appliedStudents
         );
     }
 
