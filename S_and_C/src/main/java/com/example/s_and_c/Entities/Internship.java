@@ -35,7 +35,7 @@ public class Internship {
     private Company company;
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "internship_students",
+            name = "internship_appliedStudents",
             joinColumns = @JoinColumn(name = "internship_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
