@@ -4,23 +4,23 @@
     <UpperPart></UpperPart>
 
     <div style="width: 100%; display: flex; justify-content: center;">
-      <span class="orange">Private</span>
+      <span class="orange">Public</span>
       <span style="margin-left: 7px;" class="black">page</span>
     </div>
 
     <div style="width: 100%; display: flex;">
       <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center;">
         <div class="data">
-          <input v-model="editedData.name" type="text" class="editable-input"/>
+          <span class="editable-input">{{ originalData.name }}</span>
         </div>
         <div class="data">
-          <input v-model="editedData.email" type="email" class="editable-input"/>
+          <span class="editable-input">{{ originalData.email  }}</span>
         </div>
         <div class="data">
-          <textarea v-model="editedData.description" class="editable-textarea"></textarea>
+          <span class="editable-textarea">{{originalData.description}}</span>
         </div>
         <div class="data">
-          <input v-model="editedData.vat_number" type="number" class="editable-input"/>
+          <span class="editable-input">{{ originalData.vat_number  }}</span>
         </div>
       </div>
       <div class="vertical_line2"></div>
@@ -49,13 +49,6 @@ const originalData = ref<UserData>({
   vat_number: 0
 });
 
-const editedData = ref<UserData>({
-  name: '',
-  email: '',
-  description: '',
-  vat_number: 0
-});
-
 function receiveData() {
   const token = localStorage.getItem('token');
 
@@ -78,7 +71,6 @@ function receiveData() {
           description: data.description,
           vat_number: data.vat_number
         };
-        editedData.value = { ...originalData.value };
       })
       .catch(error => {
         console.error("Errore durante il recupero dei dati:", error);
