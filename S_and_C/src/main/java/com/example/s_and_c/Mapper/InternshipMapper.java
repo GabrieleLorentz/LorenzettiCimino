@@ -9,6 +9,8 @@ import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Service.CompanyService;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,9 +39,14 @@ public class InternshipMapper {
     public static Internship maptoInternship(InsertInternshipDTO dto, Company company) {
         Internship internship = new Internship();
         internship.setName(dto.getName());
-        internship.setStartDate(dto.getStart_date());
-        internship.setEndDate(dto.getEnd_date());
-        internship.setSalary(dto.getSalary());
+        System.out.println(dto);
+        if(dto.getStartDate() == null || dto.getEndDate() == null)
+            throw new IllegalArgumentException("Start date and end date cannot be null");
+        internship.setStartDate(LocalDate.parse(dto.getStartDate(),
+                DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        internship.setEndDate(LocalDate.parse(dto.getEndDate(),
+                DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+
         internship.setQualification_required(dto.getQualification_required());
         internship.setDescription(dto.getDescription());
         internship.setCompany(company);

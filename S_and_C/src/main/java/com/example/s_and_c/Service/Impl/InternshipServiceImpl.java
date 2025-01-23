@@ -58,20 +58,20 @@ public class InternshipServiceImpl implements InternshipService {
         return internships.stream().map(InternshipMapper::maptoInternshipDTO).collect(Collectors.toList());
     }
 
-    @Override
-    public InternshipDTO updateInternship(int id, InsertInternshipDTO insertInternshipDTODTO) {
+    /*@Override
+    public InternshipDTO updateInternship(int id, InsertInternshipDTO insertInternshipDTO) {
         Internship internship = internshipRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Internship not found"));
 
-        internship.setName(insertInternshipDTODTO.getName());
-        internship.setDescription(insertInternshipDTODTO.getDescription());
-        internship.setStartDate(insertInternshipDTODTO.getStart_date());
-        internship.setEndDate(insertInternshipDTODTO.getEnd_date());
-        internship.setSalary(insertInternshipDTODTO.getSalary());
+        internship.setName(insertInternshipDTO.getName());
+        internship.setDescription(insertInternshipDTO.getDescription());
+        internship.setStartDate(insertInternshipDTO.getStart_date());
+        internship.setEndDate(insertInternshipDTO.getEnd_date());
+        internship.setSalary(insertInternshipDTO.getSalary());
         Internship updatedInternship = internshipRepository.save(internship);
 
         return InternshipMapper.maptoInternshipDTO(updatedInternship);
 
-    }
+    }*/
 
     @Override
     public void deleteInternship(int id) {

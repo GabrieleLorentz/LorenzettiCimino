@@ -15,8 +15,6 @@ public interface InternshipService {
 
     List<InternshipDTO> getAllInternships();
 
-    InternshipDTO updateInternship(int id, InsertInternshipDTO insertInternshipDTODTO);
-
     void deleteInternship(int id);
 
     List<InternshipDTO> findMatch(SearchDTO searchDTO);

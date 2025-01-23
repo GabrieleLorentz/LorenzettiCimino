@@ -5,17 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.util.Date;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class InsertInternshipDTO {
     private String name;
-    private LocalDate start_date;
-    private LocalDate End_date;
+    private String startDate;
+    private String endDate;
     private int Salary;
     private String qualification_required;
     private String description;

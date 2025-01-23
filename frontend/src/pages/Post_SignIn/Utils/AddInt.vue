@@ -150,13 +150,13 @@ function addInternship() {
 
   const formData = {
     name: Data.value.name,
-    start: Data.value.start,
-    end: Data.value.end,
+    start_date: Data.value.start,
+    End_date: Data.value.end,
     salary: Data.value.salary,
     qualification: Data.value.qualification,
     description: Data.value.description
   };
-  console.log(formData.start);
+  console.log(formData.start_date);
 
   fetch('http://localhost:8080/api/company/insertInternship', {
     method: 'POST',
