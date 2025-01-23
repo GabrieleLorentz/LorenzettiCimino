@@ -84,6 +84,7 @@ export default {
   cursor: pointer;
   transition: filter 0.2s ease;
   filter: invert(71%) sepia(45%) saturate(669%) hue-rotate(346deg) brightness(96%) contrast(92%);
+  transform: scale(1.2);
 }
 .profile-container {
   position: relative;

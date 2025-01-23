@@ -4,11 +4,11 @@
     <UpperPart></UpperPart>
 
     <div style="width: 100%; display: flex;">
+
       <div style="flex: 1; padding: 20px;">
         <div class="my_collaboration">
           MY INTERNSHIP
         </div>
-
         <div v-if="internships.length > 0" class="internships-container">
           <div v-for="internship in internships" :key="internship.id" style="padding: 5px">
             <div class="int">
@@ -23,14 +23,16 @@
         <div v-else>
           <p>No internships available.</p>
         </div>
-
       </div>
+
       <div class="vertical_line"></div>
+
       <div style="flex: 1; padding: 20px;">
         <div class="my_collaboration">
           MY COLLABORATIONS IN PROGESS
         </div>
       </div>
+
     </div>
   </div>
 </template>
