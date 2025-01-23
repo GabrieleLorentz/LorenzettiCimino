@@ -44,7 +44,7 @@
   width: 2px;
   background-color: black;
 }
-.data {
+/*.data {
   background-color: white;
   color: black;
   padding: 10px;
@@ -54,7 +54,7 @@
   text-align: center;
   width: 450px;
   margin-bottom: 20px;
-}
+}*/
 .editable-input {
   width: 90%;
   background: transparent;
