@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import AddInt from "@/pages/Post_SignIn/AddInt.vue";
+import AddInt from "@/pages/Post_SignIn/Utils/AddInt.vue";
 
 export default {
   components: {AddInt},

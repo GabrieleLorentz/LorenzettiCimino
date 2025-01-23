@@ -121,8 +121,8 @@ import {ref, computed} from 'vue';
 
 interface data {
   name: string;
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
   salary: number;
   qualification: string[];
   description: string;
@@ -130,8 +130,8 @@ interface data {
 
 const Data = ref<data>({
   name: '',
-  start: null,
-  end: null,
+  start: '',
+  end: '',
   salary: 0,
   qualification: [],
   description: ''
@@ -139,8 +139,8 @@ const Data = ref<data>({
 
 const hasChanges = computed(() =>{
   return Data.value.name.trim() !== '' &&
-      Data.value.start !== null &&
-      Data.value.end !== null &&
+      Data.value.start !== '' &&
+      Data.value.end !== '' &&
       Data.value.qualification.length > 0 &&
       Data.value.description.trim() !== '';
 })
@@ -156,6 +156,7 @@ function addInternship() {
     qualification: Data.value.qualification,
     description: Data.value.description
   };
+  console.log(formData.start);
 
   fetch('http://localhost:8080/api/company/insertInternship', {
     method: 'POST',

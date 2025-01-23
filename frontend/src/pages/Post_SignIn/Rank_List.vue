@@ -11,5 +11,5 @@
 </template>
 
 <script setup lang="ts">
-import UpperPart from "@/pages/Post_SignIn/upper_part.vue";
+import UpperPart from "@/pages/Post_SignIn/Utils/upper_part.vue";
 </script>

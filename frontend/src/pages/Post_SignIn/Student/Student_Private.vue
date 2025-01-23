@@ -100,7 +100,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed} from 'vue';
-import UpperPart from "@/pages/Post_SignIn/upper_part.vue";
+import UpperPart from "@/pages/Post_SignIn/Utils/upper_part.vue";
 
 interface UserData {
   name: string;
@@ -191,7 +191,7 @@ function saveAllChanges() {
             localStorage.setItem("email", data.email);
             localStorage.setItem("password", editedData.value.password);
 
-            originalData.value = {...editedData.value};
+            //originalData.value = {...editedData.value};
           });
         } else {
           console.log(response.status);

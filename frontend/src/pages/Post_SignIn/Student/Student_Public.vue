@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted} from 'vue';
-import UpperPart from "@/pages/Post_SignIn/upper_part.vue";
+import UpperPart from "@/pages/Post_SignIn/Utils/upper_part.vue";
 
 interface UserData {
   name: string;
