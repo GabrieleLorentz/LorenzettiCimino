@@ -261,4 +261,18 @@ public class InternshipServiceImpl implements InternshipService {
         }
         internshipRepository.save(internship);
     }
+
+    @Override
+    public void addSelectedStudent(String email, int internshipId, String authEmail) {
+        Company company = companyRepository.findByEmail(authEmail).orElseThrow(()->new IllegalArgumentException("Company not found"));
+        List<Internship> internships = internshipRepository.findByCompany(company);
+        Internship internship = internshipRepository.findById(internshipId).orElseThrow(()->new IllegalArgumentException("Internship not found"));
+        if(!internships.contains(internship)){
+            throw new IllegalArgumentException("Internship not found");
+        }
+        Student student = studentRepository.findByEmail(email).orElseThrow(()->new IllegalArgumentException("Student not found"));
+        internship.addSelectedStudent(student);
+        internship.deleteAcceptedStudent(student);
+        internshipRepository.save(internship);
+    }
 }

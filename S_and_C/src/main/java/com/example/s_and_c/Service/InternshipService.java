@@ -22,4 +22,6 @@ public interface InternshipService {
     List<InternshipForStudentsDTO> getAllForStudents();
 
     void addFormResponse(InternshipForStudentsDTO internshipForStudentsDTO, String authEmail);
+
+    void addSelectedStudent(String email, int internshipId, String authEmail);
 }

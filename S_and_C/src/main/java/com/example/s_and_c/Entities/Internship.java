@@ -47,6 +47,14 @@ public class Internship {
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private List<Student> acceptedStudents = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "internship_selected_Students",
+            joinColumns = @JoinColumn(name = "internship_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    private List<Student> selectedStudents = new ArrayList<>();
+
     @OneToMany(mappedBy = "internship")
     private List<Form> form = new ArrayList<>();
 
@@ -72,4 +80,8 @@ public class Internship {
     public void addAcceptedStudent(Student student) {acceptedStudents.add(student);}
 
     public void deleteAcceptedStudent(Student student) {acceptedStudents.remove(student);}
+
+    public void addSelectedStudent(Student student) {selectedStudents.add(student);}
+
+    public void deleteSelectedStudent(Student student) {selectedStudents.remove(student);}
 }

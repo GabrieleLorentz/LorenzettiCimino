@@ -70,6 +70,14 @@ public class CompanyController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/studentSelected/{email}_{internshipId}")
+    public ResponseEntity<StudentDTO> studentSelected(@PathVariable ("email") String email, @PathVariable ("internshipId") int internshipId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+        internshipService.addSelectedStudent(email,internshipId,authEmail);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping({"{email}"})
     public ResponseEntity<CompanyDTO> getCompanyById(@PathVariable ("email") String email) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
