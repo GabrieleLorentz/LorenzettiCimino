@@ -244,9 +244,11 @@ public class InternshipServiceImpl implements InternshipService {
         Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new IllegalArgumentException("Student not found"));
         for(Form form: internship.getForm()){
             form.addStudent(student);
-            //form.setResponse(internshipForStudentsDTO.getFormToCompile().);
+            form.setResponse(internshipForStudentsDTO.getFormToCompile().get((int)form.getFormId()).getResponse());
             formRepository.save(form);
         }
+        internshipRepository.save(internship);
+
 
     }
 }

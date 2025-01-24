@@ -29,7 +29,11 @@ public class Form {
     private Internship internship;
 
     @ManyToMany
-    @JoinColumn(name = "student_id", nullable = false)
+    @JoinTable(
+            name = "form_student",
+            joinColumns = @JoinColumn(name = "form_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
     private List<Student> studentList = new ArrayList<>();
 
     public Form(String request, String response, Internship internship) {
