@@ -62,7 +62,10 @@ public class CompanyServiceImpl implements CompanyService {
                 Company newCompany = new Company();
                 newCompany.setEmail(companyDTO.getEmail());
                 newCompany.setName(companyDTO.getName());
-                newCompany.setVat_number(companyDTO.getVat_number());
+                if(!company.getVat_number().equals(companyDTO.getVat_number())) {
+                    newCompany.setVat_number(companyDTO.getVat_number());
+                }
+
                 newCompany.setDescription(companyDTO.getDescription());
                 String rawPassword = companyDTO.getPassword();
                 newCompany.setPassword(passwordEncoder.encode(rawPassword));
@@ -81,6 +84,7 @@ public class CompanyServiceImpl implements CompanyService {
                 // 4. Rimuovi la vecchia company
                 entityManager.remove(company);
                 entityManager.flush();
+                newCompany.setVat_number(companyDTO.getVat_number());
                 UserTokenDTO user = authService.authenticate(
                         new AuthRequestDTO(newCompany.getEmail(), rawPassword)
                 );

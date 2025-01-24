@@ -15,4 +15,6 @@ public interface StudentService {
     UpdatedStudentDTO updateStudent(String email, StudentDTO studentDTO);
 
     void deleteStudent(String email);
+
+    void requestInternship(long internshipId, String authEmail);
 }

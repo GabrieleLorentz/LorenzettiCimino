@@ -1,12 +1,14 @@
 package com.example.s_and_c.Controller;
 
 import com.example.s_and_c.DTO.InternshipDTO;
+import com.example.s_and_c.DTO.InternshipIdDTO;
 import com.example.s_and_c.DTO.SearchDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
 import com.example.s_and_c.DTO.UpdatedStudentDTO;
 import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Entities.Student;
+import com.example.s_and_c.Mapper.InternshipMapper;
 import com.example.s_and_c.Repositories.InternshipRepository;
 import com.example.s_and_c.Repositories.StudentRepository;
 import com.example.s_and_c.Service.InternshipService;
@@ -17,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -81,22 +84,27 @@ public class StudentController {
 
     }
 
-    @PostMapping("requestInternship")
-    public ResponseEntity<InternshipDTO> requestInternship(@RequestBody int internship_id) {
+    @PostMapping("/requestInternship")
+    public ResponseEntity<InternshipDTO> requestInternship(@RequestBody InternshipIdDTO internshipId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
-        Internship internship = internshipRepository.findById(internship_id).orElse(null);
-        if(internship == null){
-            return ResponseEntity.badRequest().build();
-        }
-        Student student = studentRepository.findByEmail(authEmail).orElse(null);
-        if(student == null){
-            return ResponseEntity.badRequest().build();
-        }
-        internship.addStudent(student);
+        studentService.requestInternship(internshipId.getId(),authEmail);
         // notifica la company
         return ResponseEntity.ok().build();
 
+    }
+
+    @GetMapping("/myInternships")
+    public ResponseEntity<List<InternshipDTO>> getMyInternships() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
+        List<Internship> internships = internshipRepository.findByAppliedStudentsContainingIgnoreCase(student);
+        List<InternshipDTO> internshipDTOList = new ArrayList<>();
+        for(Internship internship : internships){
+            internshipDTOList.add(InternshipMapper.maptoInternshipDTO(internship));
+        }
+        return internshipDTOList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(internshipDTOList);
     }
 
 

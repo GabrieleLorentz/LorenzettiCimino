@@ -9,6 +9,7 @@ import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.StudentMapper;
+import com.example.s_and_c.Repositories.InternshipRepository;
 import com.example.s_and_c.Repositories.StudentRepository;
 import com.example.s_and_c.Service.StudentService;
 import jakarta.transaction.Transactional;
@@ -27,6 +28,7 @@ public class StudentServiceImpl implements StudentService {
 
     private final AuthService authService;
     private StudentRepository studentRepository;
+    private InternshipRepository internshipRepository;
     private final PasswordEncoder passwordEncoder;
     @Override
     public StudentInternshipDTO getStudent(String email) {
@@ -96,6 +98,15 @@ public class StudentServiceImpl implements StudentService {
     public void deleteStudent(String email) {
 
         studentRepository.deleteStudentByEmail(email);
+    }
+
+    @Override
+    public void requestInternship(long internshipId, String authEmail) {
+        System.out.println(internshipId);
+        Internship internship = internshipRepository.findById((int)internshipId).orElseThrow(()->new RuntimeException("Internship not found"));
+        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
+        internship.addStudent(student);
+        internshipRepository.save(internship);
     }
 
     /*private StudentDTO mapInternshipToDTO(Student student) {
