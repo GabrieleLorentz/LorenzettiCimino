@@ -5,10 +5,12 @@ import com.example.s_and_c.DTO.InsertInternshipDTO;
 import com.example.s_and_c.DTO.InternshipDTO;
 import com.example.s_and_c.DTO.SearchDTO;
 import com.example.s_and_c.Entities.Company;
+import com.example.s_and_c.Entities.Form;
 import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.InternshipMapper;
 import com.example.s_and_c.Repositories.CompanyRepository;
+import com.example.s_and_c.Repositories.FormRepository;
 import com.example.s_and_c.Repositories.InternshipRepository;
 import com.example.s_and_c.Service.InternshipService;
 import io.micrometer.common.util.StringUtils;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 public class InternshipServiceImpl implements InternshipService {
     private final InternshipRepository internshipRepository;
     private final CompanyRepository companyRepository;
+    private final FormRepository formRepository;
 
 
     @Override
@@ -35,6 +38,7 @@ public class InternshipServiceImpl implements InternshipService {
         Company insertingCompany = companyRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Company not found"));
 
         Internship internship = InternshipMapper.maptoInternship(insertInternshipDTO, insertingCompany);
+        formRepository.saveAll(internship.getForm());
         internshipRepository.save(internship);
 
         return getAllInternshipsByEmail(insertingCompany);

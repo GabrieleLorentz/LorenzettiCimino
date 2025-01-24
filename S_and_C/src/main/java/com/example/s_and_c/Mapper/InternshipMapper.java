@@ -5,9 +5,9 @@ import com.example.s_and_c.DTO.InternshipCompleteDTO;
 import com.example.s_and_c.DTO.InternshipDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.Entities.Company;
+import com.example.s_and_c.Entities.Form;
 import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Entities.Student;
-import com.example.s_and_c.Service.CompanyService;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
@@ -18,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InternshipMapper {
 
-    private final CompanyService companyService;
 
     public static InternshipDTO maptoInternshipDTO(Internship internship) {
         List<StudentDTO> appliedStudents = new ArrayList<>();
@@ -51,6 +50,11 @@ public class InternshipMapper {
         internship.setQualification_required(dto.getQualification_required());
         internship.setDescription(dto.getDescription());
         internship.setCompany(company);
+        List<Form> questions = new ArrayList<>();
+        for(String question: dto.getQuestions()){
+            questions.add(new Form(question,null,internship));
+        }
+        internship.setForm(questions);
         company.getInternships().add(internship);
 
         return internship;

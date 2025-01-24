@@ -139,8 +139,8 @@ public interface InternshipRepository extends JpaRepository<Internship, Integer>
 
     List<Internship> findByAppliedStudentsContainingIgnoreCase(Student student);
 
-    @Modifying
+    /*@Modifying
     @Query("UPDATE InternshipAppliedStudents i SET i.student = :newStudent WHERE i.student = :oldStudent")
     void updateStudentInInternships(@Param("oldStudent") String oldStudent,
-                                    @Param("newStudent") String newStudent);
+                                    @Param("newStudent") String newStudent);*/
 }

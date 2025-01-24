@@ -66,7 +66,7 @@ public class StudentServiceImpl implements StudentService {
                 entityManager.persist(newStudent);
                 entityManager.flush();
 
-                internshipRepository.updateStudentInInternships(student.getEmail(),newStudent.getEmail());
+                //internshipRepository.updateStudentInInternships(student.getEmail(),newStudent.getEmail());
 
                 entityManager.remove(student);
                 entityManager.flush();

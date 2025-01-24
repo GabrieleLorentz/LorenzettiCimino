@@ -40,6 +40,8 @@ public class Internship {
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private List<Student> appliedStudents = new ArrayList<>();
+    @OneToMany(mappedBy = "internship")
+    private List<Form> form;
 
 
     public Internship(String name, LocalDate startDate, LocalDate endDate, int salary, String qualification_required, String description, Company company) {
