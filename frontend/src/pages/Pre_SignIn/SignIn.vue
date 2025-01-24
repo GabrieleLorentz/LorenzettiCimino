@@ -64,7 +64,7 @@ export default {
   background-color: white; /* Colore di sfondo iniziale */
   color: #f2a73b; /* Colore del testo */
   border: 4px solid #232526;
-  width: 90%;
+  width: 85%;
   font-size: 40px;
   padding: 15px;
   border-radius: 30px; /* Angoli arrotondati */
