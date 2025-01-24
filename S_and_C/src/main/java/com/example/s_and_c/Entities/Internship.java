@@ -33,13 +33,20 @@ public class Internship {
     @ManyToOne(optional = false)
     @JoinColumn(name = "company_email",nullable = false)
     private Company company;
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "internship_appliedStudents",
             joinColumns = @JoinColumn(name = "internship_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private List<Student> appliedStudents = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "internship_acceptedStudents",
+            joinColumns = @JoinColumn(name = "internship_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    private List<Student> acceptedStudents = new ArrayList<>();
     @OneToMany(mappedBy = "internship")
     private List<Form> form;
 
@@ -54,11 +61,11 @@ public class Internship {
         this.company = company;
     }
 
-    public void addStudent(Student student) {
+    public void addAppliedStudent(Student student) {
         appliedStudents.add(student);
     }
 
-    public void deleteStudent(Student student) {
+    public void deleteAppliedStudent(Student student) {
         appliedStudents.remove(student);
     }
 }

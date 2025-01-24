@@ -23,7 +23,7 @@ public class StudentMapper {
                 student.getEmail(),
                 student.getPassword(),
                 student.getDescription(),
-                student.getInternships()
+                student.getAppliedToInternships()
         );
     }
 

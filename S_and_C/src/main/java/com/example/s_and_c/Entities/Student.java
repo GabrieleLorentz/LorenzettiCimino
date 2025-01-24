@@ -38,13 +38,14 @@ public class Student implements UserDetails {
             joinColumns = @JoinColumn(name = "email"), // FK verso `students`
             inverseJoinColumns = @JoinColumn(name = "internship_id") // FK verso `internships`
     )
-    private List<Internship> internships = new ArrayList<>();
+    private List<Internship> appliedToInternships = new ArrayList<>();
 
-    public List<Internship> getInternships() {
-        if (internships == null) {
-            internships = new ArrayList<>();
+
+    public List<Internship> getAppliedToInternships() {
+        if (appliedToInternships == null) {
+            appliedToInternships = new ArrayList<>();
         }
-        return internships;
+        return appliedToInternships;
     }
 
     @Enumerated(EnumType.STRING)
@@ -58,13 +59,13 @@ public class Student implements UserDetails {
         this.description = description;
     }
 
-    public Student(String name, String surname, String email, String password, String description, List<Internship> internships) {
+    public Student(String name, String surname, String email, String password, String description, List<Internship> appliedToInternships) {
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.password = password;
         this.description = description;
-        this.internships = internships;
+        this.appliedToInternships = appliedToInternships;
     }
 
 

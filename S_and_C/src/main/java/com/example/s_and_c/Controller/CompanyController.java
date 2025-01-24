@@ -1,6 +1,7 @@
 package com.example.s_and_c.Controller;
 
 import com.example.s_and_c.DTO.*;
+import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.Service.CompanyService;
 import com.example.s_and_c.Service.InternshipService;
 import lombok.AllArgsConstructor;
@@ -51,10 +52,18 @@ public class CompanyController {
     }
 
     @GetMapping("/myInternship")
-    public ResponseEntity<List<InternshipDTO>> getMyInternship() {
+    public ResponseEntity<List<InternshipCompleteDTO>> getMyInternship() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        List<InternshipDTO> savedInternship = internshipService.getMyInternship(auth.getName());
+        List<InternshipCompleteDTO> savedInternship = internshipService.getMyInternship(auth.getName());
         return new ResponseEntity<>(savedInternship, HttpStatus.OK);
+    }
+
+    @PostMapping("/studentAccepted/{email}_{internshipId}")
+    public ResponseEntity<StudentDTO> studentAccepted(@PathVariable ("email") String email, @PathVariable("internshipId") int internshipId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+        internshipService.addAcceptedStudent(email, internshipId);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping({"{email}"})

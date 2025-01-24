@@ -14,7 +14,6 @@ import com.example.s_and_c.Repositories.StudentRepository;
 import com.example.s_and_c.Service.StudentService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -110,7 +109,7 @@ public class StudentServiceImpl implements StudentService {
         System.out.println(internshipId);
         Internship internship = internshipRepository.findById((int)internshipId).orElseThrow(()->new RuntimeException("Internship not found"));
         Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
-        internship.addStudent(student);
+        internship.addAppliedStudent(student);
         internshipRepository.save(internship);
     }
 

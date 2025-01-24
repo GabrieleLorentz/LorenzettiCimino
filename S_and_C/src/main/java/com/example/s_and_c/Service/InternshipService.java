@@ -1,6 +1,7 @@
 package com.example.s_and_c.Service;
 
 import com.example.s_and_c.DTO.InsertInternshipDTO;
+import com.example.s_and_c.DTO.InternshipCompleteDTO;
 import com.example.s_and_c.DTO.InternshipDTO;
 import com.example.s_and_c.DTO.SearchDTO;
 
@@ -19,5 +20,7 @@ public interface InternshipService {
 
     List<InternshipDTO> findMatch(SearchDTO searchDTO);
 
-    List<InternshipDTO> getMyInternship(String name);
+    List<InternshipCompleteDTO> getMyInternship(String name);
+
+    void addAcceptedStudent(String email, int internshipId);
 }

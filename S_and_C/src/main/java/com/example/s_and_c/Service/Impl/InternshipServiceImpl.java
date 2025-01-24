@@ -2,16 +2,18 @@ package com.example.s_and_c.Service.Impl;
 
 
 import com.example.s_and_c.DTO.InsertInternshipDTO;
+import com.example.s_and_c.DTO.InternshipCompleteDTO;
 import com.example.s_and_c.DTO.InternshipDTO;
 import com.example.s_and_c.DTO.SearchDTO;
 import com.example.s_and_c.Entities.Company;
-import com.example.s_and_c.Entities.Form;
 import com.example.s_and_c.Entities.Internship;
+import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.InternshipMapper;
 import com.example.s_and_c.Repositories.CompanyRepository;
 import com.example.s_and_c.Repositories.FormRepository;
 import com.example.s_and_c.Repositories.InternshipRepository;
+import com.example.s_and_c.Repositories.StudentRepository;
 import com.example.s_and_c.Service.InternshipService;
 import io.micrometer.common.util.StringUtils;
 import lombok.AllArgsConstructor;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 public class InternshipServiceImpl implements InternshipService {
     private final InternshipRepository internshipRepository;
     private final CompanyRepository companyRepository;
+    private final StudentRepository studentRepository;
     private final FormRepository formRepository;
 
 
@@ -218,15 +221,23 @@ public class InternshipServiceImpl implements InternshipService {
     }
 
     @Override
-    public List<InternshipDTO> getMyInternship(String email) {
-        Company company = companyRepository.findByEmail(email).orElse(null);
-        if(company != null) {
+    public List<InternshipCompleteDTO> getMyInternship(String email) {
+        Company company = companyRepository.findByEmail(email).orElseThrow(()->new RuntimeException("Company not found"));
+
             List<Internship> internships = internshipRepository.findByCompany(company);
-            return internships.stream().map(InternshipMapper::maptoInternshipDTO).collect(Collectors.toList());
-        }else
-            return null;
+            List<InternshipCompleteDTO> internshipCompleteDTOS = new ArrayList<>();
+            for (Internship internship : internships) {
+                internshipCompleteDTOS.add(InternshipMapper.maptoInternshipCompleteDTO(internship));
+            }
+            return internshipCompleteDTOS;
+
 
     }
 
+    @Override
+    public void addAcceptedStudent(String email, int internshipId) {
+        Student student = studentRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Student not found"));
+        Internship internship = internshipRepository.findById(internshipId).orElseThrow(()-> new IllegalArgumentException("Internship not found"));
 
+    }
 }
