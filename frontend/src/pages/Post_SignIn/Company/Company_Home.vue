@@ -13,7 +13,7 @@
           <div v-for="internship in internships" :key="internship.id" style="padding: 5px">
             <div class="int">
               <p><strong>Name:</strong>{{ internship.name }}</p>
-              <p><strong>Company:</strong>{{  }}</p>
+              <p><strong>Company:</strong>{{ internship.company.name }}</p>
               <p><strong>Start Date:</strong> {{ internship.start_date }}</p>
               <p><strong>End Date:</strong> {{ internship.end_date }}</p>
               <p><strong>Salary:</strong> {{ internship.salary }}</p>
@@ -81,6 +81,7 @@ function receiveData() {
         throw new Error("Errore nella richiesta al backend");
       })
       .then(data => {
+        console.log(data)
         internships.value = data;
       })
       .catch(error => {

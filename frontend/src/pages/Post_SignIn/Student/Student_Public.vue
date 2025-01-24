@@ -20,7 +20,7 @@
           <span class="editable-input">{{ originalData.email  }}</span>
         </div>
         <div class="data">
-          <span class="editable-textarea">{{originalData.description}}</span>
+          <textarea class="editable-textarea">{{originalData.description}}</textarea>
         </div>
       </div>
       <div class="vertical_line2"></div>
