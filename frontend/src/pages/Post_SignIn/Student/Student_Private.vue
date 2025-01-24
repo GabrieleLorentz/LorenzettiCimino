@@ -44,7 +44,7 @@
   width: 2px;
   background-color: black;
 }
-/*.data {
+.data {
   background-color: white;
   color: black;
   padding: 10px;
@@ -54,7 +54,7 @@
   text-align: center;
   width: 450px;
   margin-bottom: 20px;
-}*/
+}
 .editable-input {
   width: 90%;
   background: transparent;
@@ -185,13 +185,13 @@ function saveAllChanges() {
   })
       .then(response => {
         if (response.ok) {
+          originalData.value = {...editedData.value};
           return response.json().then(data => {
             console.log("Dati ricevuti:", data);
             localStorage.setItem("token", data.token);
             localStorage.setItem("email", data.email);
             localStorage.setItem("password", editedData.value.password);
 
-            //originalData.value = {...editedData.value};
           });
         } else {
           console.log(response.status);

@@ -1,7 +1,7 @@
 <template>
   <div class="profile-container1">
     <img src="/src/assets/+.svg" alt="+" class="icon3 icon_hover"/>
-      <div class='popup1'>
+      <div class="popup1">
         <p>ADD INTERNSHIP</p>
 
         <div class="form">
@@ -156,8 +156,6 @@ function addInternship() {
     qualification: Data.value.qualification,
     description: Data.value.description
   };
-  console.log(formData.start);
-  console.log(formData.end);
 
   fetch('http://localhost:8080/api/company/insertInternship', {
     method: 'POST',

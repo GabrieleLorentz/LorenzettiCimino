@@ -103,7 +103,7 @@ function receiveData() {
 
 function saveAllChanges() {
   const token = localStorage.getItem('token');
-
+  console.log(localStorage.getItem('token'))
   const updateData = {
     name: editedData.value.name,
     email: editedData.value.email,
@@ -122,13 +122,17 @@ function saveAllChanges() {
   })
       .then(response => {
         if (response.ok) {
+          originalData.value = {...editedData.value};
           return response.json().then(data => {
             console.log("Dati ricevuti:", data);
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("email", data.email);
-            localStorage.setItem("password", editedData.value.password);
+            if (editedData.value.email !== originalData.value.email ||
+                editedData.value.password !== originalData.value.password) {
+              localStorage.setItem("token", data.newToken);
+              localStorage.setItem("email", data.email);
+              localStorage.setItem("password", editedData.value.password);
 
-            //originalData.value = {...editedData.value};
+              console.log(localStorage.getItem('token'))
+            }
           });
         } else {
           console.log(response.status);
