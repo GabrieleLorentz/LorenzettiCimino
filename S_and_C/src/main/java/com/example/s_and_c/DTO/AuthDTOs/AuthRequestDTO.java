@@ -1,4 +1,4 @@
-package com.example.s_and_c.DTO;
+package com.example.s_and_c.DTO.AuthDTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequestDTO {
+public class AuthRequestDTO {
     private String email;
     private String password;
-    private String name;
-    private String surname;
-    private String description;
-    private Long vat_number;
 }

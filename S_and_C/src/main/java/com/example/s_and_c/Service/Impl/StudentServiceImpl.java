@@ -1,11 +1,11 @@
 package com.example.s_and_c.Service.Impl;
 
-import com.example.s_and_c.DTO.AuthRequestDTO;
-import com.example.s_and_c.DTO.InternshipForStudentsDTO;
+import com.example.s_and_c.DTO.AuthDTOs.AuthRequestDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
 import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
-import com.example.s_and_c.DTO.UserTokenDTO;
+import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
 import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Exception.ResourceNotFoundException;

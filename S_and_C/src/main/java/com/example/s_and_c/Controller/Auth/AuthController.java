@@ -1,8 +1,8 @@
 package com.example.s_and_c.Controller.Auth;
 
-import com.example.s_and_c.DTO.AuthRequestDTO;
-import com.example.s_and_c.DTO.RegisterRequestDTO;
-import com.example.s_and_c.DTO.UserTokenDTO;
+import com.example.s_and_c.DTO.AuthDTOs.AuthRequestDTO;
+import com.example.s_and_c.DTO.AuthDTOs.RegisterRequestDTO;
+import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
 import com.example.s_and_c.Service.Impl.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

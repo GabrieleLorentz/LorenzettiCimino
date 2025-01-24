@@ -1,7 +1,7 @@
 package com.example.s_and_c.Service;
 
-import com.example.s_and_c.DTO.CompanyDTO;
-import com.example.s_and_c.DTO.UpdatedCompanyDTO;
+import com.example.s_and_c.DTO.CompanyDTOs.CompanyDTO;
+import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
 
 import java.util.List;
 

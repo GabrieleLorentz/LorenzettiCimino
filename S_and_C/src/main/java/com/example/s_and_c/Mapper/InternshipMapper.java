@@ -1,6 +1,11 @@
 package com.example.s_and_c.Mapper;
 
 import com.example.s_and_c.DTO.*;
+import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.InternshipCompleteDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.InternshipDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
+import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.Entities.Company;
 import com.example.s_and_c.Entities.Form;
@@ -58,7 +63,11 @@ public class InternshipMapper {
         return internship;
     }
 
-    public static InternshipCompleteDTO maptoInternshipCompleteDTO(Internship internship) {
+    public static InternshipCompleteDTO maptoInternshipCompleteDTO(Internship internship, List<FormWithStudentsDTO> compiledForms) {
+
+        List<ShortStudentDTO> appliedStudents = new ArrayList<>();
+        for(Student student: internship.getAppliedStudents())
+            appliedStudents.add(new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname()));
 
         return new InternshipCompleteDTO(
                 internship.getInternship_id(),
@@ -68,7 +77,9 @@ public class InternshipMapper {
                 internship.getSalary(),
                 internship.getQualification_required(),
                 internship.getDescription(),
-                CompanyMapper.mapToCompanyDTO(internship.getCompany())
+                appliedStudents,
+                compiledForms,
+                internship.getCompany().getName()
         );
 
     }
@@ -88,8 +99,10 @@ public class InternshipMapper {
 
     public static InternshipForStudentsDTO maptoInternshipForStudentsDTO(Internship internship) {
         List<FormDTO> forms = new ArrayList<>();
-        for(Form form: internship.getForm())
-            FormMapper.mapToFormDTO(form);
+        for(Form form: internship.getForm()){
+            forms.add(FormMapper.mapToFormDTO(form));
+        }
+
         return new InternshipForStudentsDTO(
                 internship.getInternship_id(),
                 internship.getName(),

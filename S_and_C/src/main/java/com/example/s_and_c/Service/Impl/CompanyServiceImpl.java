@@ -1,9 +1,9 @@
 package com.example.s_and_c.Service.Impl;
 
-import com.example.s_and_c.DTO.AuthRequestDTO;
-import com.example.s_and_c.DTO.CompanyDTO;
-import com.example.s_and_c.DTO.UpdatedCompanyDTO;
-import com.example.s_and_c.DTO.UserTokenDTO;
+import com.example.s_and_c.DTO.AuthDTOs.AuthRequestDTO;
+import com.example.s_and_c.DTO.CompanyDTOs.CompanyDTO;
+import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
+import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
 import com.example.s_and_c.Entities.Company;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.CompanyMapper;

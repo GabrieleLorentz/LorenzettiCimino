@@ -2,6 +2,10 @@ package com.example.s_and_c.Service.Impl;
 
 
 import com.example.s_and_c.DTO.*;
+import com.example.s_and_c.DTO.InternshipDTOs.InternshipCompleteDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.InternshipDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
+import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
 import com.example.s_and_c.Entities.Company;
 import com.example.s_and_c.Entities.Form;
 import com.example.s_and_c.Entities.Internship;
@@ -205,12 +209,20 @@ public class InternshipServiceImpl implements InternshipService {
     @Override
     public List<InternshipCompleteDTO> getMyInternship(String email) {
         Company company = companyRepository.findByEmail(email).orElseThrow(()->new RuntimeException("Company not found"));
-
+            List<FormWithStudentsDTO> compiledForms = new ArrayList<>();
             List<Internship> internships = internshipRepository.findByCompany(company);
             List<InternshipCompleteDTO> internshipCompleteDTOS = new ArrayList<>();
             for (Internship internship : internships) {
-                internshipCompleteDTOS.add(InternshipMapper.maptoInternshipCompleteDTO(internship));
+                for(Student student: internship.getAcceptedStudents()){
+                    List<Form> results = formRepository.findByInternshipAndStudent(internship, student);
+                    for(Form form: results){
+                        compiledForms.add(new FormWithStudentsDTO(form.getFormId(), form.getRequest(), form.getResponse(),
+                                new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname())));
+                    }
+                }
+                internshipCompleteDTOS.add(InternshipMapper.maptoInternshipCompleteDTO(internship,compiledForms));
             }
+
             return internshipCompleteDTOS;
 
 
@@ -248,7 +260,5 @@ public class InternshipServiceImpl implements InternshipService {
             formRepository.save(form);
         }
         internshipRepository.save(internship);
-
-
     }
 }

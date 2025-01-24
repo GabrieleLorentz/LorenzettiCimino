@@ -1,6 +1,10 @@
 package com.example.s_and_c.Controller;
 
 import com.example.s_and_c.DTO.*;
+import com.example.s_and_c.DTO.CompanyDTOs.CompanyDTO;
+import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.InternshipCompleteDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.InternshipDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.Service.CompanyService;
 import com.example.s_and_c.Service.InternshipService;

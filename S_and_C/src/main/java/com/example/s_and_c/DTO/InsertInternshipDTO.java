@@ -1,6 +1,5 @@
 package com.example.s_and_c.DTO;
 
-import com.example.s_and_c.Entities.Form;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

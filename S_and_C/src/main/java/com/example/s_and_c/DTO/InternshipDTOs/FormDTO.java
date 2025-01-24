@@ -1,4 +1,4 @@
-package com.example.s_and_c.DTO;
+package com.example.s_and_c.DTO.InternshipDTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

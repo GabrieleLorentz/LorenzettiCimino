@@ -1,7 +1,5 @@
-package com.example.s_and_c.DTO;
+package com.example.s_and_c.DTO.CompanyDTOs;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

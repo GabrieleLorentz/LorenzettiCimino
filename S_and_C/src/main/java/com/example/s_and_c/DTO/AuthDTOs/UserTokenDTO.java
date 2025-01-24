@@ -1,6 +1,5 @@
-package com.example.s_and_c.DTO;
+package com.example.s_and_c.DTO.AuthDTOs;
 
-import com.example.s_and_c.Entities.Status.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
