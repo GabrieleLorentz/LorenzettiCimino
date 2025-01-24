@@ -1,8 +1,6 @@
 package com.example.s_and_c.Mapper;
 
-import com.example.s_and_c.DTO.InsertInternshipDTO;
-import com.example.s_and_c.DTO.InternshipCompleteDTO;
-import com.example.s_and_c.DTO.InternshipDTO;
+import com.example.s_and_c.DTO.*;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.Entities.Company;
 import com.example.s_and_c.Entities.Form;
@@ -74,4 +72,36 @@ public class InternshipMapper {
         );
 
     }
+
+    public static InternshipForStudentsDTO maptoInternshipForAppliedStudentsDTO(Internship internship) {
+        return new InternshipForStudentsDTO(
+                internship.getInternship_id(),
+                internship.getName(),
+                internship.getStartDate(),
+                internship.getEndDate(),
+                internship.getSalary(),
+                internship.getQualification_required(),
+                internship.getDescription(),
+                internship.getCompany().getName()
+        );
+    }
+
+    public static InternshipForStudentsDTO maptoInternshipForStudentsDTO(Internship internship) {
+        List<FormDTO> forms = new ArrayList<>();
+        for(Form form: internship.getForm())
+            FormMapper.mapToFormDTO(form);
+        return new InternshipForStudentsDTO(
+                internship.getInternship_id(),
+                internship.getName(),
+                internship.getStartDate(),
+                internship.getEndDate(),
+                internship.getSalary(),
+                internship.getQualification_required(),
+                internship.getDescription(),
+                internship.getCompany().getName(),
+                forms
+        );
+    }
+
+
 }

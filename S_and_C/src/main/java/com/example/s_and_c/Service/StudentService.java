@@ -1,8 +1,9 @@
 package com.example.s_and_c.Service;
 
+import com.example.s_and_c.DTO.InternshipForStudentsDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
-import com.example.s_and_c.DTO.UpdatedStudentDTO;
+import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface StudentService {
     void deleteStudent(String email);
 
     void requestInternship(long internshipId, String authEmail);
+
+    List<InternshipForStudentsDTO> getPersonalInternships(String authEmail);
 }

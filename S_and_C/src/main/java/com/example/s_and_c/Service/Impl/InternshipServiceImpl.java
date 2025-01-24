@@ -1,11 +1,9 @@
 package com.example.s_and_c.Service.Impl;
 
 
-import com.example.s_and_c.DTO.InsertInternshipDTO;
-import com.example.s_and_c.DTO.InternshipCompleteDTO;
-import com.example.s_and_c.DTO.InternshipDTO;
-import com.example.s_and_c.DTO.SearchDTO;
+import com.example.s_and_c.DTO.*;
 import com.example.s_and_c.Entities.Company;
+import com.example.s_and_c.Entities.Form;
 import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
@@ -53,17 +51,7 @@ public class InternshipServiceImpl implements InternshipService {
 
     }
 
-    @Override
-    public InternshipDTO getInternship(int id) {
-        Internship internship = internshipRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Internship not found"));
-        return InternshipMapper.maptoInternshipDTO(internship);
-    }
 
-    @Override
-    public List<InternshipDTO> getAllInternships() {
-        List<Internship> internships = internshipRepository.findAll();
-        return internships.stream().map(InternshipMapper::maptoInternshipDTO).collect(Collectors.toList());
-    }
 
     /*@Override
     public InternshipDTO updateInternship(int id, InsertInternshipDTO insertInternshipDTO) {
@@ -80,12 +68,6 @@ public class InternshipServiceImpl implements InternshipService {
 
     }*/
 
-    @Override
-    public void deleteInternship(int id) {
-        Internship internship = internshipRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Internship not found"));
-
-        internshipRepository.delete(internship);
-    }
 
     private LocalDate convertToLocalDate(Date date) {
         if (date == null) return null;
@@ -238,6 +220,33 @@ public class InternshipServiceImpl implements InternshipService {
     public void addAcceptedStudent(String email, int internshipId) {
         Student student = studentRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Student not found"));
         Internship internship = internshipRepository.findById(internshipId).orElseThrow(()-> new IllegalArgumentException("Internship not found"));
+        internship.addAcceptedStudent(student);
+        internship.deleteAppliedStudent(student);
+        internshipRepository.save(internship);
+
+
+    }
+
+    @Override
+    public List<InternshipForStudentsDTO> getAllForStudents() {
+        List<Internship> internships = internshipRepository.findAll();
+        List<InternshipForStudentsDTO> internshipForStudentsDTOS = new ArrayList<>();
+        for(Internship internship : internships){
+            internshipForStudentsDTOS.add(InternshipMapper.maptoInternshipForStudentsDTO(internship));
+        }
+        return internshipForStudentsDTOS;
+    }
+
+    @Override
+    public void addFormResponse(InternshipForStudentsDTO internshipForStudentsDTO, String authEmail) {
+        Internship internship = internshipRepository.findById((int) internshipForStudentsDTO.getInternship_id())
+                .orElseThrow(()->new IllegalArgumentException("Internship not found"));
+        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new IllegalArgumentException("Student not found"));
+        for(Form form: internship.getForm()){
+            form.addStudent(student);
+            //form.setResponse(internshipForStudentsDTO.getFormToCompile().);
+            formRepository.save(form);
+        }
 
     }
 }

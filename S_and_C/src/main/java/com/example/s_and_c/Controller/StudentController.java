@@ -3,12 +3,7 @@ package com.example.s_and_c.Controller;
 import com.example.s_and_c.DTO.*;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
-import com.example.s_and_c.Entities.Internship;
-import com.example.s_and_c.Entities.Student;
-import com.example.s_and_c.Mapper.InternshipMapper;
-import com.example.s_and_c.Repositories.CompanyRepository;
-import com.example.s_and_c.Repositories.InternshipRepository;
-import com.example.s_and_c.Repositories.StudentRepository;
+import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
 import com.example.s_and_c.Service.InternshipService;
 import com.example.s_and_c.Service.StudentService;
 import lombok.AllArgsConstructor;
@@ -18,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -29,9 +23,6 @@ public class StudentController {
 
     private final StudentService studentService;
     private final InternshipService internshipService;
-    private final InternshipRepository internshipRepository;
-    private final StudentRepository studentRepository;
-    private final CompanyRepository companyRepository;
 
     @GetMapping({"/personalData"})
     public ResponseEntity<StudentInternshipDTO> getStudentById() {
@@ -95,26 +86,25 @@ public class StudentController {
     }
 
     @GetMapping("/myInternships")
-    public ResponseEntity<List<InternshipDTO>> getMyInternships() {
+    public ResponseEntity<List<InternshipForStudentsDTO>> getMyInternships() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
-        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
-        List<Internship> internships = internshipRepository.findByAppliedStudentsContainingIgnoreCase(student);
-        List<InternshipDTO> internshipDTOList = new ArrayList<>();
-        for(Internship internship : internships){
-            internshipDTOList.add(InternshipMapper.maptoInternshipDTO(internship));
-        }
+        List<InternshipForStudentsDTO> internshipDTOList = studentService.getPersonalInternships(authEmail);
         return internshipDTOList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(internshipDTOList);
     }
 
     @GetMapping("/allInternships")
-    public ResponseEntity<List<InternshipCompleteDTO>> getAllInternships() {
-        List<Internship> internships = internshipRepository.findAll();
-        List<InternshipCompleteDTO> internshipDTOList = new ArrayList<>();
-        for(Internship internship : internships){
-            internshipDTOList.add(InternshipMapper.maptoInternshipCompleteDTO(internship));
-        }
-        return new ResponseEntity<>(internshipDTOList, HttpStatus.OK);
+    public ResponseEntity<List<InternshipForStudentsDTO>> getAllInternships() {
+        List<InternshipForStudentsDTO> internshipForStudentsDTOS = internshipService.getAllForStudents();
+        return new ResponseEntity<>(internshipForStudentsDTOS, HttpStatus.OK);
+    }
+
+    @PostMapping("/formResponses")
+    public ResponseEntity<StudentDTO> formResponses(@RequestBody InternshipForStudentsDTO internshipForStudentsDTO) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+        internshipService.addFormResponse(internshipForStudentsDTO, authEmail);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{email}")
@@ -123,6 +113,7 @@ public class StudentController {
         studentService.deleteStudent(email);
         return ResponseEntity.ok("Student deleted succesfully");
     }
+
 
 
 }

@@ -1,13 +1,15 @@
 package com.example.s_and_c.Service.Impl;
 
 import com.example.s_and_c.DTO.AuthRequestDTO;
+import com.example.s_and_c.DTO.InternshipForStudentsDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
-import com.example.s_and_c.DTO.UpdatedStudentDTO;
+import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
 import com.example.s_and_c.DTO.UserTokenDTO;
 import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
+import com.example.s_and_c.Mapper.InternshipMapper;
 import com.example.s_and_c.Mapper.StudentMapper;
 import com.example.s_and_c.Repositories.InternshipRepository;
 import com.example.s_and_c.Repositories.StudentRepository;
@@ -21,6 +23,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -111,6 +114,21 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
         internship.addAppliedStudent(student);
         internshipRepository.save(internship);
+    }
+
+    @Override
+    public List<InternshipForStudentsDTO> getPersonalInternships(String authEmail) {
+        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
+        List<Internship> internships = internshipRepository.findByAppliedStudentsContainingIgnoreCase(student);
+        List<Internship> internshipsAccepted = internshipRepository.findByAcceptedStudentsContainingIgnoreCase(student);
+        List<InternshipForStudentsDTO> internshipDTOList = new ArrayList<>();
+        for(Internship internship : internships){
+            internshipDTOList.add(InternshipMapper.maptoInternshipForAppliedStudentsDTO(internship));
+        }
+        for(Internship internship : internshipsAccepted){
+            internshipDTOList.add(InternshipMapper.maptoInternshipForStudentsDTO(internship));
+        }
+        return internshipDTOList;
     }
 
     /*private StudentDTO mapInternshipToDTO(Student student) {

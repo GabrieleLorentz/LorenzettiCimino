@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,9 +28,17 @@ public class Form {
     @JoinColumn(name = "internship_id")
     private Internship internship;
 
+    @ManyToMany
+    @JoinColumn(name = "student_id", nullable = false)
+    private List<Student> studentList = new ArrayList<>();
+
     public Form(String request, String response, Internship internship) {
         this.request = request;
         this.response = response;
         this.internship = internship;
+    }
+
+    public void addStudent(Student student) {
+        studentList.add(student);
     }
 }
