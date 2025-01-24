@@ -12,6 +12,9 @@ import com.example.s_and_c.Mapper.StudentMapper;
 import com.example.s_and_c.Repositories.InternshipRepository;
 import com.example.s_and_c.Repositories.StudentRepository;
 import com.example.s_and_c.Service.StudentService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +33,9 @@ public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
     private InternshipRepository internshipRepository;
     private final PasswordEncoder passwordEncoder;
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Override
     public StudentInternshipDTO getStudent(String email) {
         Student student = studentRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Student with id " + email + " not found"));
@@ -57,15 +63,14 @@ public class StudentServiceImpl implements StudentService {
                 newStudent.setDescription(studentDTO.getDescription());
                 newStudent.setPassword(passwordEncoder.encode(studentDTO.getPassword()));
 
-                for(Internship internship : student.getInternships()) {
+                entityManager.persist(newStudent);
+                entityManager.flush();
 
-                    internship.addStudent(newStudent);
-                    internship.deleteStudent(student);
-                }
-                studentRepository.save(newStudent);
+                internshipRepository.updateStudentInInternships(student.getEmail(),newStudent.getEmail());
 
+                entityManager.remove(student);
+                entityManager.flush();
 
-                studentRepository.delete(student);
 
                 UserTokenDTO user = authService.authenticate(new AuthRequestDTO(newStudent.getEmail(), studentDTO.getPassword()));
                 String token = user.getToken();

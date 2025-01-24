@@ -1,6 +1,7 @@
 package com.example.s_and_c.Mapper;
 
 import com.example.s_and_c.DTO.InsertInternshipDTO;
+import com.example.s_and_c.DTO.InternshipCompleteDTO;
 import com.example.s_and_c.DTO.InternshipDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.Entities.Company;
@@ -53,5 +54,20 @@ public class InternshipMapper {
         company.getInternships().add(internship);
 
         return internship;
+    }
+
+    public static InternshipCompleteDTO maptoInternshipCompleteDTO(Internship internship) {
+
+        return new InternshipCompleteDTO(
+                internship.getInternship_id(),
+                internship.getName(),
+                internship.getStartDate(),
+                internship.getEndDate(),
+                internship.getSalary(),
+                internship.getQualification_required(),
+                internship.getDescription(),
+                CompanyMapper.mapToCompanyDTO(internship.getCompany())
+        );
+
     }
 }

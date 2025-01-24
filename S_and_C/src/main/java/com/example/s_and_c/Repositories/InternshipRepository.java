@@ -4,6 +4,7 @@ import com.example.s_and_c.Entities.Company;
 import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Entities.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -137,4 +138,9 @@ public interface InternshipRepository extends JpaRepository<Internship, Integer>
     List<Internship> findByCompanyNameContainingIgnoreCase(String companyName);
 
     List<Internship> findByAppliedStudentsContainingIgnoreCase(Student student);
+
+    @Modifying
+    @Query("UPDATE InternshipAppliedStudents i SET i.student = :newStudent WHERE i.student = :oldStudent")
+    void updateStudentInInternships(@Param("oldStudent") String oldStudent,
+                                    @Param("newStudent") String newStudent);
 }

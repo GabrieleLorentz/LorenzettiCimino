@@ -1,19 +1,18 @@
 package com.example.s_and_c.Controller;
 
-import com.example.s_and_c.DTO.InternshipDTO;
-import com.example.s_and_c.DTO.InternshipIdDTO;
-import com.example.s_and_c.DTO.SearchDTO;
+import com.example.s_and_c.DTO.*;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
-import com.example.s_and_c.DTO.UpdatedStudentDTO;
 import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Mapper.InternshipMapper;
+import com.example.s_and_c.Repositories.CompanyRepository;
 import com.example.s_and_c.Repositories.InternshipRepository;
 import com.example.s_and_c.Repositories.StudentRepository;
 import com.example.s_and_c.Service.InternshipService;
 import com.example.s_and_c.Service.StudentService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +31,7 @@ public class StudentController {
     private final InternshipService internshipService;
     private final InternshipRepository internshipRepository;
     private final StudentRepository studentRepository;
+    private final CompanyRepository companyRepository;
 
     @GetMapping({"/personalData"})
     public ResponseEntity<StudentInternshipDTO> getStudentById() {
@@ -107,6 +107,15 @@ public class StudentController {
         return internshipDTOList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(internshipDTOList);
     }
 
+    @GetMapping("/allInternships")
+    public ResponseEntity<List<InternshipCompleteDTO>> getAllInternships() {
+        List<Internship> internships = internshipRepository.findAll();
+        List<InternshipCompleteDTO> internshipDTOList = new ArrayList<>();
+        for(Internship internship : internships){
+            internshipDTOList.add(InternshipMapper.maptoInternshipCompleteDTO(internship));
+        }
+        return new ResponseEntity<>(internshipDTOList, HttpStatus.OK);
+    }
 
     @DeleteMapping("/{email}")
     public ResponseEntity<String> deleteStudent(
@@ -114,4 +123,6 @@ public class StudentController {
         studentService.deleteStudent(email);
         return ResponseEntity.ok("Student deleted succesfully");
     }
+
+
 }
