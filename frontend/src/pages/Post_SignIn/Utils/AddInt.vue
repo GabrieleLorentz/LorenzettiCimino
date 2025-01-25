@@ -11,11 +11,11 @@
           </div>
           <div class="form-row">
             <label for="Start Date">Start Date:</label>
-            <input id="Start Date" v-model="Data.start" type="date" class="form-input" />
+            <input id="Start Date" v-model="Data.startDate" type="date" class="form-input" />
           </div>
           <div class="form-row">
             <label for="End Date">End Date:</label>
-            <input id="End Date" v-model="Data.end" type="date" class="form-input" />
+            <input id="End Date" v-model="Data.endDate" type="date" class="form-input" />
           </div>
           <div class="form-row">
             <label for="Salary">Salary: $</label>
@@ -121,8 +121,8 @@ import {ref, computed} from 'vue';
 
 interface data {
   name: string;
-  start: string;
-  end: string;
+  startDate: string;
+  endDate: string;
   salary: number;
   qualification: string[];
   description: string;
@@ -130,8 +130,8 @@ interface data {
 
 const Data = ref<data>({
   name: '',
-  start: '',
-  end: '',
+  startDate: '',
+  endDate: '',
   salary: 0,
   qualification: [],
   description: ''
@@ -139,8 +139,8 @@ const Data = ref<data>({
 
 const hasChanges = computed(() =>{
   return Data.value.name.trim() !== '' &&
-      Data.value.start !== '' &&
-      Data.value.end !== '' &&
+      Data.value.startDate !== '' &&
+      Data.value.endDate !== '' &&
       Data.value.qualification.length > 0 &&
       Data.value.description.trim() !== '';
 })
@@ -150,12 +150,13 @@ function addInternship() {
 
   const formData = {
     name: Data.value.name,
-    start: Data.value.start,
-    end: Data.value.end,
+    startDate: Data.value.startDate,
+    endDate: Data.value.endDate,
     salary: Data.value.salary,
     qualification: Data.value.qualification,
     description: Data.value.description
   };
+  console.log(formData);
 
   fetch('http://localhost:8080/api/company/insertInternship', {
     method: 'POST',

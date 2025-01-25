@@ -19,35 +19,61 @@
           <input v-model="key.name" type="text" class="search-bar" placeholder="Search..." />
           <div class="profile-container1">
             <img src="/src/assets/filtro.svg" alt="filtro" class="icon4 icon_hover"/>
-              <div class="popup1" style="min-width: 300px;">
-                <div class="form">
-                  <div class="form-row">
-                    <label for="start">Min Start Date:</label>
-                    <input id="start" v-model="key.start" type="date" class="form-input" />
-                  </div>
-                  <div class="form-row">
-                    <label for="end">Max end Date:</label>
-                    <input id="end" v-model="key.end" type="date" class="form-input" />
-                  </div>
-                  <div class="form-row">
-                    <label for="salary">Min Salary:</label>
-                    <input id="salary" v-model="key.salary" type="number" class="form-input" />
-                  </div>
+            <div class="popup1" style="min-width: 300px;">
+              <div class="form">
+                <div class="form-row">
+                  <label for="start">Min Start Date:</label>
+                  <input id="start" v-model="key.start" type="date" class="form-input" />
+                </div>
+                <div class="form-row">
+                  <label for="end">Max end Date:</label>
+                  <input id="end" v-model="key.end" type="date" class="form-input" />
+                </div>
+                <div class="form-row">
+                  <label for="salary">Min Salary:</label>
+                  <input id="salary" v-model="key.salary" type="number" class="form-input" />
                 </div>
               </div>
+            </div>
           </div>
         </div>
+
         <div v-if="internships.length > 0" class="internships-container">
           <div v-for="internship in internships" :key="internship.id" style="padding: 5px">
             <div class="int">
               <p><strong>Name:</strong>{{ internship.name }}</p>
-              <p><strong>Company:</strong>{{ internship.company.name }}</p>
+              <p><strong>Company:</strong>{{ internship.company_name }}</p>
               <p><strong>Start Date:</strong> {{ internship.start_date }}</p>
-              <p><strong>End Date:</strong> {{ internship.end_date }}</p>
+              <!--<p><strong>End Date:</strong> {{ internship.end_date }}</p>-->
               <p><strong>Salary:</strong> {{ internship.salary }}</p>
-
+              <button @click="openPopup(internship)" class="popup-button">Details</button>
             </div>
           </div>
+
+          <div v-if="showPopup" class="det">
+            <div class="det-content">
+              <h2>Internship Details</h2>
+              <p><strong>Name:</strong> {{ selectedInternship.name }}</p>
+              <p><strong>Company:</strong> {{ selectedInternship.company_name }}</p>
+              <p><strong>Company email:</strong> {{ selectedInternship.company_email }}</p>
+              <p><strong>Start Date:</strong> {{ selectedInternship.start_date }}</p>
+              <p><strong>End Date:</strong> {{ selectedInternship.end_date }}</p>
+              <p><strong>Salary: $</strong> {{ selectedInternship.salary }}</p>
+              <div style="display: flex; gap: 5px">
+                <p><strong>Qualification required:</strong></p>
+                <textarea readonly style="width: 90%;"> {{ selectedInternship.qualification_required }}</textarea>
+              </div>
+              <div style="display: flex; gap: 5px">
+                <p><strong>Description:</strong></p>
+                <textarea readonly style="width: 90%;"> {{ selectedInternship.description }}</textarea>
+              </div>
+              <div style="display: flex; gap: 5px; margin-top: 5px">
+                <button @click="closePopup" class="popup-button" style="font-size: 20px;">Close</button>
+                <button @click="request" class="popup-button" style="font-size: 20px;">Request!</button>
+              </div>
+            </div>
+          </div>
+
         </div>
         <div v-else>
           <p>No internships available.</p>
@@ -79,6 +105,38 @@
   height: 25px;
   cursor: pointer;
   margin-top: 5px;
+}
+.popup-button {
+  background-color: #f2a73b;
+  color: black;
+  border: 2px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
+}
+.popup-button:hover {
+  background-color: #232526;
+  color: #f2a73b;
+  border: 2px solid #f2a73b;
+}
+.det {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /*z-index: 1000;*/
+}
+.det-content {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  width: 700px;
+  max-width: 90%;
 }
 </style>
 
@@ -159,4 +217,43 @@ function search() {
 onMounted(() => {
   receiveData();
 });
+
+const showPopup = ref(false);
+const selectedInternship = ref(null);
+const send = ref(true);
+
+function openPopup(internship) {
+  selectedInternship.value = internship;
+  console.log(selectedInternship.value.internship_id);
+  showPopup.value = true;
+}
+function closePopup() {
+  showPopup.value = false;
+  selectedInternship.value = null;
+}
+function request() {
+  const token = localStorage.getItem('token');
+
+  const id = selectedInternship.value.internship_id;
+  console.log(id)
+
+  fetch('http://localhost:8080/api/student/requestInternship', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id })
+  })
+      .then(response => {
+        if (response.ok) {
+          send.value = false;
+          return null;
+        } else {
+          console.log(response.status);
+        }
+      })
+      .catch(error => {console.error('Errore errore', error);
+      });
+}
 </script>
