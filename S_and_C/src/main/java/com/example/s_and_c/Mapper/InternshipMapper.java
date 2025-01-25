@@ -58,7 +58,7 @@ public class InternshipMapper {
         internship.setEndSelectionAcceptanceDate(LocalDate.parse(dto.getEndSelectionAcceptanceDate(),
                 DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         List<Qualification> qualifications = new ArrayList<>();
-        for(String qualification : dto.getQualification_required()){
+        for(String qualification : dto.getQualificationRequired()){
             qualifications.add( new Qualification(qualification, internship));
         }
         internship.setQualification_required(qualifications);
