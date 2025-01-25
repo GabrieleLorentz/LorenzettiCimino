@@ -110,6 +110,30 @@ public class CompanyController {
         return ResponseEntity.ok(companyDTO);
     }
 
+    @PostMapping("/complaints")
+    public ResponseEntity<CompanyDTO> complaints(@RequestBody ComplaintDTO complaintDTO) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+        companyService.handleComplaint(authEmail, complaintDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/feedback/{internship_id}")
+    public ResponseEntity<CompanyDTO> feedback(@PathVariable("internship_id") String internship_id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/review/{internship_id}")
+    public ResponseEntity<CompanyDTO> review(@PathVariable("internship_id") String internship_id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{email}")
     public ResponseEntity<String> deleteCompany(
             @PathVariable("email") String email) {

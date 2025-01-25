@@ -17,14 +17,16 @@ public class InternshipForStudentsDTO {
     private String name;
     private LocalDate start_date;
     private LocalDate End_date;
+    private LocalDate endFormCompilingDate;
+    private LocalDate endSelectionAcceptanceDate;
     private int Salary;
     private String qualification_required;
     private String description;
     private String company_name;
     private List<FormDTO> formToCompile;
 
-    public InternshipForStudentsDTO(long internshipId, String name, LocalDate startDate,
-                                    LocalDate endDate, int salary, String qualificationRequired,
-                                    String description, String name1) {
+
+
+    public InternshipForStudentsDTO(long internshipId, String name, LocalDate startDate, LocalDate endDate, LocalDate endFormCompilingDate, LocalDate endSelectionAcceptanceDate, int salary, String qualificationRequired, String description, String name1) {
     }
 }

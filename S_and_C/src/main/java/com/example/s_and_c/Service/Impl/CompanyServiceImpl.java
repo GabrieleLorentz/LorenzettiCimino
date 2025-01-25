@@ -4,10 +4,18 @@ import com.example.s_and_c.DTO.AuthDTOs.AuthRequestDTO;
 import com.example.s_and_c.DTO.CompanyDTOs.CompanyDTO;
 import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
 import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
+import com.example.s_and_c.DTO.ComplaintDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import com.example.s_and_c.Entities.Company;
+import com.example.s_and_c.Entities.CompanyForm;
+import com.example.s_and_c.Entities.Internship;
+import com.example.s_and_c.Entities.Status.FormType;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.CompanyMapper;
+import com.example.s_and_c.Mapper.FormMapper;
 import com.example.s_and_c.Repositories.CompanyRepository;
+import com.example.s_and_c.Repositories.FormCompanyRepository;
+import com.example.s_and_c.Repositories.InternshipRepository;
 import com.example.s_and_c.Service.CompanyService;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
@@ -26,7 +34,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final PasswordEncoder passwordEncoder;
     private CompanyRepository companyRepository;
+    private InternshipRepository internshipRepository;
     private final AuthService authService;
+    private final FormCompanyRepository formCompanyRepository;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -128,6 +138,20 @@ public class CompanyServiceImpl implements CompanyService {
     public void deleteCompany(String email){
 
         companyRepository.deleteCompanyByEmail(email);
+    }
+
+
+    @Override
+    public void handleComplaint(String authEmail, ComplaintDTO complaintDTO) {
+        Company company = companyRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
+        Internship internship = internshipRepository.findById(complaintDTO.getInternship_id()).orElseThrow(()->new RuntimeException("Internship not found"));
+        for(FormDTO formDTO: complaintDTO.getComplaints()){
+            CompanyForm form = FormMapper.mapToCompanyForm(formDTO, internship);
+            form.setFormType(FormType.COMPLAINT);
+            form.addCompany(company);
+            formCompanyRepository.save(form);
+        }
+
     }
 
 }

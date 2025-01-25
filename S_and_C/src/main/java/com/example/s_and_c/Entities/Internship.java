@@ -17,22 +17,37 @@ import java.util.List;
 @Entity
 @Table(name = "Internship")
 public class Internship {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long internship_id;
+
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private LocalDate startDate;
+
     @Column(nullable = false)
     private LocalDate endDate;
+
     @Column(nullable = false)
     private int salary;
+
+    @Column(nullable = false)
+    private LocalDate endFormCompilingDate;
+
+    @Column(nullable = false)
+    private LocalDate endSelectionAcceptanceDate;
+
     private String qualification_required;
+
     private String description;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "company_email",nullable = false)
     private Company company;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "internship_applied_Student",
@@ -40,6 +55,7 @@ public class Internship {
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private List<Student> appliedStudents = new ArrayList<>();
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "internship_accepted_Students",

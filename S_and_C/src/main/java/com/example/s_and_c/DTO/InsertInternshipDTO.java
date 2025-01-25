@@ -1,5 +1,6 @@
 package com.example.s_and_c.DTO;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,8 @@ public class InsertInternshipDTO {
     private String name;
     private String startDate;
     private String endDate;
+    private String endFormCompilingDate;
+    private String endSelectionAcceptanceDate;
     private int Salary;
     private String qualification_required;
     private String description;

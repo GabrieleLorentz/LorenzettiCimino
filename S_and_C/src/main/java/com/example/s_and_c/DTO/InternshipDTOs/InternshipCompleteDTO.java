@@ -17,8 +17,10 @@ import java.util.List;
 public class InternshipCompleteDTO {
     private long id;
     private String name;
-    private LocalDate start_date;
-    private LocalDate End_date;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private LocalDate endFormCompilingDate;
+    private LocalDate endSelectionAcceptanceDate;
     private int Salary;
     private String qualification_required;
     private String description;
@@ -30,8 +32,8 @@ public class InternshipCompleteDTO {
                                  int salary, String qualification_required, String description, String companyName) {
         this.id = id;
         this.name = name;
-        this.start_date = start_date;
-        End_date = end_date;
+        this.startDate = start_date;
+        this.endDate = end_date;
         Salary = salary;
         this.qualification_required = qualification_required;
         this.description = description;

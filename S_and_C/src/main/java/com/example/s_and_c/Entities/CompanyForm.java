@@ -1,7 +1,5 @@
 package com.example.s_and_c.Entities;
 
-
-
 import com.example.s_and_c.Entities.Status.FormType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,8 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Form")
-public class Form {
+@Table(name = "Company_Form")
+public class CompanyForm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long formId;
@@ -31,30 +29,23 @@ public class Form {
 
     @ManyToMany
     @JoinTable(
-            name = "form_student",
+            name = "form_company",
             joinColumns = @JoinColumn(name = "form_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id")
+            inverseJoinColumns = @JoinColumn(name = "company_id")
     )
-    private List<Student> studentList = new ArrayList<>();
+    private List<Company> companyList = new ArrayList<>();
 
     private FormType formType;
 
-    public Form(String request, String response, Internship internship) {
+    public CompanyForm(String request, String response, Internship internship) {
         this.request = request;
         this.response = response;
         this.internship = internship;
     }
 
-    public Form(String request, String response, Internship internship, FormType formType) {
-        this.request = request;
-        this.response = response;
-        this.internship = internship;
-        this.formType = formType;
-    }
-
-
-
-    public void addStudent(Student student) {
-        studentList.add(student);
+    public void addCompany(Company company) {
+        companyList.add(company);
     }
 }
+
+

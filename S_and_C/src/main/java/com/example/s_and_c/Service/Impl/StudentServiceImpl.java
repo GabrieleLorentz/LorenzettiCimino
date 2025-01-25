@@ -1,16 +1,22 @@
 package com.example.s_and_c.Service.Impl;
 
 import com.example.s_and_c.DTO.AuthDTOs.AuthRequestDTO;
+import com.example.s_and_c.DTO.ComplaintDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
 import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
 import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
+import com.example.s_and_c.Entities.Form;
 import com.example.s_and_c.Entities.Internship;
+import com.example.s_and_c.Entities.Status.FormType;
 import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
+import com.example.s_and_c.Mapper.FormMapper;
 import com.example.s_and_c.Mapper.InternshipMapper;
 import com.example.s_and_c.Mapper.StudentMapper;
+import com.example.s_and_c.Repositories.FormRepository;
 import com.example.s_and_c.Repositories.InternshipRepository;
 import com.example.s_and_c.Repositories.StudentRepository;
 import com.example.s_and_c.Service.StudentService;
@@ -32,6 +38,7 @@ import java.util.stream.Collectors;
 public class StudentServiceImpl implements StudentService {
 
     private final AuthService authService;
+    private final FormRepository formRepository;
     private StudentRepository studentRepository;
     private InternshipRepository internshipRepository;
     private final PasswordEncoder passwordEncoder;
@@ -129,6 +136,18 @@ public class StudentServiceImpl implements StudentService {
             internshipDTOList.add(InternshipMapper.maptoInternshipForStudentsDTO(internship));
         }
         return internshipDTOList;
+    }
+
+    @Override
+    public void handleComplaint(String authEmail, ComplaintDTO complaintDTO) {
+        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
+        Internship internship = internshipRepository.findById(complaintDTO.getInternship_id()).orElseThrow(()->new RuntimeException("Internship not found"));
+        for(FormDTO formDTO: complaintDTO.getComplaints()){
+            Form form = FormMapper.mapToForm(formDTO, internship);
+            form.setFormType(FormType.COMPLAINT);
+            form.addStudent(student);
+            formRepository.save(form);
+        }
     }
 
     /*private StudentDTO mapInternshipToDTO(Student student) {

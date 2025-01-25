@@ -83,9 +83,7 @@ public class StudentController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
         studentService.requestInternship(internshipId.getId(),authEmail);
-        // notifica la company
         return ResponseEntity.ok().build();
-
     }
 
     @GetMapping("/myInternships")
@@ -117,6 +115,29 @@ public class StudentController {
         return ResponseEntity.ok("Student deleted succesfully");
     }
 
+    @PostMapping("/complaints")
+    public ResponseEntity<StudentDTO> complaints(@RequestBody ComplaintDTO complaintDTO) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+        studentService.handleComplaint(authEmail, complaintDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/feedback/{internship_id}")
+    public ResponseEntity<StudentDTO> feedback(@PathVariable("internship_id") String internship_id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/review/{internship_id}")
+    public ResponseEntity<StudentDTO> review(@PathVariable("internship_id") String internship_id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+
+        return ResponseEntity.ok().build();
+    }
 
 
 }

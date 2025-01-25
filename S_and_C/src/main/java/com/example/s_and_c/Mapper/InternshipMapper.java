@@ -10,6 +10,7 @@ import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.Entities.Company;
 import com.example.s_and_c.Entities.Form;
 import com.example.s_and_c.Entities.Internship;
+import com.example.s_and_c.Entities.Status.FormType;
 import com.example.s_and_c.Entities.Student;
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +32,8 @@ public class InternshipMapper {
                 internship.getName(),
                 internship.getStartDate(),
                 internship.getEndDate(),
+                internship.getEndFormCompilingDate(),
+                internship.getEndSelectionAcceptanceDate(),
                 internship.getSalary(),
                 internship.getQualification_required(),
                 internship.getDescription(),
@@ -46,18 +49,27 @@ public class InternshipMapper {
         if(dto.getStartDate() == null || dto.getEndDate() == null)
             throw new IllegalArgumentException("Start date and end date cannot be null");
         internship.setStartDate(LocalDate.parse(dto.getStartDate(),
-                DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         internship.setEndDate(LocalDate.parse(dto.getEndDate(),
-                DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        if(dto.getEndFormCompilingDate() == null || dto.getEndSelectionAcceptanceDate() == null)
+            throw new IllegalArgumentException("End form compilation date cannot be null");
+        internship.setEndFormCompilingDate(LocalDate.parse(dto.getEndFormCompilingDate(),
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        internship.setEndSelectionAcceptanceDate(LocalDate.parse(dto.getEndSelectionAcceptanceDate(),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         internship.setQualification_required(dto.getQualification_required());
         internship.setDescription(dto.getDescription());
         internship.setCompany(company);
         List<Form> questions = new ArrayList<>();
-        for(String question: dto.getQuestions()){
-            questions.add(new Form(question,null,internship));
+        if(dto.getQuestions() != null){ //during implementation
+            for(String question: dto.getQuestions()){
+                questions.add(new Form(question,null,internship, FormType.INTERVIEW));
+            }
+            internship.setForm(questions);
         }
-        internship.setForm(questions);
+
         company.getInternships().add(internship);
 
         return internship;
@@ -74,6 +86,8 @@ public class InternshipMapper {
                 internship.getName(),
                 internship.getStartDate(),
                 internship.getEndDate(),
+                internship.getEndFormCompilingDate(),
+                internship.getEndSelectionAcceptanceDate(),
                 internship.getSalary(),
                 internship.getQualification_required(),
                 internship.getDescription(),
@@ -90,6 +104,8 @@ public class InternshipMapper {
                 internship.getName(),
                 internship.getStartDate(),
                 internship.getEndDate(),
+                internship.getEndFormCompilingDate(),
+                internship.getEndSelectionAcceptanceDate(),
                 internship.getSalary(),
                 internship.getQualification_required(),
                 internship.getDescription(),
@@ -108,6 +124,8 @@ public class InternshipMapper {
                 internship.getName(),
                 internship.getStartDate(),
                 internship.getEndDate(),
+                internship.getEndFormCompilingDate(),
+                internship.getEndSelectionAcceptanceDate(),
                 internship.getSalary(),
                 internship.getQualification_required(),
                 internship.getDescription(),

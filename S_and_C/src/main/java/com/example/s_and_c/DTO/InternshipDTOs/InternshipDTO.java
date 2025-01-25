@@ -18,6 +18,8 @@ public class InternshipDTO {
     private String name;
     private LocalDate start_date;
     private LocalDate End_date;
+    private LocalDate endFormCompilingDate;
+    private LocalDate endSelectionAcceptanceDate;
     private int Salary;
     private String qualification_required;
     private String description;
