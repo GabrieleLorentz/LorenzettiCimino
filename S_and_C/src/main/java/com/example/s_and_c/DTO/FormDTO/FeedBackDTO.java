@@ -1,4 +1,4 @@
-package com.example.s_and_c.DTO;
+package com.example.s_and_c.DTO.FormDTO;
 
 import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import lombok.AllArgsConstructor;
@@ -11,10 +11,11 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class ReviewDTO {
-    private String counterpartEmail;
+@AllArgsConstructor
+public class FeedBackDTO {
+
+    private String email;
     private int internship_id;
-    private FormDTO review;
+    private List<FormDTO> feedbacks = new ArrayList<>();
 }

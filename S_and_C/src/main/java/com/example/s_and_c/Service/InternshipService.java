@@ -1,9 +1,6 @@
 package com.example.s_and_c.Service;
 
-import com.example.s_and_c.DTO.*;
-import com.example.s_and_c.DTO.InternshipDTOs.InternshipCompleteDTO;
-import com.example.s_and_c.DTO.InternshipDTOs.InternshipDTO;
-import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.*;
 
 import java.util.List;
 

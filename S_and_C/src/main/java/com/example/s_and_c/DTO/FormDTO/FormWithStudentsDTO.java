@@ -1,13 +1,10 @@
-package com.example.s_and_c.DTO;
+package com.example.s_and_c.DTO.FormDTO;
 
 import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
-import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter

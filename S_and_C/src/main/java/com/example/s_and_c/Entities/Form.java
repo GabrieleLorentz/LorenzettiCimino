@@ -29,8 +29,14 @@ public class Form {
     @JoinColumn(name = "internship_id")
     private Internship internship;
 
-    @ManyToOne
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "student_email")
     private Student student;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "company_email")
+    private Company company;
 
     private FormType formType;
 

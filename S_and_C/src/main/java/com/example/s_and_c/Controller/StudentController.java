@@ -1,9 +1,12 @@
 package com.example.s_and_c.Controller;
 
-import com.example.s_and_c.DTO.*;
+import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
+import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
+import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipIdDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.SearchDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
 import com.example.s_and_c.Service.InternshipService;

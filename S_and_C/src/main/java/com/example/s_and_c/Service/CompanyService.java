@@ -2,9 +2,9 @@ package com.example.s_and_c.Service;
 
 import com.example.s_and_c.DTO.CompanyDTOs.CompanyDTO;
 import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
-import com.example.s_and_c.DTO.ComplaintDTO;
-import com.example.s_and_c.DTO.FeedBackDTO;
-import com.example.s_and_c.DTO.ReviewDTO;
+import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
+import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
+import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
 
 import java.util.List;
 

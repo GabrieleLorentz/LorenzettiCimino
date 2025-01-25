@@ -4,19 +4,16 @@ import com.example.s_and_c.DTO.AuthDTOs.AuthRequestDTO;
 import com.example.s_and_c.DTO.CompanyDTOs.CompanyDTO;
 import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
 import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
-import com.example.s_and_c.DTO.ComplaintDTO;
-import com.example.s_and_c.DTO.FeedBackDTO;
+import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
+import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
-import com.example.s_and_c.DTO.ReviewDTO;
+import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
 import com.example.s_and_c.Entities.*;
 import com.example.s_and_c.Entities.Status.FormType;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.CompanyMapper;
 import com.example.s_and_c.Mapper.FormMapper;
-import com.example.s_and_c.Repositories.CompanyRepository;
-import com.example.s_and_c.Repositories.FormCompanyRepository;
-import com.example.s_and_c.Repositories.InternshipRepository;
-import com.example.s_and_c.Repositories.StudentRepository;
+import com.example.s_and_c.Repositories.*;
 import com.example.s_and_c.Service.CompanyService;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
@@ -34,11 +31,10 @@ import java.util.stream.Collectors;
 public class CompanyServiceImpl implements CompanyService {
 
     private final PasswordEncoder passwordEncoder;
-    private final StudentRepository studentRepository;
     private CompanyRepository companyRepository;
     private InternshipRepository internshipRepository;
     private final AuthService authService;
-    private final FormCompanyRepository formCompanyRepository;
+    private final FormRepository formRepository;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -148,10 +144,10 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = companyRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
         Internship internship = internshipRepository.findById(complaintDTO.getInternship_id()).orElseThrow(()->new RuntimeException("Internship not found"));
         for(FormDTO formDTO: complaintDTO.getComplaints()){
-            CompanyForm form = FormMapper.mapToCompanyForm(formDTO, internship);
+            Form form = FormMapper.mapToForm(formDTO, internship);
             form.setFormType(FormType.COMPLAINT);
-            form.addCompany(company);
-            formCompanyRepository.save(form);
+            form.setCompany(company);
+            formRepository.save(form);
         }
 
     }
@@ -165,10 +161,10 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = companyRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
         Internship internship = internshipRepository.findById(feedBackDTO.getInternship_id()).orElseThrow(()->new RuntimeException("Internship not found"));
         for(FormDTO formDTO: feedBackDTO.getFeedbacks()){
-            CompanyForm form = FormMapper.mapToCompanyForm(formDTO, internship);
+            Form form = FormMapper.mapToForm(formDTO, internship);
             form.setFormType(FormType.COMPLAINT);
-            form.addCompany(company);
-            formCompanyRepository.save(form);
+            form.setCompany(company);
+            formRepository.save(form);
         }
     }
 
@@ -179,13 +175,13 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public void handleReview(String authEmail, ReviewDTO reviewDTO) {
         Company company = companyRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
-        CompanyForm form = new CompanyForm();
+        Form form = new Form();
         form.setFormType(FormType.REVIEW);
         form.setRequest(reviewDTO.getReview().getRequest());
         form.setResponse(reviewDTO.getReview().getResponse());
-        form.addCompany(company);
+        form.setCompany(company);
         form.setInternship(internshipRepository.findById(reviewDTO.getInternship_id()).orElseThrow(()->new RuntimeException("Internship not found")));
-        formCompanyRepository.save(form);
+        formRepository.save(form);
     }
 
 }
