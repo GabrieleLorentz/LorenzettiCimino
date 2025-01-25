@@ -69,7 +69,7 @@
               </div>
               <div style="display: flex; gap: 5px; margin-top: 5px">
                 <button @click="closePopup" class="popup-button" style="font-size: 20px;">Close</button>
-                <button @click="request" class="popup-button" style="font-size: 20px;">Request!</button>
+                <button @click="request" :disabled="!sendStatus[selectedInternship.internship_id]" class="popup-button" style="font-size: 20px;">Request!</button>
               </div>
             </div>
           </div>
@@ -138,6 +138,10 @@
   width: 700px;
   max-width: 90%;
 }
+.popup-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
 </style>
 
 <script setup lang="ts">
@@ -145,6 +149,7 @@ import UpperPart from "@/pages/Post_SignIn/Utils/upper_part.vue";
 import {onMounted, ref} from "vue";
 
 const internships = ref([]);
+const sendStatus = ref<Record<number, boolean>>({});
 
 interface filters {
   name: string;
@@ -177,6 +182,9 @@ function receiveData() {
       })
       .then(data => {
         internships.value = data;
+        data.forEach((internship: { internship_id: number }) => {
+          sendStatus.value[internship.internship_id] = true; // Default: pulsante abilitato
+        });
       })
       .catch(error => {
         console.error("Errore durante il recupero dei dati:", error);
@@ -220,11 +228,9 @@ onMounted(() => {
 
 const showPopup = ref(false);
 const selectedInternship = ref(null);
-const send = ref(true);
 
 function openPopup(internship) {
   selectedInternship.value = internship;
-  console.log(selectedInternship.value.internship_id);
   showPopup.value = true;
 }
 function closePopup() {
@@ -247,8 +253,7 @@ function request() {
   })
       .then(response => {
         if (response.ok) {
-          send.value = false;
-          return null;
+          sendStatus.value[id] = false;
         } else {
           console.log(response.status);
         }
