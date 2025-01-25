@@ -5,6 +5,7 @@ import com.example.s_and_c.DTO.CompanyDTOs.CompanyDTO;
 import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
 import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
 import com.example.s_and_c.DTO.ComplaintDTO;
+import com.example.s_and_c.DTO.FeedBackDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import com.example.s_and_c.Entities.Company;
 import com.example.s_and_c.Entities.CompanyForm;
@@ -152,6 +153,22 @@ public class CompanyServiceImpl implements CompanyService {
             formCompanyRepository.save(form);
         }
 
+    }
+
+    /**
+     * @param authEmail
+     * @param feedBackDTO
+     */
+    @Override
+    public void handleFeedBack(String authEmail, FeedBackDTO feedBackDTO) {
+        Company company = companyRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
+        Internship internship = internshipRepository.findById(feedBackDTO.getInternship_id()).orElseThrow(()->new RuntimeException("Internship not found"));
+        for(FormDTO formDTO: feedBackDTO.getFeedbacks()){
+            CompanyForm form = FormMapper.mapToCompanyForm(formDTO, internship);
+            form.setFormType(FormType.COMPLAINT);
+            form.addCompany(company);
+            formCompanyRepository.save(form);
+        }
     }
 
 }

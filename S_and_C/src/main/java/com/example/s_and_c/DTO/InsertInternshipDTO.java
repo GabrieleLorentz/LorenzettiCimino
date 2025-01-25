@@ -19,7 +19,7 @@ public class InsertInternshipDTO {
     private String endFormCompilingDate;
     private String endSelectionAcceptanceDate;
     private int Salary;
-    private String qualification_required;
+    private List<String> qualification_required;
     private String description;
     private List<String> Questions;
 

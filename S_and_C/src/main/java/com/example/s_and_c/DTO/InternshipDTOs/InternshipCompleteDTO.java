@@ -22,14 +22,14 @@ public class InternshipCompleteDTO {
     private LocalDate endFormCompilingDate;
     private LocalDate endSelectionAcceptanceDate;
     private int Salary;
-    private String qualification_required;
+    private List<String> qualification_required;
     private String description;
     private List<ShortStudentDTO> applicants;
     private List<FormWithStudentsDTO> formWithStudents;
     private String companyName;
 
     public InternshipCompleteDTO(long id, String name, LocalDate start_date, LocalDate end_date,
-                                 int salary, String qualification_required, String description, String companyName) {
+                                 int salary, List<String> qualification_required, String description, String companyName) {
         this.id = id;
         this.name = name;
         this.startDate = start_date;

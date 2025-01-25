@@ -3,6 +3,7 @@ package com.example.s_and_c.Controller;
 import com.example.s_and_c.DTO.*;
 import com.example.s_and_c.DTO.CompanyDTOs.CompanyDTO;
 import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipCompleteDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
@@ -118,16 +119,16 @@ public class CompanyController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/feedback/{internship_id}")
-    public ResponseEntity<CompanyDTO> feedback(@PathVariable("internship_id") String internship_id) {
+    @PostMapping("/feedback")
+    public ResponseEntity<CompanyDTO> feedback(@RequestBody FeedBackDTO feedBackDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
-
+        companyService.handleFeedBack(authEmail, feedBackDTO);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/review/{internship_id}")
-    public ResponseEntity<CompanyDTO> review(@PathVariable("internship_id") String internship_id) {
+    public ResponseEntity<CompanyDTO> review(@RequestBody ComplaintDTO complaintDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
 

@@ -20,13 +20,24 @@ public class InternshipForStudentsDTO {
     private LocalDate endFormCompilingDate;
     private LocalDate endSelectionAcceptanceDate;
     private int Salary;
-    private String qualification_required;
+    private List<String> qualification_required;
     private String description;
     private String company_name;
     private List<FormDTO> formToCompile;
 
 
 
-    public InternshipForStudentsDTO(long internshipId, String name, LocalDate startDate, LocalDate endDate, LocalDate endFormCompilingDate, LocalDate endSelectionAcceptanceDate, int salary, String qualificationRequired, String description, String name1) {
+    public InternshipForStudentsDTO(long internshipId, String name, LocalDate startDate, LocalDate endDate, LocalDate endFormCompilingDate,
+                                    LocalDate endSelectionAcceptanceDate, int salary, List<String> qualificationRequired, String description, String name1) {
+        this.internship_id = internshipId;
+        this.name = name;
+        this.start_date = startDate;
+        this.End_date = endDate;
+        this.endFormCompilingDate = endFormCompilingDate;
+        this.endSelectionAcceptanceDate = endSelectionAcceptanceDate;
+        this.Salary = salary;
+        this.qualification_required = qualificationRequired;
+        this.description = description;
+        this.company_name = name1;
     }
 }

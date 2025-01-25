@@ -21,7 +21,7 @@ public class InternshipDTO {
     private LocalDate endFormCompilingDate;
     private LocalDate endSelectionAcceptanceDate;
     private int Salary;
-    private String qualification_required;
+    private List<String> qualification_required;
     private String description;
     private String company_email;
     private List<StudentDTO> appliedStudents;

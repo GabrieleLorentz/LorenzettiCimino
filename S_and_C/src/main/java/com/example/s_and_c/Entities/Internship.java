@@ -40,7 +40,8 @@ public class Internship {
     @Column(nullable = false)
     private LocalDate endSelectionAcceptanceDate;
 
-    private String qualification_required;
+    @OneToMany(mappedBy = "qualificationName")
+    private List<Qualification> qualification_required;
 
     private String description;
 
@@ -75,7 +76,7 @@ public class Internship {
     private List<Form> form = new ArrayList<>();
 
 
-    public Internship(String name, LocalDate startDate, LocalDate endDate, int salary, String qualification_required, String description, Company company) {
+    public Internship(String name, LocalDate startDate, LocalDate endDate, int salary, List<Qualification> qualification_required, String description, Company company) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
