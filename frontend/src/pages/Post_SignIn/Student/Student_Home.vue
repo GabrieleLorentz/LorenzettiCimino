@@ -7,7 +7,16 @@
 
       <div style="flex: 1; padding: 20px;">
         <div class="my_collaboration">
-          MY COLLABORATIONS IN PROGESS
+          MY COLLABORATIONS IN PROGRESS
+        </div>
+        <div class="text">
+          Accepted
+        </div>
+        <div class="text">
+          Applied
+        </div>
+        <div class="text">
+          Selected
         </div>
       </div>
 
@@ -17,9 +26,9 @@
         <div style="display: flex; gap: 10px;">
           <img @click="search" src="/src/assets/lente.svg" alt="lente" class="icon2 icon_hover"/>
           <input v-model="key.name" type="text" class="search-bar" placeholder="Search..." />
-          <div class="profile-container1">
+          <div class="profile-container">
             <img src="/src/assets/filtro.svg" alt="filtro" class="icon4 icon_hover"/>
-            <div class="popup1" style="min-width: 300px;">
+            <div class="popup" style="min-width: 300px;">
               <div class="form">
                 <div class="form-row">
                   <label for="start">Min Start Date:</label>
@@ -38,8 +47,8 @@
           </div>
         </div>
 
-        <div v-if="internships.length > 0" class="internships-container">
-          <div v-for="internship in internships" :key="internship.id" style="padding: 5px">
+        <div v-if="allInternships.length > 0" class="internships-container">
+          <div v-for="internship in allInternships" :key="internship.id" style="padding: 5px">
             <div class="int">
               <p><strong>Name:</strong>{{ internship.name }}</p>
               <p><strong>Company:</strong>{{ internship.company_name }}</p>
@@ -93,6 +102,10 @@
   font-size: 30px;
   font-weight: bold;
   text-align: center;
+}
+.text {
+  font-size: 24px;
+  font-weight: bold;
 }
 .search-bar {
   font-size: 20px;
@@ -148,7 +161,7 @@
 import UpperPart from "@/pages/Post_SignIn/Utils/upper_part.vue";
 import {onMounted, ref} from "vue";
 
-const internships = ref([]);
+const allInternships = ref([]);
 const sendStatus = ref<Record<number, boolean>>({});
 
 interface filters {
@@ -165,7 +178,7 @@ const key = ref<filters>({
   salary: 0
 })
 
-function receiveData() {
+function receiveAll() {
   const token = localStorage.getItem('token');
 
   fetch('http://localhost:8080/api/student/allInternships', {
@@ -181,7 +194,7 @@ function receiveData() {
         throw new Error("Errore nella richiesta al backend");
       })
       .then(data => {
-        internships.value = data;
+        allInternships.value = data;
         data.forEach((internship: { internship_id: number }) => {
           sendStatus.value[internship.internship_id] = true; // Default: pulsante abilitato
         });
@@ -217,13 +230,13 @@ function search() {
         }
       })
       .then(data => {
-        internships.value = data;
+        allInternships.value = data;
       })
       .catch(error => {console.error('Errore errore', error);
       });
 }
 onMounted(() => {
-  receiveData();
+  receiveAll();
 });
 
 const showPopup = ref(false);

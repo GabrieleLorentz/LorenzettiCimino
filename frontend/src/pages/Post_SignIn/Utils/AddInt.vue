@@ -1,36 +1,53 @@
 <template>
   <div class="profile-container1">
-    <img src="/src/assets/+.svg" alt="+" class="icon3 icon_hover"/>
-      <div class="popup1">
-        <p>ADD INTERNSHIP</p>
+    <img @click="openPopup" src="/src/assets/+.svg" alt="+" class="icon3 icon_hover"/>
+      <div v-if="showPopup" class="det1">
+        <div class="det-content">
+          <p>ADD INTERNSHIP</p>
 
-        <div class="form">
-          <div class="form-row">
-            <label for="name">Name:</label>
-            <input id="name" v-model="Data.name" type="text" class="form-input" />
+          <div class="form">
+            <div class="form-row">
+              <label for="name">Name:</label>
+              <input id="name" v-model="Data.name" type="text" class="form-input" />
+            </div>
+            <div class="form-row">
+              <label for="Start Date">Start Date:</label>
+              <input id="Start Date" v-model="Data.startDate" type="date" class="form-input" />
+            </div>
+            <div class="form-row">
+              <label for="End Date">End Date:</label>
+              <input id="End Date" v-model="Data.endDate" type="date" class="form-input" />
+            </div>
+            <div class="form-row">
+              <label for="end Form Compiling Date">End Form Compiling Date:</label>
+              <input id="end Form Compiling Date" v-model="Data.endFormCompilingDate" type="date" class="form-input" />
+            </div>
+            <div class="form-row">
+              <label for="end Selection Acceptance Date">End Selection Acceptance Date:</label>
+              <input id="end Selection Acceptance Date" v-model="Data.endSelectionAcceptanceDate" type="date" class="form-input" />
+            </div>
+            <div class="form-row">
+              <label for="Salary">Salary: $</label>
+              <input id="Salary" v-model="Data.salary" type="number" class="form-input" />
+            </div>
+            <div class="form-row">
+              <label for="Qualification">Qualification required:</label>
+              <textarea id="Qualification" v-model="qualificationInput" @change="updateQualifications" placeholder="Separate with commas" type="text" class="form-input" />
+            </div>
+            <div class="form-row">
+              <label for="Description">Description:</label>
+              <textarea id="Description" v-model="Data.description" type="text" class="form-input" />
+            </div>
+            <div class="form-row">
+              <label for="Question">Question:</label>
+              <textarea id="Question" v-model="updateQuestion" @change="addQuestion" placeholder="Separate with commas" type="text" class="form-input" />
+            </div>
           </div>
-          <div class="form-row">
-            <label for="Start Date">Start Date:</label>
-            <input id="Start Date" v-model="Data.startDate" type="date" class="form-input" />
-          </div>
-          <div class="form-row">
-            <label for="End Date">End Date:</label>
-            <input id="End Date" v-model="Data.endDate" type="date" class="form-input" />
-          </div>
-          <div class="form-row">
-            <label for="Salary">Salary: $</label>
-            <input id="Salary" v-model="Data.salary" type="number" class="form-input" />
-          </div>
-          <div class="form-row">
-            <label for="Qualification">Qualification required:</label>
-            <input id="Qualification" v-model="qualificationInput" @change="updateQualifications" placeholder="Separate with commas" type="text" class="form-input" />
-          </div>
-          <div class="form-row">
-            <label for="Description">Description:</label>
-            <textarea id="Description" v-model="Data.description" type="text" class="form-input" />
+          <div style="display: flex; gap: 5px; margin-top: 5px">
+            <button @click="closePopup" class="popup-button" style="font-size: 20px;">Close</button>
+            <button @click="addInternship" class="popup-button" :disabled="!hasChanges">ADD</button>
           </div>
         </div>
-        <button @click="addInternship" class="add" :disabled="!hasChanges">ADD</button>
       </div>
   </div>
 </template>
@@ -43,7 +60,7 @@
   /*margin-top: 5px;
   margin-right: -5px;*/
 }
-.popup1 p {
+.det-content1 p {
   font-size: 25px;
   color: black;
   font-weight: bold;
@@ -51,22 +68,17 @@
   text-decoration: underline;
   margin-top: -3px;
 }
-.profile-container1 {
-  position: relative;
-  display: inline-block;
-}
-.profile-container1:hover .popup1 {
-  display: block;
-}
-.popup1 {
-  display: none;
-  position: absolute;
-  right: 0;
-  background-color: #f2a73b;
-  border: 2px solid black;
-  border-radius: 15px;
-  padding: 4px;
-  min-width: 500px;
+.det1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /*z-index: 1000;*/
 }
 .form {
   display: flex;
@@ -91,29 +103,6 @@
   font-size: 16px;
   margin-left: 5px;
 }
-.add {
-  background-color: #f2a73b;
-  color: black;
-  cursor: pointer;
-  padding: 10px 50px;
-  border: 3px solid black;
-  border-radius: 40px;
-  margin-top: 20px;
-  margin-left: 170px;
-  font-size: 25px;
-  font-weight: bold;
-  text-align: center;
-  transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
-}
-.add:hover {
-  background-color: #232526;
-  color: #f2a73b;
-  cursor: pointer;
-}
-.add:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
 </style>
 
 <script setup lang="ts">
@@ -123,26 +112,35 @@ interface data {
   name: string;
   startDate: string;
   endDate: string;
+  endFormCompilingDate: string;
+  endSelectionAcceptanceDate: string;
   salary: number;
   qualification: string[];
   description: string;
+  questions: string[];
 }
 
 const Data = ref<data>({
   name: '',
   startDate: '',
   endDate: '',
+  endFormCompilingDate: '',
+  endSelectionAcceptanceDate: '',
   salary: 0,
   qualification: [],
-  description: ''
+  description: '',
+  questions: []
 })
 
 const hasChanges = computed(() =>{
   return Data.value.name.trim() !== '' &&
       Data.value.startDate !== '' &&
       Data.value.endDate !== '' &&
+      Data.value.endFormCompilingDate !== '' &&
+      Data.value.endSelectionAcceptanceDate !== '' &&
       Data.value.qualification.length > 0 &&
-      Data.value.description.trim() !== '';
+      Data.value.description.trim() !== '' &&
+      Data.value.questions.length > 0;
 })
 
 function addInternship() {
@@ -152,9 +150,12 @@ function addInternship() {
     name: Data.value.name,
     startDate: Data.value.startDate,
     endDate: Data.value.endDate,
+    endFormCompilingDate: Data.value.endFormCompilingDate,
+    endSelectionAcceptanceDate: Data.value.endSelectionAcceptanceDate,
     salary: Data.value.salary,
-    qualification: Data.value.qualification,
-    description: Data.value.description
+    qualification_required: Data.value.qualification,
+    description: Data.value.description,
+    questions: Data.value.questions
   };
   console.log(formData);
 
@@ -179,11 +180,26 @@ function addInternship() {
 }
 
 const qualificationInput = ref('');
-
 function updateQualifications() {
   Data.value.qualification = qualificationInput.value
       .split(',')
       .map(q => q.trim())
       .filter(q => q);
+}
+
+const updateQuestion = ref('');
+function addQuestion() {
+  Data.value.question = updateQuestion.value
+      .split(',')
+      .map(q => q.trim())
+      .filter(q => q);
+}
+
+const showPopup = ref(false);
+function openPopup() {
+  showPopup.value = true;
+}
+function closePopup() {
+  showPopup.value = false;
 }
 </script>
