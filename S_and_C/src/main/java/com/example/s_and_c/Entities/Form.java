@@ -29,13 +29,8 @@ public class Form {
     @JoinColumn(name = "internship_id")
     private Internship internship;
 
-    @ManyToMany
-    @JoinTable(
-            name = "form_student",
-            joinColumns = @JoinColumn(name = "form_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id")
-    )
-    private List<Student> studentList = new ArrayList<>();
+    @ManyToOne
+    private Student student;
 
     private FormType formType;
 
@@ -53,8 +48,4 @@ public class Form {
     }
 
 
-
-    public void addStudent(Student student) {
-        studentList.add(student);
-    }
 }

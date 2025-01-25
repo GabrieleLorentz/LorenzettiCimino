@@ -229,12 +229,17 @@ public class InternshipServiceImpl implements InternshipService {
     }
 
     @Override
-    public void addAcceptedStudent(String email, int internshipId) {
+    public void addAcceptedStudent(String email, int internshipId, String authEmail) {
         Student student = studentRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Student not found"));
         Internship internship = internshipRepository.findById(internshipId).orElseThrow(()-> new IllegalArgumentException("Internship not found"));
-        internship.addAcceptedStudent(student);
-        internship.deleteAppliedStudent(student);
-        internshipRepository.save(internship);
+        if(authEmail.equals(internship.getCompany().getEmail())){
+            internship.addAcceptedStudent(student);
+            internship.deleteAppliedStudent(student);
+            internshipRepository.save(internship);
+        }
+        else
+            throw new IllegalArgumentException("Student is not accepted by internship");
+
 
 
     }
@@ -255,7 +260,7 @@ public class InternshipServiceImpl implements InternshipService {
                 .orElseThrow(()->new IllegalArgumentException("Internship not found"));
         Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new IllegalArgumentException("Student not found"));
         for(Form form: internship.getForm()){
-            form.addStudent(student);
+            form.setStudent(student);
             form.setResponse(internshipForStudentsDTO.getFormToCompile().get((int)form.getFormId()).getResponse());
             formRepository.save(form);
         }

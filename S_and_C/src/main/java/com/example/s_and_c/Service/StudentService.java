@@ -1,7 +1,9 @@
 package com.example.s_and_c.Service;
 
 import com.example.s_and_c.DTO.ComplaintDTO;
+import com.example.s_and_c.DTO.FeedBackDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
+import com.example.s_and_c.DTO.ReviewDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
 
@@ -22,4 +24,8 @@ public interface StudentService {
     List<InternshipForStudentsDTO> getPersonalInternships(String authEmail);
 
     void handleComplaint(String authEmail, ComplaintDTO complaintDTO);
+
+    void handleFeedBack(String authEmail, FeedBackDTO feedBackDTO);
+
+    void handleReview(String authEmail, ReviewDTO reviewDTO);
 }

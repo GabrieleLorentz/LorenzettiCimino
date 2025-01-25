@@ -122,19 +122,19 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/feedback/{internship_id}")
-    public ResponseEntity<StudentDTO> feedback(@PathVariable("internship_id") String internship_id) {
+    @PostMapping("/feedback")
+    public ResponseEntity<StudentDTO> feedback(@RequestBody FeedBackDTO feedBackDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
-
+        studentService.handleFeedBack(authEmail, feedBackDTO);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/review/{internship_id}")
-    public ResponseEntity<StudentDTO> review(@PathVariable("internship_id") String internship_id) {
+    @PostMapping("/review")
+    public ResponseEntity<StudentDTO> review(@RequestBody ReviewDTO reviewDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
-
+        studentService.handleReview(authEmail, reviewDTO);
         return ResponseEntity.ok().build();
     }
 

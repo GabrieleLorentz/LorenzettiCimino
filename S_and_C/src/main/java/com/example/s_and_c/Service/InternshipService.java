@@ -17,7 +17,7 @@ public interface InternshipService {
 
     List<InternshipCompleteDTO> getMyInternship(String name);
 
-    void addAcceptedStudent(String email, int internshipId);
+    void addAcceptedStudent(String email, int internshipId, String authEmail);
 
     List<InternshipForStudentsDTO> getAllForStudents();
 

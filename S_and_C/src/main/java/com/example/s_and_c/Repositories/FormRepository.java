@@ -12,6 +12,5 @@ import java.util.List;
 public interface FormRepository extends JpaRepository<Form, Integer> {
     List<Form> findByInternship(Internship internship);
 
-    @Query("SELECT f FROM Form f WHERE f.internship = :internship AND :student MEMBER OF f.studentList")
-    List<Form> findByInternshipAndStudent(@Param("internship") Internship internship, @Param("student") Student student);
+    List<Form> findByInternshipAndStudent(Internship internship, Student student);
 }

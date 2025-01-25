@@ -2,8 +2,10 @@ package com.example.s_and_c.Service.Impl;
 
 import com.example.s_and_c.DTO.AuthDTOs.AuthRequestDTO;
 import com.example.s_and_c.DTO.ComplaintDTO;
+import com.example.s_and_c.DTO.FeedBackDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
+import com.example.s_and_c.DTO.ReviewDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
 import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
@@ -144,12 +146,41 @@ public class StudentServiceImpl implements StudentService {
         for(FormDTO formDTO: complaintDTO.getComplaints()){
             Form form = FormMapper.mapToForm(formDTO, internship);
             form.setFormType(FormType.COMPLAINT);
-            form.addStudent(student);
+            form.setStudent(student);
             formRepository.save(form);
         }
     }
 
-    /*private StudentDTO mapInternshipToDTO(Student student) {
+    /**
+     * @param authEmail
+     * @param reviewDTO
+     */
+    @Override
+    public void handleReview(String authEmail, ReviewDTO reviewDTO) {
+        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
+        Internship internship = internshipRepository.findById(reviewDTO.getInternship_id()).orElseThrow(()->new RuntimeException("Internship not found"));
+        Form form = FormMapper.mapToForm(reviewDTO.getReview(), internship);
+        form.setFormType(FormType.REVIEW);
+        form.setStudent(student);
+        formRepository.save(form);
+    }
+
+    /**
+     * @param authEmail
+     * @param feedBackDTO
+     */
+    @Override
+    public void handleFeedBack(String authEmail, FeedBackDTO feedBackDTO) {
+        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
+        Internship internship = internshipRepository.findById(feedBackDTO.getInternship_id()).orElseThrow(()->new RuntimeException("Internship not found"));
+        for(FormDTO formDTO: feedBackDTO.getFeedbacks()){
+        Form form = FormMapper.mapToForm(formDTO,internship);
+        form.setFormType(FormType.FEEDBACK);
+        form.setStudent(student);
+        formRepository.save(form);
+        }
+    }
+/*private StudentDTO mapInternshipToDTO(Student student) {
         StudentDTO studentDTO = new StudentDTO();
         studentDTO.setEmail(student.getEmail());
         studentDTO.setName(student.getName());
