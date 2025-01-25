@@ -5,7 +5,6 @@ import com.example.s_and_c.DTO.ComplaintDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
-import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
 import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
 import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
 import com.example.s_and_c.Entities.Form;
@@ -46,9 +45,9 @@ public class StudentServiceImpl implements StudentService {
     private EntityManager entityManager;
 
     @Override
-    public StudentInternshipDTO getStudent(String email) {
+    public StudentDTO getStudent(String email) {
         Student student = studentRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Student with id " + email + " not found"));
-        return StudentMapper.mapToStudentInternshipDTO(student);
+        return StudentMapper.mapToStudentDTO(student);
     }
 
     @Override

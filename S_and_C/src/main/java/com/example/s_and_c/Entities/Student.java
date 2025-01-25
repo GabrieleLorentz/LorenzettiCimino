@@ -10,10 +10,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+
 
 @Getter
 @Setter
@@ -32,21 +31,7 @@ public class Student implements UserDetails {
     @Column(nullable = false)
     private String password;
     private String description;
-    @ManyToMany
-    @JoinTable(//da risolvere
-            name = "student_internship", // Nome della tabella di join
-            joinColumns = @JoinColumn(name = "email"), // FK verso `students`
-            inverseJoinColumns = @JoinColumn(name = "internship_id") // FK verso `internships`
-    )
-    private List<Internship> appliedToInternships = new ArrayList<>();
 
-
-    public List<Internship> getAppliedToInternships() {
-        if (appliedToInternships == null) {
-            appliedToInternships = new ArrayList<>();
-        }
-        return appliedToInternships;
-    }
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -59,14 +44,6 @@ public class Student implements UserDetails {
         this.description = description;
     }
 
-    public Student(String name, String surname, String email, String password, String description, List<Internship> appliedToInternships) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.password = password;
-        this.description = description;
-        this.appliedToInternships = appliedToInternships;
-    }
 
 
 

@@ -5,7 +5,6 @@ import com.example.s_and_c.DTO.InternshipDTOs.InternshipDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipIdDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
-import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
 import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
 import com.example.s_and_c.Service.InternshipService;
 import com.example.s_and_c.Service.StudentService;
@@ -28,11 +27,11 @@ public class StudentController {
     private final InternshipService internshipService;
 
     @GetMapping({"/personalData"})
-    public ResponseEntity<StudentInternshipDTO> getStudentById() {
+    public ResponseEntity<StudentDTO> getStudentById() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
         try {
-            StudentInternshipDTO student = studentService.getStudent(authEmail);
+            StudentDTO student = studentService.getStudent(authEmail);
             if (student == null) {
                 return ResponseEntity.notFound().build();
             }

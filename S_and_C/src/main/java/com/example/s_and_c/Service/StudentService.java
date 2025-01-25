@@ -3,14 +3,13 @@ package com.example.s_and_c.Service;
 import com.example.s_and_c.DTO.ComplaintDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
-import com.example.s_and_c.DTO.StudentDTOS.StudentInternshipDTO;
 import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
 
 import java.util.List;
 
 public interface StudentService {
 
-    StudentInternshipDTO getStudent(String email);
+    StudentDTO getStudent(String email);
 
     List<StudentDTO> getAllStudents();
 
