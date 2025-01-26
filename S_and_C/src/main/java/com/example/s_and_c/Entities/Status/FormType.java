@@ -4,5 +4,6 @@ public enum FormType {
     REVIEW,
     FEEDBACK,
     INTERVIEW,
-    COMPLAINT
+    COMPLAINT,
+    CV
 }

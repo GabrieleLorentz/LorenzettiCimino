@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -16,4 +18,5 @@ public class RegisterRequestDTO {
     private String surname;
     private String description;
     private Long vat_number;
+    private List<String> cv;
 }

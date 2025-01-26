@@ -5,6 +5,7 @@ import com.example.s_and_c.DTO.FormDTO.FormWithStudentsDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.*;
 import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
 import com.example.s_and_c.Entities.*;
+import com.example.s_and_c.Entities.Status.FormType;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.InternshipMapper;
 import com.example.s_and_c.Repositories.*;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -42,8 +42,35 @@ public class InternshipServiceImpl implements InternshipService {
 
     private List<InternshipDTO> getAllInternshipsByEmail(Company insCompany) {
         List<Internship> internships = internshipRepository.findByCompany(insCompany);
-        return internships.stream().map(InternshipMapper::maptoInternshipDTO).collect(Collectors.toList());
+        List<ShortStudentDTO> appliedStudents = new ArrayList<>();
+        List<ShortStudentDTO> acceptedStudents = new ArrayList<>();
+        List<ShortStudentDTO> selectedStudents = new ArrayList<>();
+        List<InternshipDTO> allInternships = new ArrayList<>();
+        for (Internship internship : internships) {
+            for(Student student : internship.getAppliedStudents()){
+                createShortenDtoList(appliedStudents, student);
+            }
+            for(Student student : internship.getAppliedStudents()){
+                createShortenDtoList(acceptedStudents, student);
 
+            }
+            for(Student student : internship.getSelectedStudents()){
+                createShortenDtoList(selectedStudents, student);
+
+            }
+            allInternships.add(InternshipMapper.maptoInternshipDTO(internship,appliedStudents,acceptedStudents,selectedStudents));
+        }
+        return allInternships;
+
+    }
+
+    private void createShortenDtoList(List<ShortStudentDTO> selectedStudents, Student student) {
+        List<Form> cv = formRepository.findByStudentAndFormType(student, FormType.CV);
+        List<String> cv_string = new ArrayList<>();
+        for(Form form : cv){
+            cv_string.add(form.getResponse());
+        }
+        selectedStudents.add(new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname(), cv_string));
     }
 
 

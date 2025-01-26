@@ -4,6 +4,8 @@ import com.example.s_and_c.DTO.AuthDTOs.AuthRequestDTO;
 import com.example.s_and_c.DTO.AuthDTOs.RegisterRequestDTO;
 import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
 import com.example.s_and_c.Entities.Company;
+import com.example.s_and_c.Entities.Form;
+import com.example.s_and_c.Entities.Status.FormType;
 import com.example.s_and_c.Entities.Status.Role;
 import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Repositories.CompanyRepository;
@@ -47,6 +49,13 @@ public class AuthService implements AuthorizationService {
 
         // Salva lo studente nel repository
         studentRepository.save(student);
+
+        for(String cv_string : registerRequestDTO.getCv()){
+            Form form = new Form();
+            form.setStudent(student);
+            form.setFormType(FormType.CV);
+            form.setResponse(cv_string);
+        }
 
         // Genera il JWT token per lo studente
         var jwtToken = jwtService.generateToken(student);

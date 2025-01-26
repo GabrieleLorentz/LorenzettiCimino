@@ -1,9 +1,12 @@
 package com.example.s_and_c.DTO.StudentDTOS;
 
+import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,6 +19,7 @@ public class StudentDTO {
     private String email;
     private String password;
     private String description;
+    private List<FormDTO> cv;
 }
 
 

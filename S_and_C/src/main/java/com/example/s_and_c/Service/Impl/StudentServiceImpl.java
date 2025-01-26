@@ -9,7 +9,6 @@ import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
 import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
-import com.example.s_and_c.Entities.Company;
 import com.example.s_and_c.Entities.Form;
 import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Entities.Status.FormType;
@@ -33,7 +32,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -50,13 +48,25 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentDTO getStudent(String email) {
         Student student = studentRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Student with id " + email + " not found"));
-        return StudentMapper.mapToStudentDTO(student);
+        List<Form> formsCV = formRepository.findByStudentAndFormType(student, FormType.CV);
+        List<FormDTO> formDTOS = new ArrayList<>();
+        for(Form form : formsCV)
+            formDTOS.add(FormMapper.mapToFormDTO(form));
+        return StudentMapper.mapToStudentDTO(student,formDTOS);
     }
 
     @Override
     public List<StudentDTO> getAllStudents() {
         List<Student> students = studentRepository.findAll();
-        return students.stream().map(StudentMapper::mapToStudentDTO).collect(Collectors.toList());
+        List<StudentDTO> studentDTOS = new ArrayList<>();
+        for(Student student : students){
+            List<Form> formsCV = formRepository.findByStudentAndFormType(student, FormType.CV);
+            List<FormDTO> formDTOS = new ArrayList<>();
+            for(Form form : formsCV)
+                formDTOS.add(FormMapper.mapToFormDTO(form));
+            studentDTOS.add(StudentMapper.mapToStudentDTO(student,formDTOS));
+        }
+        return studentDTOS;
     }
 
     @Transactional

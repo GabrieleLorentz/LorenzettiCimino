@@ -1,6 +1,6 @@
 package com.example.s_and_c.DTO.InternshipDTOs;
 
-import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
+import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,5 +24,7 @@ public class InternshipDTO {
     private List<String> qualification_required;
     private String description;
     private String company_email;
-    private List<StudentDTO> appliedStudents;
+    private List<ShortStudentDTO> appliedStudents;
+    private List<ShortStudentDTO> acceptedStudents;
+    private List<ShortStudentDTO> selectedStudents;
 }

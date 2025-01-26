@@ -3,7 +3,6 @@ package com.example.s_and_c.Mapper;
 import com.example.s_and_c.DTO.FormDTO.FormWithStudentsDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.*;
 import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
-import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.Entities.*;
 import com.example.s_and_c.Entities.Status.FormType;
 import lombok.RequiredArgsConstructor;
@@ -16,27 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InternshipMapper {
 
-    public static InternshipDTO maptoInternshipDTO(Internship internship) {
-        List<StudentDTO> appliedStudents = new ArrayList<>();
-        for(Student student: internship.getAppliedStudents())
-            appliedStudents.add(StudentMapper.mapToStudentDTO(student));
-        List<String> qualifications = new ArrayList<>();
-        for(Qualification qualification: internship.getQualification_required())
-            qualifications.add(qualification.getQualificationName());
-        return new InternshipDTO(
-                internship.getInternship_id(),
-                internship.getName(),
-                internship.getStartDate(),
-                internship.getEndDate(),
-                internship.getEndFormCompilingDate(),
-                internship.getEndSelectionAcceptanceDate(),
-                internship.getSalary(),
-                qualifications,
-                internship.getDescription(),
-                internship.getCompany().getEmail(),
-                appliedStudents
-        );
-    }
+
 
     public static Internship maptoInternship(InsertInternshipDTO dto, Company company) {
         Internship internship = new Internship();
@@ -142,4 +121,25 @@ public class InternshipMapper {
     }
 
 
+    public static InternshipDTO maptoInternshipDTO(Internship internship, List<ShortStudentDTO> appliedStudents, List<ShortStudentDTO> acceptedStudents, List<ShortStudentDTO> selectedStudents) {
+
+        List<String> qualifications = new ArrayList<>();
+        for(Qualification qualification: internship.getQualification_required())
+            qualifications.add(qualification.getQualificationName());
+        return new InternshipDTO(
+                internship.getInternship_id(),
+                internship.getName(),
+                internship.getStartDate(),
+                internship.getEndDate(),
+                internship.getEndFormCompilingDate(),
+                internship.getEndSelectionAcceptanceDate(),
+                internship.getSalary(),
+                qualifications,
+                internship.getDescription(),
+                internship.getCompany().getEmail(),
+                appliedStudents,
+                acceptedStudents,
+                selectedStudents
+        );
+    }
 }
