@@ -10,10 +10,7 @@ import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.InternshipMapper;
-import com.example.s_and_c.Repositories.CompanyRepository;
-import com.example.s_and_c.Repositories.FormRepository;
-import com.example.s_and_c.Repositories.InternshipRepository;
-import com.example.s_and_c.Repositories.StudentRepository;
+import com.example.s_and_c.Repositories.*;
 import com.example.s_and_c.Service.InternshipService;
 import io.micrometer.common.util.StringUtils;
 import lombok.AllArgsConstructor;
@@ -33,6 +30,7 @@ public class InternshipServiceImpl implements InternshipService {
     private final CompanyRepository companyRepository;
     private final StudentRepository studentRepository;
     private final FormRepository formRepository;
+    private final QualificationRepository qualificationRepository;
 
 
     @Override
@@ -42,6 +40,7 @@ public class InternshipServiceImpl implements InternshipService {
 
         Internship internship = InternshipMapper.maptoInternship(insertInternshipDTO, insertingCompany);
         formRepository.saveAll(internship.getForm());
+        qualificationRepository.saveAll(internship.getQualification_required());
         internshipRepository.save(internship);
 
         return getAllInternshipsByEmail(insertingCompany);

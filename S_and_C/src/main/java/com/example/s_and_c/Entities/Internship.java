@@ -40,7 +40,7 @@ public class Internship {
     @Column(nullable = false)
     private LocalDate endSelectionAcceptanceDate;
 
-    @OneToMany(mappedBy = "qualificationName")
+    @OneToMany(mappedBy = "internship")
     private List<Qualification> qualification_required;
 
     private String description;
@@ -100,5 +100,4 @@ public class Internship {
 
     public void addSelectedStudent(Student student) {selectedStudents.add(student);}
 
-    public void deleteSelectedStudent(Student student) {selectedStudents.remove(student);}
 }

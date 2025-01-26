@@ -153,7 +153,7 @@ function addInternship() {
     endFormCompilingDate: Data.value.endFormCompilingDate,
     endSelectionAcceptanceDate: Data.value.endSelectionAcceptanceDate,
     salary: Data.value.salary,
-    qualification_required: Data.value.qualification,
+    qualificationRequired: Data.value.qualification,
     description: Data.value.description,
     questions: Data.value.questions
   };
@@ -189,7 +189,7 @@ function updateQualifications() {
 
 const updateQuestion = ref('');
 function addQuestion() {
-  Data.value.question = updateQuestion.value
+  Data.value.questions = updateQuestion.value
       .split(',')
       .map(q => q.trim())
       .filter(q => q);

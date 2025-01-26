@@ -113,7 +113,15 @@ public class CompanyController {
         return ResponseEntity.ok(companyDTO);
     }
 
-    @PostMapping("/complaints")
+    @GetMapping("/complaint/{internship_id}")
+    public ResponseEntity<ComplaintDTO> getCompanyByEmail(@RequestParam int internship_id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+        ComplaintDTO complaintDTO = companyService.handleComplaintToSend(authEmail,internship_id);
+        return ResponseEntity.ok(complaintDTO);
+    }
+
+    @PostMapping("/sendComplaints")
     public ResponseEntity<CompanyDTO> complaints(@RequestBody ComplaintDTO complaintDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();

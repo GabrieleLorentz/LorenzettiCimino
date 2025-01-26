@@ -184,4 +184,22 @@ public class CompanyServiceImpl implements CompanyService {
         formRepository.save(form);
     }
 
+    /**
+     * @param authEmail
+     * @param internshipId
+     * @return
+     */
+    @Override
+    public ComplaintDTO handleComplaintToSend(String authEmail, int internshipId) {
+        Internship internship = internshipRepository.findById(internshipId).orElseThrow(()->new RuntimeException("Internship not found"));
+        if(!internship.getCompany().getEmail().equals(authEmail)){
+            throw new DataIntegrityViolationException("Internship does not belong to this company");
+        }
+        Form form = new Form();
+        form.setFormType(FormType.COMPLAINT);
+        form.setRequest("Tell us your complaint:");
+        form.setResponse(null);
+        form.setCompany(internship.getCompany());
+        return null;
+    }
 }
