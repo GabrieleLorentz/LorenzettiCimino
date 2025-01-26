@@ -83,7 +83,7 @@
               <p><strong>Name:</strong>{{ internship.name }}</p>
               <p><strong>Company:</strong>{{ internship.company_name }}</p>
               <p><strong>Start Date:</strong> {{ internship.start_date }}</p>
-              <!--<p><strong>End Date:</strong> {{ internship.end_date }}</p>-->
+              <p><strong>End Date:</strong> {{ internship.end_date }}</p>
               <p><strong>Salary:</strong> {{ internship.salary }}</p>
               <button @click="openDetails(internship)" class="popup-button">Details</button>
             </div>
@@ -96,8 +96,8 @@
               <p><strong>Company:</strong> {{ selectedInternship.company_name }}</p>
               <p><strong>Start Date:</strong> {{ selectedInternship.start_date }}</p>
               <p><strong>End Date:</strong> {{ selectedInternship.end_date }}</p>
-              <p><strong>End Form CompilingDate:</strong> {{ selectedInternship.endFormCompilingDate }}</p>
               <p><strong>End Selection AcceptanceDate:</strong> {{ selectedInternship.endSelectionAcceptanceDate }}</p>
+              <p><strong>End Form CompilingDate:</strong> {{ selectedInternship.endFormCompilingDate }}</p>
               <p><strong>Salary: $</strong> {{ selectedInternship.salary }}</p>
               <div style="display: flex; gap: 5px">
                 <p><strong>Qualification required:</strong></p>
@@ -133,6 +133,13 @@
   font-size: 30px;
   font-weight: bold;
   text-align: center;
+}
+.int {
+  border: 3px solid black;
+  border-radius: 40px;
+  padding: 10px;
+  display: flex;
+  gap: 20px;
 }
 .text {
   font-size: 24px;
@@ -209,6 +216,7 @@ function receiveMy() {
         throw new Error("Errore nella richiesta al backend");
       })
       .then(data => {
+        console.log(data)
         myInternships.value = data;
       })
       .catch(error => {
@@ -302,7 +310,6 @@ onMounted(() => {
 
 const showDetails = ref(false);
 const selectedInternship = ref(null);
-
 function openDetails(internship) {
   selectedInternship.value = internship;
   showDetails.value = true;

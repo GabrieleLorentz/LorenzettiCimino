@@ -107,6 +107,7 @@
 
 <script setup lang="ts">
 import {ref, computed} from 'vue';
+import Company_Home from "@/pages/Post_SignIn/Company/Company_Home.vue";
 
 interface data {
   name: string;

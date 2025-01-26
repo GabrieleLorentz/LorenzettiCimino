@@ -11,12 +11,41 @@
         </div>
         <div v-if="internships.length > 0" class="internships-container">
           <div v-for="internship in internships" :key="internship.id" style="padding: 5px">
-            <div class="int">
-              <p><strong>Name:</strong>{{ internship.name }}</p>
-              <p><strong>Company:</strong>{{ internship.company_name }}</p>
-              <p><strong>Start Date:</strong> {{ internship.start_date }}</p>
-              <p><strong>End Date:</strong> {{ internship.end_date }}</p>
-              <p><strong>Salary:</strong> {{ internship.salary }}</p>
+            <div style="border: 3px solid black; border-radius: 40px; padding: 10px; flex-direction: column;">
+              <div style="display: flex; gap: 10px">
+                <p><strong>Name:</strong> {{ internship.name }}</p>
+                <p><strong>Company:</strong> {{ internship.companyName }}</p>
+                <p><strong>Start Date:</strong> {{ internship.startDate }}</p>
+                <p><strong>End Date:</strong> {{ internship.endDate }}</p>
+              </div>
+              <div style="display: flex; gap: 10px">
+                <p><strong>End Selection AcceptanceDate:</strong> {{ internship.endSelectionAcceptanceDate }}</p>
+                <p><strong>End Form CompilingDate:</strong> {{ internship.endFormCompilingDate }}</p>
+                <p><strong>Salary: $</strong> {{ internship.salary }}</p>
+              </div>
+              <div style="display: flex; gap: 5px">
+                <p><strong>Qualification required:</strong></p>
+                <textarea readonly style="width: 90%;"> {{ internship.qualification_required }}</textarea>
+              </div>
+              <div style="display: flex; gap: 5px">
+                <p><strong>Description:</strong></p>
+                <textarea readonly style="width: 90%;"> {{ internship.description }}</textarea>
+              </div>
+              <div style="display: flex; gap: 5px">
+                <button @click="openRequest(internship)" class="popup-button" style="font-size: 15px;">Request Students </button>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="showRequest" class="det">
+            <div class="det-content">
+              <h2>Students</h2>
+              <div v-for="student in selecteInternship.applicants" style="padding: 5px; display: flex; gap: 10px">
+                <p> {{student.name}} </p>
+                <p> {{student.surname}}</p>
+                <button @click="accepted(student.email, selecteInternship.internship_id)" >Yes</button>
+              </div>
+              <button @click="closeRequest" class="popup-button" style="font-size: 20px;">Close</button>
             </div>
           </div>
         </div>
@@ -38,13 +67,6 @@
 </template>
 
 <style>
-.int {
-  border: 3px solid black;
-  border-radius: 40px;
-  padding: 10px;
-  display: flex;
-  gap: 20px;
-}
 .internships-container {
   max-height: 540px;
   overflow-y: auto;
@@ -92,4 +114,38 @@ function receiveData() {
 onMounted(() => {
   receiveData();
 });
+
+const showRequest = ref(false);
+const selecteInternship = ref(null);
+function openRequest(internship) {
+  selecteInternship.value = internship;
+  showRequest.value = true;
+}
+function closeRequest() {
+  showRequest.value = false;
+  selecteInternship.value = null;
+}
+function accepted(email, internshipId) {
+  const token = localStorage.getItem('token');
+
+  fetch(`http://localhost:8080/api/company/studentAccepted/${email}_${internshipId}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+
+    },
+  })
+      .then(response => {
+        if (response.ok) {
+          return;
+        }
+        throw new Error("Errore nella richiesta al backend");
+      })
+      .then(data => {
+        console.log("ciao")
+      })
+      .catch(error => {
+        console.error("Errore durante il recupero dei dati:", error);
+      });
+}
 </script>
