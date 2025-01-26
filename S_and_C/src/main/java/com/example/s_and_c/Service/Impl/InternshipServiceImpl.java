@@ -4,10 +4,7 @@ package com.example.s_and_c.Service.Impl;
 import com.example.s_and_c.DTO.FormDTO.FormWithStudentsDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.*;
 import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
-import com.example.s_and_c.Entities.Company;
-import com.example.s_and_c.Entities.Form;
-import com.example.s_and_c.Entities.Internship;
-import com.example.s_and_c.Entities.Student;
+import com.example.s_and_c.Entities.*;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.InternshipMapper;
 import com.example.s_and_c.Repositories.*;
@@ -79,128 +76,16 @@ public class InternshipServiceImpl implements InternshipService {
 
     @Override
     public List<InternshipDTO> findMatch(SearchDTO searchDTO) {
-        List<InternshipDTO> results = new ArrayList<>();
-        List<Internship> internships;
+        List<Internship> results = new ArrayList<>();
+        if(searchDTO.getKeyword() != null)
+            results = internshipRepository.findInternshipsByKeyword(searchDTO.getKeyword());
 
-        LocalDate maxEndLocal = convertToLocalDate(searchDTO.getMax_end());
-        LocalDate minStartLocal = convertToLocalDate(searchDTO.getMin_start());
-
-        // Controllo se i campi sono vuoti o null
-        boolean hasKeyword = !StringUtils.isEmpty(searchDTO.getKeyword());
-        boolean hasCompany = !StringUtils.isEmpty(searchDTO.getCompany_name());
-        boolean hasQualification = !searchDTO.getQualification().isEmpty();
-        boolean hasMaxEnd = searchDTO.getMax_end() != null;
-        boolean hasMinStart = searchDTO.getMin_start() != null;
-
-        // Ricerca in base alle combinazioni di campi non vuoti
-        if (hasKeyword && !hasCompany && !hasMaxEnd && !hasMinStart && !hasQualification) {
-            // Solo keyword
-            internships = internshipRepository.findByNameContainingIgnoreCase(searchDTO.getKeyword());
+        List<InternshipDTO> internshipDTOS = new ArrayList<>();
+        for (Internship internship : results) {
+            InternshipDTO internshipDTO = InternshipMapper.maptoInternshipDTO(internship);
+            internshipDTOS.add(internshipDTO);
         }
-        else if (!hasKeyword && hasCompany && !hasMaxEnd && !hasMinStart && !hasQualification) {
-            // Solo company
-            internships = internshipRepository.findByCompanyNameContainingIgnoreCase(searchDTO.getCompany_name());
-        }
-        else if (!hasKeyword && !hasCompany && hasMaxEnd && !hasMinStart && !hasQualification) {
-            // Solo max end date
-            internships = internshipRepository.findByEndDateIsLessThanEqual(maxEndLocal);
-        }
-        else if (!hasKeyword && !hasCompany && !hasMaxEnd && hasMinStart && !hasQualification) {
-            // Solo min start date
-            internships = internshipRepository.findByStartDateGreaterThanEqual(minStartLocal);
-        }
-        else if (!hasKeyword && !hasCompany && !hasMaxEnd && !hasMinStart && hasQualification) {
-            // Solo qualification
-            internships = internshipRepository.findByQualificationContainingIgnoreCase(searchDTO.getQualification());
-        }
-        else if (hasKeyword && hasCompany && !hasMaxEnd && !hasMinStart && !hasQualification) {
-            // Keyword + Company
-            internships = internshipRepository.findByKeywordAndCompany(
-                    searchDTO.getKeyword(),
-                    searchDTO.getCompany_name()
-            );
-        }
-        else if (hasKeyword && !hasCompany && (hasMaxEnd || hasMinStart) && !hasQualification) {
-            // Keyword + Dates
-            internships = internshipRepository.findByKeywordAndDates(
-                    searchDTO.getKeyword(),
-                    maxEndLocal,
-                    minStartLocal
-            );
-        }
-        else if (hasKeyword && !hasCompany && !hasMaxEnd && !hasMinStart && hasQualification) {
-            // Keyword + Qualification
-            internships = internshipRepository.findByKeywordAndQualification(
-                    searchDTO.getKeyword(),
-                    searchDTO.getQualification()
-            );
-        }
-        else if (!hasKeyword && hasCompany && (hasMaxEnd || hasMinStart) && !hasQualification) {
-            // Company + Dates
-            internships = internshipRepository.findByCompanyAndDates(
-                    searchDTO.getCompany_name(),
-                    maxEndLocal,
-                    minStartLocal
-            );
-        }
-        else if (!hasKeyword && hasCompany && !hasMaxEnd && !hasMinStart && hasQualification) {
-            // Company + Qualification
-            internships = internshipRepository.findByCompanyAndQualification(
-                    searchDTO.getCompany_name(),
-                    searchDTO.getQualification()
-            );
-        }
-        else if (!hasKeyword && !hasCompany && (hasMaxEnd || hasMinStart) && hasQualification) {
-            // Dates + Qualification
-            internships = internshipRepository.findByDatesAndQualification(
-                    maxEndLocal,
-                    minStartLocal,
-                    searchDTO.getQualification()
-            );
-        }
-        else if (hasKeyword && hasCompany && (hasMaxEnd || hasMinStart) && !hasQualification) {
-            // Keyword + Company + Dates
-            internships = internshipRepository.findByKeywordAndCompanyAndDates(
-                    searchDTO.getKeyword(),
-                    searchDTO.getCompany_name(),
-                    maxEndLocal,
-                    minStartLocal
-            );
-        }
-        else if (hasKeyword && hasCompany && !hasMaxEnd && !hasMinStart && hasQualification) {
-            // Keyword + Company + Qualification
-            internships = internshipRepository.findByKeywordAndCompanyAndQualification(
-                    searchDTO.getKeyword(),
-                    searchDTO.getCompany_name(),
-                    searchDTO.getQualification()
-            );
-        }
-        else if (!hasKeyword && hasCompany && (hasMaxEnd || hasMinStart) && hasQualification) {
-            // Company + Dates + Qualification
-            internships = internshipRepository.findByCompanyAndDatesAndQualification(
-                    searchDTO.getCompany_name(),
-                    maxEndLocal,
-                    minStartLocal,
-                    searchDTO.getQualification()
-            );
-        }
-        else {
-            // Se ci sono altre combinazioni o nessun parametro, usa la ricerca generica
-            internships = internshipRepository.findByAllCriteria(
-                    searchDTO.getKeyword(),
-                    searchDTO.getCompany_name(),
-                    maxEndLocal,
-                    minStartLocal,
-                    searchDTO.getQualification()
-            );
-        }
-
-        // Converte i risultati in DTO
-        for (Internship internship : internships) {
-            results.add(InternshipMapper.maptoInternshipDTO(internship));
-        }
-
-        return results;
+        return internshipDTOS;
     }
 
     @Override

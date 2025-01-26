@@ -25,5 +25,9 @@ public interface CompanyService {
 
     void handleReview(String authEmail, ReviewDTO formDTO);
 
-    ComplaintDTO handleComplaintToSend(String authEmail, int internshipId);
+    List<ComplaintDTO> handleComplaintToSend(String authEmail, int internshipId);
+
+    List<FeedBackDTO> handleFeedBackToSend(String authEmail, int internshipId);
+
+    List<ReviewDTO> handleReviewToSend(String authEmail, int internshipId);
 }

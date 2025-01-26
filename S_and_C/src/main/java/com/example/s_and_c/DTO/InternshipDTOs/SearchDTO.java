@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -14,9 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 public class SearchDTO {
     private String keyword;
-    private String min_salary;
-    private Date min_start;
-    private Date max_end;
-    private List<String> qualification;
-    private String company_name;
+    private int minSalary;
+    private LocalDate minStart;
+    private LocalDate maxEnd;
+    private String companyName;
 }

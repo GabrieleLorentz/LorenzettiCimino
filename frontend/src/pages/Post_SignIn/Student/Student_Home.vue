@@ -208,10 +208,10 @@ function search() {
   const token = localStorage.getItem('token');
 
   const key1 = {
-    name: key.value.name,
-    start: key.value.start,
-    end: key.value.end,
-    salary: key.value.salary
+    keyword: key.value.name,
+    minSalary: key.value.start,
+    maxEnd: key.value.end,
+    companyName: key.value.salary
   }
 
   fetch('http://localhost:8080/api/student/search', {

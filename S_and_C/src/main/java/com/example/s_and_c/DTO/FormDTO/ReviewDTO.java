@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,5 +15,5 @@ import lombok.Setter;
 public class ReviewDTO {
     private String counterpartEmail;
     private int internship_id;
-    private FormDTO review;
+    private List<FormDTO> review;
 }
