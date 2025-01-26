@@ -31,11 +31,12 @@ export default {
   components: {AddInt},
   data() {
     return {
-      role: localStorage.getItem("role"),
+      role: localStorage.getItem("role")
     };
   },
   computed: {
     subtitle() {
+      console.log(localStorage.getItem("role"));
       return this.role === "[STUDENT]" ? "- Student" : "- Company";
     },
     showAddIcon() {
