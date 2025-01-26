@@ -10,7 +10,7 @@ public interface InternshipService {
     List<InternshipDTO> createInternship(String email, InsertInternshipDTO insertInternshipDTO);
 
 
-    List<InternshipDTO> findMatch(SearchDTO searchDTO);
+    List<InternshipForStudentsDTO> findMatch(SearchDTO searchDTO);
 
     List<InternshipCompleteDTO> getMyInternship(String name);
 

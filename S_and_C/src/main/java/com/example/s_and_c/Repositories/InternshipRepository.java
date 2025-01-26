@@ -14,16 +14,23 @@ public interface InternshipRepository extends JpaRepository<Internship, Integer>
     List<Internship> findByCompany(Company company);
 
     @Query("SELECT DISTINCT i FROM Internship i " +
-            "WHERE LOWER(i.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "LOWER(i.company.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "EXISTS (SELECT 1 FROM i.qualification_required q WHERE LOWER(q.qualificationName) LIKE LOWER(CONCAT('%', :keyword, '%')))")
-    List<Internship> findInternshipsByKeyword(@Param("keyword") String keyword);
+            "LEFT JOIN i.company c " +
+            "LEFT JOIN i.qualification_required q " +
+            "WHERE (LOWER(i.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(q.qualificationName) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+            "AND (:minStart IS NULL OR i.startDate >= :minStart) " +
+            "AND (:maxEnd IS NULL OR i.endDate <= :maxEnd) " +
+            "AND (:minSalary IS NULL OR i.salary >= :minSalary)")
+    List<Internship> findInternshipsBySearch(
+            @Param("keyword") String keyword,
+            @Param("minStart") LocalDate minStart,
+            @Param("maxEnd") LocalDate maxEnd,
+            @Param("minSalary") Integer minSalary
+    );
     List<Internship> findByAppliedStudentsContainingIgnoreCase(Student student);
 
     List<Internship> findByAcceptedStudentsContainingIgnoreCase(Student student);
 
-    /*@Modifying
-    @Query("UPDATE InternshipAppliedStudents i SET i.student = :newStudent WHERE i.student = :oldStudent")
-    void updateStudentInInternships(@Param("oldStudent") String oldStudent,
-                                    @Param("newStudent") String newStudent);*/
+
 }

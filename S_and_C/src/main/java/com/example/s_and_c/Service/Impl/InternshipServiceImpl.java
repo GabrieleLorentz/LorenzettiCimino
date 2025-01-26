@@ -9,14 +9,11 @@ import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.InternshipMapper;
 import com.example.s_and_c.Repositories.*;
 import com.example.s_and_c.Service.InternshipService;
-import io.micrometer.common.util.StringUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,39 +47,15 @@ public class InternshipServiceImpl implements InternshipService {
     }
 
 
-
-    /*@Override
-    public InternshipDTO updateInternship(int id, InsertInternshipDTO insertInternshipDTO) {
-        Internship internship = internshipRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Internship not found"));
-
-        internship.setName(insertInternshipDTO.getName());
-        internship.setDescription(insertInternshipDTO.getDescription());
-        internship.setStartDate(insertInternshipDTO.getStart_date());
-        internship.setEndDate(insertInternshipDTO.getEnd_date());
-        internship.setSalary(insertInternshipDTO.getSalary());
-        Internship updatedInternship = internshipRepository.save(internship);
-
-        return InternshipMapper.maptoInternshipDTO(updatedInternship);
-
-    }*/
-
-
-    private LocalDate convertToLocalDate(Date date) {
-        if (date == null) return null;
-        return date.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-    }
-
     @Override
-    public List<InternshipDTO> findMatch(SearchDTO searchDTO) {
+    public List<InternshipForStudentsDTO> findMatch(SearchDTO searchDTO) {
         List<Internship> results = new ArrayList<>();
         if(searchDTO.getKeyword() != null)
-            results = internshipRepository.findInternshipsByKeyword(searchDTO.getKeyword());
+            results = internshipRepository.findInternshipsBySearch(searchDTO.getKeyword(),searchDTO.getMinStart(),searchDTO.getMaxEnd(),searchDTO.getMinSalary());
 
-        List<InternshipDTO> internshipDTOS = new ArrayList<>();
+        List<InternshipForStudentsDTO> internshipDTOS = new ArrayList<>();
         for (Internship internship : results) {
-            InternshipDTO internshipDTO = InternshipMapper.maptoInternshipDTO(internship);
+            InternshipForStudentsDTO internshipDTO = InternshipMapper.maptoInternshipForStudentsDTO(internship);
             internshipDTOS.add(internshipDTO);
         }
         return internshipDTOS;

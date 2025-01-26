@@ -69,11 +69,11 @@ public class StudentController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<InternshipDTO>> searchInternships(
+    public ResponseEntity<List<InternshipForStudentsDTO>> searchInternships(
             @RequestBody SearchDTO searchDTO){
         /*Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();*/
-        List<InternshipDTO> internshipDTOList = internshipService.findMatch(searchDTO);
+        List<InternshipForStudentsDTO> internshipDTOList = internshipService.findMatch(searchDTO);
         if(internshipDTOList.isEmpty()){
             return ResponseEntity.noContent().build();
         }
