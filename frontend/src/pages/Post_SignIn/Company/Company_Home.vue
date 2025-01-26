@@ -15,12 +15,12 @@
               <p><strong>Name:</strong>{{ internship.name }}</p>
               <p><strong>Company:</strong>{{ internship.company_name }}</p>
               <p><strong>Start Date:</strong> {{ internship.start_date }}</p>
-              <!--<p><strong>End Date:</strong> {{ internship.end_date }}</p>-->
+              <p><strong>End Date:</strong> {{ internship.end_date }}</p>
               <p><strong>Salary:</strong> {{ internship.salary }}</p>
             </div>
           </div>
         </div>
-        <div v-else>
+        <div v-else style="font-size: 30px">
           <p>No internships available.</p>
         </div>
       </div>

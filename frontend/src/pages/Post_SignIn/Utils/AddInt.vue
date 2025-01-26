@@ -39,7 +39,7 @@
               <textarea id="Description" v-model="Data.description" type="text" class="form-input" />
             </div>
             <div class="form-row">
-              <label for="Question">Question:</label>
+              <label for="Question">Questions:</label>
               <textarea id="Question" v-model="updateQuestion" @change="addQuestion" placeholder="Separate with commas" type="text" class="form-input" />
             </div>
           </div>

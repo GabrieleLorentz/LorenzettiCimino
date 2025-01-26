@@ -9,14 +9,44 @@
         <div class="my_collaboration">
           MY COLLABORATIONS IN PROGRESS
         </div>
-        <div class="text">
-          Accepted
+        <div v-if="myInternships.length > 0" class="internships-container">
+          <div v-for="internship in myInternships" :key="internship.id" style="padding: 5px">
+            <div style="border: 3px solid black; border-radius: 40px; padding: 10px; flex-direction: column;">
+              <div style="display: flex; gap: 10px">
+                <p><strong>Name:</strong> {{ internship.name }}</p>
+                <p><strong>Company:</strong> {{ internship.company_name }}</p>
+                <p><strong>Start Date:</strong> {{ internship.start_date }}</p>
+                <p><strong>End Date:</strong> {{ internship.end_date }}</p>
+              </div>
+              <div style="display: flex; gap: 10px">
+                <p><strong>End Form CompilingDate:</strong> {{ internship.endFormCompilingDate }}</p>
+                <p><strong>End Selection AcceptanceDate:</strong> {{ internship.endSelectionAcceptanceDate }}</p>
+                <p><strong>Salary: $</strong> {{ internship.salary }}</p>
+              </div>
+              <div style="display: flex; gap: 5px">
+                <p><strong>Qualification required:</strong></p>
+                <textarea readonly style="width: 90%;"> {{ internship.qualification_required }}</textarea>
+              </div>
+              <div style="display: flex; gap: 5px">
+                <p><strong>Description:</strong></p>
+                <textarea readonly style="width: 90%;"> {{ internship.description }}</textarea>
+              </div>
+              <div v-if="internship.form" style="display: flex; gap: 5px">
+                <button @click="openForm" class="popup-button">Form</button>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="showForm" class="det">
+            <div class="det-content">
+              <h2>Questions</h2>
+
+            </div>
+          </div>
+
         </div>
-        <div class="text">
-          Applied
-        </div>
-        <div class="text">
-          Selected
+        <div v-else style="font-size: 30px">
+          <p>No internships available.</p>
         </div>
       </div>
 
@@ -55,18 +85,19 @@
               <p><strong>Start Date:</strong> {{ internship.start_date }}</p>
               <!--<p><strong>End Date:</strong> {{ internship.end_date }}</p>-->
               <p><strong>Salary:</strong> {{ internship.salary }}</p>
-              <button @click="openPopup(internship)" class="popup-button">Details</button>
+              <button @click="openDetails(internship)" class="popup-button">Details</button>
             </div>
           </div>
 
-          <div v-if="showPopup" class="det">
+          <div v-if="showDetails" class="det">
             <div class="det-content">
               <h2>Internship Details</h2>
               <p><strong>Name:</strong> {{ selectedInternship.name }}</p>
               <p><strong>Company:</strong> {{ selectedInternship.company_name }}</p>
-              <p><strong>Company email:</strong> {{ selectedInternship.company_email }}</p>
               <p><strong>Start Date:</strong> {{ selectedInternship.start_date }}</p>
               <p><strong>End Date:</strong> {{ selectedInternship.end_date }}</p>
+              <p><strong>End Form CompilingDate:</strong> {{ selectedInternship.endFormCompilingDate }}</p>
+              <p><strong>End Selection AcceptanceDate:</strong> {{ selectedInternship.endSelectionAcceptanceDate }}</p>
               <p><strong>Salary: $</strong> {{ selectedInternship.salary }}</p>
               <div style="display: flex; gap: 5px">
                 <p><strong>Qualification required:</strong></p>
@@ -77,14 +108,14 @@
                 <textarea readonly style="width: 90%;"> {{ selectedInternship.description }}</textarea>
               </div>
               <div style="display: flex; gap: 5px; margin-top: 5px">
-                <button @click="closePopup" class="popup-button" style="font-size: 20px;">Close</button>
+                <button @click="closeDetails" class="popup-button" style="font-size: 20px;">Close</button>
                 <button @click="request" :disabled="!sendStatus[selectedInternship.internship_id]" class="popup-button" style="font-size: 20px;">Request!</button>
               </div>
             </div>
           </div>
 
         </div>
-        <div v-else>
+        <div v-else style="font-size: 30px">
           <p>No internships available.</p>
         </div>
       </div>
@@ -161,23 +192,40 @@
 import UpperPart from "@/pages/Post_SignIn/Utils/upper_part.vue";
 import {onMounted, ref} from "vue";
 
-const allInternships = ref([]);
-const sendStatus = ref<Record<number, boolean>>({});
+const myInternships = ref([]);
+function receiveMy() {
+  const token = localStorage.getItem('token');
 
-interface filters {
-  name: string;
-  start: string;
-  end: string;
-  salary: number;
+  fetch('http://localhost:8080/api/student/myInternships', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Errore nella richiesta al backend");
+      })
+      .then(data => {
+        myInternships.value = data;
+      })
+      .catch(error => {
+        console.error("Errore durante il recupero dei dati:", error);
+      });
 }
 
-const key = ref<filters>({
-  name: '',
-  start: '',
-  end: '',
-  salary: 0
-})
+const showForm = ref(false);
+function openForm(){
+  showForm.value = true;
+}
+function closeForm() {
+  showForm.value = false;
+}
 
+const allInternships = ref([]);
+const sendStatus = ref<Record<number, boolean>>({});
 function receiveAll() {
   const token = localStorage.getItem('token');
 
@@ -204,14 +252,26 @@ function receiveAll() {
       });
 }
 
+interface filters {
+  name: string;
+  start: string;
+  end: string;
+  salary: number;
+}
+const key = ref<filters>({
+  name: '',
+  start: '',
+  end: '',
+  salary: 0
+})
 function search() {
   const token = localStorage.getItem('token');
 
   const key1 = {
     keyword: key.value.name,
-    minSalary: key.value.start,
+    minStart: key.value.start,
     maxEnd: key.value.end,
-    companyName: key.value.salary
+    minSalary: key.value.salary
   }
 
   fetch('http://localhost:8080/api/student/search', {
@@ -237,17 +297,18 @@ function search() {
 }
 onMounted(() => {
   receiveAll();
+  receiveMy();
 });
 
-const showPopup = ref(false);
+const showDetails = ref(false);
 const selectedInternship = ref(null);
 
-function openPopup(internship) {
+function openDetails(internship) {
   selectedInternship.value = internship;
-  showPopup.value = true;
+  showDetails.value = true;
 }
-function closePopup() {
-  showPopup.value = false;
+function closeDetails() {
+  showDetails.value = false;
   selectedInternship.value = null;
 }
 function request() {
@@ -267,6 +328,7 @@ function request() {
       .then(response => {
         if (response.ok) {
           sendStatus.value[id] = false;
+          receiveMy();
         } else {
           console.log(response.status);
         }
