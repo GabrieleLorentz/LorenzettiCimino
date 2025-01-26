@@ -288,7 +288,7 @@ function search() {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ key1 })
+    body: JSON.stringify(key1 )
   })
       .then(response => {
         if (response.ok) {
