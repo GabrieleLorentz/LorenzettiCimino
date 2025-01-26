@@ -18,5 +18,4 @@ public class SearchDTO {
     private int minSalary;
     private LocalDate minStart;
     private LocalDate maxEnd;
-    private String companyName;
 }
