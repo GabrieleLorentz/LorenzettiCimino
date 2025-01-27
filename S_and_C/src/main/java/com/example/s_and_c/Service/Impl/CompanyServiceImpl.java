@@ -10,6 +10,7 @@ import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
 import com.example.s_and_c.Entities.*;
 import com.example.s_and_c.Entities.Status.FormType;
+import com.example.s_and_c.Entities.Status.Role;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.CompanyMapper;
 import com.example.s_and_c.Mapper.FormMapper;
@@ -20,8 +21,10 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +35,7 @@ import java.util.stream.Collectors;
 public class CompanyServiceImpl implements CompanyService {
 
     private final PasswordEncoder passwordEncoder;
+    private final StudentRepository studentRepository;
     private CompanyRepository companyRepository;
     private InternshipRepository internshipRepository;
     private final AuthService authService;
@@ -68,6 +72,9 @@ public class CompanyServiceImpl implements CompanyService {
 
         try {
             if (!companyDTO.getEmail().equals(company.getEmail())) {
+                if(studentRepository.findByEmail(companyDTO.getEmail()).isPresent()) {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT,"Student with email " + companyDTO.getEmail() + " already exists");
+                }
                 Company newCompany = new Company();
                 newCompany.setEmail(companyDTO.getEmail());
                 newCompany.setName(companyDTO.getName());
@@ -78,7 +85,7 @@ public class CompanyServiceImpl implements CompanyService {
                 newCompany.setDescription(companyDTO.getDescription());
                 String rawPassword = companyDTO.getPassword();
                 newCompany.setPassword(passwordEncoder.encode(rawPassword));
-                newCompany.setRole(company.getRole());
+                newCompany.setRole(Role.COMPANY);
 
                 entityManager.persist(newCompany);
                 entityManager.flush();

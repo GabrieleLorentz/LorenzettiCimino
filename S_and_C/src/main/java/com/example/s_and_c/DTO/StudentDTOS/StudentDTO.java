@@ -19,7 +19,7 @@ public class StudentDTO {
     private String email;
     private String password;
     private String description;
-    private List<FormDTO> cv;
+    private List<String> cv;
 }
 
 

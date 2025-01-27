@@ -9,6 +9,7 @@ import com.example.s_and_c.Entities.Status.FormType;
 import com.example.s_and_c.Entities.Status.Role;
 import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Repositories.CompanyRepository;
+import com.example.s_and_c.Repositories.FormRepository;
 import com.example.s_and_c.Repositories.StudentRepository;
 import com.example.s_and_c.Service.AuthorizationService;
 import com.example.s_and_c.config.CustomUserDetailsService;
@@ -23,6 +24,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import static com.example.s_and_c.config.CustomUserDetailsService.*;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService implements AuthorizationService {
@@ -32,6 +35,7 @@ public class AuthService implements AuthorizationService {
     private final CompanyRepository companyRepository;
     private final CustomUserDetailsService userDetailsService;
     private final CustomAuthenticationManager authenticationManager;
+    private final FormRepository formRepository;
 
     public UserTokenDTO registerStudent(RegisterRequestDTO registerRequestDTO) {
 
@@ -45,9 +49,9 @@ public class AuthService implements AuthorizationService {
         student.setEmail(registerRequestDTO.getEmail());
         student.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword()));
         student.setDescription(registerRequestDTO.getDescription());
-        student.setRole(Role.STUDENT);  // Imposta il ruolo a STUDENT
-
-        // Salva lo studente nel repository
+        student.setRole(Role.STUDENT);
+        if(registerRequestDTO.getCv().isEmpty())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "CV cannot be empty");
         studentRepository.save(student);
 
         for(String cv_string : registerRequestDTO.getCv()){
@@ -55,12 +59,11 @@ public class AuthService implements AuthorizationService {
             form.setStudent(student);
             form.setFormType(FormType.CV);
             form.setResponse(cv_string);
+            formRepository.save(form);
         }
 
-        // Genera il JWT token per lo studente
         var jwtToken = jwtService.generateToken(student);
 
-        // Restituisci il token nell'AuthenticationResponse
         return new UserTokenDTO(student.getEmail(),jwtToken, student.getRole().toString());
     }
 
@@ -88,7 +91,7 @@ public class AuthService implements AuthorizationService {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        var jwtToken = jwtService.generateToken(authentication);
+        var jwtToken = jwtService.generateToken(company);
         return new UserTokenDTO(company.getEmail(),jwtToken, company.getRole().toString());
     }
 
@@ -101,7 +104,7 @@ public class AuthService implements AuthorizationService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UserDetails userDetails = userDetailsService.loadUserByUsername(authRequestDTO.getEmail());
             // Generate JWT token
-            String token = jwtService.generateToken(authentication);
+            String token = jwtService.generateToken(userDetails);
 
             return new UserTokenDTO(authRequestDTO.getEmail(), token, userDetails.getAuthorities().toString());
         } catch (BadCredentialsException e) {

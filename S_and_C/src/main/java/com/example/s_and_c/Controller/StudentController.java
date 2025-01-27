@@ -48,23 +48,24 @@ public class StudentController {
         }
     }
 
-    @GetMapping
+    /*@GetMapping
     //Build get all student REST API
     public ResponseEntity<List<StudentDTO>> getAllStudents() {
         List<StudentDTO> allStudents = studentService.getAllStudents();
         return ResponseEntity.ok(allStudents);
-    }
+    }*/
 
     @PostMapping("/updateData")
     //Build update student
     public ResponseEntity<UpdatedStudentDTO> updateStudent(
-            @RequestBody StudentDTO updatedStudentDTO) {
+            @RequestBody UpdatedStudentDTO updatedStudentDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UpdatedStudentDTO studentDTO = studentService.updateStudent(auth.getName(), updatedStudentDTO);
         //aggiungere il controllo in caso di cambio dati, che sia sistemato anche nelle internship
         if (studentDTO == null) {
             return ResponseEntity.badRequest().build();
         }
+
         return ResponseEntity.ok(studentDTO);
     }
 

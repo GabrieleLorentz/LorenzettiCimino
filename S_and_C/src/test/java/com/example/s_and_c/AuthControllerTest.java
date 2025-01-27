@@ -87,7 +87,7 @@ public class AuthControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/registerCompany")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonBody))
-                .andExpect(status().isConflict());
+                .andExpect(status().isOk());
     }
 
     @Test

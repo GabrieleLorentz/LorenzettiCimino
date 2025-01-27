@@ -13,9 +13,9 @@ public interface StudentService {
 
     StudentDTO getStudent(String email);
 
-    List<StudentDTO> getAllStudents();
+    //List<StudentDTO> getAllStudents();
 
-    UpdatedStudentDTO updateStudent(String email, StudentDTO studentDTO);
+    UpdatedStudentDTO updateStudent(String email, UpdatedStudentDTO studentDTO);
 
     void deleteStudent(String email);
 

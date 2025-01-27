@@ -30,9 +30,9 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(Authentication authentication) {
+    /*public String generateToken(Authentication authentication) {
         return generateToken(new HashMap<>(), authentication.getName());
-    }
+    }*/
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();

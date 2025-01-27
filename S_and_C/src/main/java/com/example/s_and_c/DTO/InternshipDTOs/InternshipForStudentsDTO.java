@@ -27,9 +27,9 @@ public class InternshipForStudentsDTO {
 
 
 
-    public InternshipForStudentsDTO(long internshipId, String name, LocalDate startDate, LocalDate endDate, LocalDate endFormCompilingDate,
+    public InternshipForStudentsDTO(long internship_id, String name, LocalDate startDate, LocalDate endDate, LocalDate endFormCompilingDate,
                                     LocalDate endSelectionAcceptanceDate, int salary, List<String> qualificationRequired, String description, String name1) {
-        this.internship_id = internshipId;
+        this.internship_id = internship_id;
         this.name = name;
         this.start_date = startDate;
         this.End_date = endDate;

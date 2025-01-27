@@ -73,7 +73,7 @@ public class Student implements UserDetails {
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(this.role.toString()));
+        return Collections.singletonList(new SimpleGrantedAuthority(Role.STUDENT.toString()));
 
     }
 

@@ -12,9 +12,11 @@ import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.Service.CompanyService;
 import com.example.s_and_c.Service.InternshipService;
 import lombok.AllArgsConstructor;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextChangedEvent;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,11 +30,7 @@ public class CompanyController {
     private final CompanyService companyService;
     private final InternshipService internshipService;
 
-    /*@PostMapping
-    public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {
-        CompanyDTO savedCompany = companyService.createCompany(companyDTO);
-        return new ResponseEntity<>(savedCompany, HttpStatus.CREATED);
-    }*/
+
     @GetMapping({"/personalData"})
     public ResponseEntity<CompanyDTO> getStudentById() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -169,4 +167,5 @@ public class CompanyController {
         return ResponseEntity.ok("Company deleted succesfully");
     }
 
+    
 }
