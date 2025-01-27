@@ -43,7 +43,7 @@
               <div v-for="student in selecteInternship.applicants" style="padding: 5px; display: flex; gap: 10px">
                 <p> {{student.name}} </p>
                 <p> {{student.surname}}</p>
-                <button @click="accepted(student.email, selecteInternship.internship_id)" >Yes</button>
+                <button @click="accepted(student.email, selecteInternship.id)" >Yes</button>
               </div>
               <button @click="closeRequest" class="popup-button" style="font-size: 20px;">Close</button>
             </div>
@@ -127,6 +127,7 @@ function closeRequest() {
 }
 function accepted(email, internshipId) {
   const token = localStorage.getItem('token');
+  console.log(selecteInternship)
 
   fetch(`http://localhost:8080/api/company/studentAccepted/${email}_${internshipId}`, {
     method: 'POST',

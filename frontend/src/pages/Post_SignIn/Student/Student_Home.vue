@@ -1,4 +1,4 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start">
 
     <UpperPart></UpperPart>
@@ -10,7 +10,7 @@
           MY COLLABORATIONS IN PROGRESS
         </div>
         <div v-if="myInternships.length > 0" class="internships-container">
-          <div v-for="internship in myInternships" :key="internship.id" style="padding: 5px">
+          <div v-for="internship in myInternships" style="padding: 5px">
             <div style="border: 3px solid black; border-radius: 40px; padding: 10px; flex-direction: column;">
               <div style="display: flex; gap: 10px">
                 <p><strong>Name:</strong> {{ internship.name }}</p>
@@ -31,8 +31,8 @@
                 <p><strong>Description:</strong></p>
                 <textarea readonly style="width: 90%;"> {{ internship.description }}</textarea>
               </div>
-              <div v-if="internship.form" style="display: flex; gap: 5px">
-                <button @click="openForm" class="popup-button">Form</button>
+              <div v-if="internship.formToCompile" style="display: flex; gap: 5px">
+                <button @click="openForm(internship)" class="popup-button">Form</button>
               </div>
             </div>
           </div>
@@ -40,7 +40,14 @@
           <div v-if="showForm" class="det">
             <div class="det-content">
               <h2>Questions</h2>
-
+              <div v-for="form in selectedForm.formToCompile" :key="form.formId">
+                <p>{{form.request}}</p>
+                <textarea v-model="form.response" type="text" id="response" style="width: 90%; height: 50px" placeholder="Enter your response..."/>
+              </div>
+              <div>
+                <button @click="closeForm" class="popup-button" style="font-size: 20px;">Close</button>
+                <button @click="send" class="popup-button" style="font-size: 20px;">Send</button>
+              </div>
             </div>
           </div>
 
@@ -78,7 +85,7 @@
         </div>
 
         <div v-if="allInternships.length > 0" class="internships-container">
-          <div v-for="internship in allInternships" :key="internship.id" style="padding: 5px">
+          <div v-for="internship in allInternships" style="padding: 5px">
             <div class="int">
               <p><strong>Name:</strong>{{ internship.name }}</p>
               <p><strong>Company:</strong>{{ internship.company_name }}</p>
@@ -225,11 +232,39 @@ function receiveMy() {
 }
 
 const showForm = ref(false);
-function openForm(){
+const selectedForm = ref(null);
+function openForm(internship){
+  selectedForm.value = internship;
   showForm.value = true;
+  console.log(selectedForm.value)
 }
 function closeForm() {
   showForm.value = false;
+  selectedForm.value = null;
+}
+
+function send(){
+  const token = localStorage.getItem('token');
+
+  const form = selectedForm.value;
+  console.log(form);
+  fetch('http://localhost:8080/api/student/formResponses', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ form })
+  })
+      .then(response => {
+        if (response.ok) {
+          return;
+        } else {
+          console.log(response.status);
+        }
+      })
+      .catch(error => {console.error('Errore errore', error);
+      });
 }
 
 const allInternships = ref([]);
