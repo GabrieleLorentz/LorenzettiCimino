@@ -9,7 +9,7 @@
       <input v-model="formData.email" type="email" placeholder="e-mail" class="text-input-signin" />
       <input v-model="formData.password" type="password" placeholder="password" class="text-input-signin" />
       <textarea v-model="formData.description" placeholder="description" class="input-signin"></textarea>
-      <textarea v-model="formData.cv" @change="insertCV" type="text" placeholder="CV, separate with one / " class="input-signin" />
+      <textarea v-model="formData.cv" @blur="insertCV" type="text" placeholder="CV, separate with one / " class="input-signin" />
 
       <button @click="submitForm" class="button">SIGN UP</button>
     </div>
@@ -38,7 +38,6 @@
 
 <script>
 import {ref} from "vue";
-const cv = ref('');
 
 export default {
   data() {
@@ -83,7 +82,7 @@ export default {
           .catch(error => {console.error('Errore:', error);});
     },
     insertCV() {
-    this.formData.value.cv = cv.value
+    this.formData.cv = this.formData.cv
       .split('/')
       .map(q => q.trim())
       .filter(q => q);
