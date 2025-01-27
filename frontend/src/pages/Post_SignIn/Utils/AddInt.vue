@@ -183,7 +183,7 @@ function addInternship() {
 const qualificationInput = ref('');
 function updateQualifications() {
   Data.value.qualification = qualificationInput.value
-      .split(',')
+      .split('/')
       .map(q => q.trim())
       .filter(q => q);
 }
@@ -191,7 +191,7 @@ function updateQualifications() {
 const updateQuestion = ref('');
 function addQuestion() {
   Data.value.questions = updateQuestion.value
-      .split(',')
+      .split('/')
       .map(q => q.trim())
       .filter(q => q);
 }

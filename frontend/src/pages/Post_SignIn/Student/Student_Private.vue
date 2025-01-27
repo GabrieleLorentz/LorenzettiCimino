@@ -25,6 +25,9 @@
         <div class="data">
           <textarea v-model="editedData.description" class="editable-textarea"></textarea>
         </div>
+        <div class="data">
+          <textarea v-model="editedData.cv" class="editable-textarea"></textarea>
+        </div>
         <button @click="saveAllChanges" class="save" :disabled="!hasChanges">SAVE</button>
       </div>
       <div class="vertical_line2"></div>
@@ -108,6 +111,7 @@ interface UserData {
   email: string;
   password: string;
   description: string;
+  cv: string[];
 }
 
 const originalData = ref<UserData>({
@@ -115,7 +119,8 @@ const originalData = ref<UserData>({
   surname: '',
   email: '',
   password: '',
-  description: ''
+  description: '',
+  cv: []
 });
 
 const editedData = ref<UserData>({
@@ -123,7 +128,8 @@ const editedData = ref<UserData>({
   surname: '',
   email: '',
   password: '',
-  description: ''
+  description: '',
+  cv: []
 });
 
 const hasChanges = computed(() => {
@@ -131,7 +137,8 @@ const hasChanges = computed(() => {
       originalData.value.surname !== editedData.value.surname ||
       originalData.value.email !== editedData.value.email ||
       originalData.value.password !== editedData.value.password ||
-      originalData.value.description !== editedData.value.description;
+      originalData.value.description !== editedData.value.description ||
+      originalData.value.cv !== editedData.value.description
 });
 
 function receiveData() {
@@ -155,7 +162,8 @@ function receiveData() {
           surname: data.surname,
           email: data.email,
           password: localStorage.getItem("password"),
-          description: data.description
+          description: data.description,
+          cv: data.cv
         };
         editedData.value = { ...originalData.value };
       })
@@ -172,7 +180,8 @@ function saveAllChanges() {
     surname: editedData.value.surname,
     email: editedData.value.email,
     password: editedData.value.password,
-    description: editedData.value.description
+    description: editedData.value.description,
+    cv: editedData.value.cv
   };
 
   fetch('http://localhost:8080/api/student/updateData', {

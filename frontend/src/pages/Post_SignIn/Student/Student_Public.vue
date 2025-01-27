@@ -22,6 +22,9 @@
         <div class="data">
           <textarea class="editable-textarea">{{originalData.description}}</textarea>
         </div>
+        <div class="data">
+          <textarea class="editable-textarea">{{originalData.cv}}</textarea>
+        </div>
       </div>
       <div class="vertical_line2"></div>
       <div style="flex: 1; padding: 20px;">
@@ -40,13 +43,15 @@ interface UserData {
   surname: string;
   email: string;
   description: string;
+  cv: string[]
 }
 
 const originalData = ref<UserData>({
   name: '',
   surname: '',
   email: '',
-  description: ''
+  description: '',
+  cv: []
 });
 
 function receiveData() {
@@ -69,7 +74,8 @@ function receiveData() {
           name: data.name,
           surname: data.surname,
           email: data.email,
-          description: data.description
+          description: data.description,
+          cv: data.cv
         };
       })
       .catch(error => {
