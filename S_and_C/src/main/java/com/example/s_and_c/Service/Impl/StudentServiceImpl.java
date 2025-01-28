@@ -160,6 +160,9 @@ public class StudentServiceImpl implements StudentService {
         System.out.println(internshipId);
         Internship internship = internshipRepository.findById((int)internshipId).orElseThrow(()->new RuntimeException("Internship not found"));
         Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
+        if(internship.getAcceptedStudents().contains(student) || internship.getSelectedStudents().contains(student) || internship.getAppliedStudents().contains(student)){
+            throw new IllegalArgumentException("Student is already accepted by internship");
+        }
         internship.addAppliedStudent(student);
         internshipRepository.save(internship);
     }
