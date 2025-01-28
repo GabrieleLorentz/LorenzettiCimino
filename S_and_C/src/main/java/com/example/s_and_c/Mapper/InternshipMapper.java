@@ -63,7 +63,7 @@ public class InternshipMapper {
         for(Qualification qualification: internship.getQualification_required())
             qualifications.add(qualification.getQualificationName());
         return new InternshipCompleteDTO(
-                internship.getInternship_id(),
+                internship.getInternshipId(),
                 internship.getName(),
                 internship.getStartDate(),
                 internship.getEndDate(),
@@ -84,7 +84,7 @@ public class InternshipMapper {
         for(Qualification qualification: internship.getQualification_required())
             qualifications.add(qualification.getQualificationName());
         return new InternshipForStudentsDTO(
-                internship.getInternship_id(),
+                internship.getInternshipId(),
                 internship.getName(),
                 internship.getStartDate(),
                 internship.getEndDate(),
@@ -106,7 +106,7 @@ public class InternshipMapper {
         for(Qualification qualification: internship.getQualification_required())
             qualifications.add(qualification.getQualificationName());
         return new InternshipForStudentsDTO(
-                internship.getInternship_id(),
+                internship.getInternshipId(),
                 internship.getName(),
                 internship.getStartDate(),
                 internship.getEndDate(),
@@ -127,7 +127,7 @@ public class InternshipMapper {
         for(Qualification qualification: internship.getQualification_required())
             qualifications.add(qualification.getQualificationName());
         return new InternshipDTO(
-                internship.getInternship_id(),
+                internship.getInternshipId(),
                 internship.getName(),
                 internship.getStartDate(),
                 internship.getEndDate(),

@@ -20,7 +20,7 @@ public class Internship {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long internship_id;
+    private long internshipId;
 
     @Column(nullable = false)
     private String name;

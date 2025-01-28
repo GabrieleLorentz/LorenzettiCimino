@@ -31,7 +31,7 @@ public class FormMapper {
         List<FormDTO> formDTOS= new ArrayList<>();
         formDTOS.add(formDTO);
         return new ComplaintDTO(
-                (int) form.getInternship().getInternship_id(),
+                (int) form.getInternship().getInternshipId(),
                 formDTOS
         );
     }
@@ -42,7 +42,7 @@ public class FormMapper {
         formDTOS.add(formDTO);
         return new FeedBackDTO(
                 authEmail,
-                (int) formIter.getInternship().getInternship_id(),
+                (int) formIter.getInternship().getInternshipId(),
                 formDTOS
         );
     }
@@ -53,7 +53,7 @@ public class FormMapper {
         formDTOS.add(formDTO);
         return new ReviewDTO(
                 authEmail,
-                (int) formIter.getInternship().getInternship_id(),
+                (int) formIter.getInternship().getInternshipId(),
                 formDTOS
         );
     }

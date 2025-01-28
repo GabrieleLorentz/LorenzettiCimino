@@ -9,8 +9,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface InternshipRepository extends JpaRepository<Internship, Integer> {
+    Optional<Internship> findInternshipByInternshipId(long internshipId);;
+
     List<Internship> findByCompany(Company company);
 
     @Query("SELECT DISTINCT i FROM Internship i " +

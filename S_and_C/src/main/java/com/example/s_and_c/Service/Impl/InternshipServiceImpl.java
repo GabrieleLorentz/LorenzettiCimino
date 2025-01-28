@@ -138,9 +138,9 @@ public class InternshipServiceImpl implements InternshipService {
 
     @Override
     public void addFormResponse(InternshipForStudentsDTO internshipForStudentsDTO, String authEmail) {
-        System.out.println(internshipForStudentsDTO.getInternship_id());
-        Internship internship = internshipRepository.findById((int) internshipForStudentsDTO.getInternship_id())
-                .orElseThrow(()->new IllegalArgumentException("Internship not found"));
+        System.out.println(internshipForStudentsDTO.getInternshipId());
+        Internship internship = internshipRepository.findInternshipByInternshipId(internshipForStudentsDTO.getInternshipId())
+                .orElseThrow(()-> new IllegalArgumentException("Internship not found"));
         Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new IllegalArgumentException("Student not found"));
         for(Form form: internship.getForm()){
             form.setStudent(student);
