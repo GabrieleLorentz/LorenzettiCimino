@@ -98,7 +98,7 @@ public class InternshipServiceImpl implements InternshipService {
             List<InternshipCompleteDTO> internshipCompleteDTOS = new ArrayList<>();
             for (Internship internship : internships) {
                 for(Student student: internship.getAcceptedStudents()){
-                    List<Form> results = formRepository.findByInternshipAndStudent(internship, student);
+                    List<Form> results = formRepository.findByInternshipAndStudentAndFormType(internship, student,FormType.INTERVIEW);
                     for(Form form: results){
                         compiledForms.add(new FormWithStudentsDTO(form.getFormId(), form.getRequest(), form.getResponse(),
                                 new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname())));
@@ -122,6 +122,16 @@ public class InternshipServiceImpl implements InternshipService {
         if(authEmail.equals(internship.getCompany().getEmail()) && internship.getAppliedStudents().contains(student)){
             internship.addAcceptedStudent(student);
             internship.deleteAppliedStudent(student);
+            List<Form> forms = formRepository.findByInternshipAndCompanyAndFormType(internship, internship.getCompany(), FormType.INTERVIEW);
+            for(Form formList : forms){
+                Form form = new Form();
+                form.setFormType(FormType.INTERVIEW);
+                form.setInternship(internship);
+                form.setRequest(formList.getRequest());
+                form.setStudent(student);
+                form.setResponse(null);
+            }
+
             internshipRepository.save(internship);
         }
         else
@@ -147,11 +157,16 @@ public class InternshipServiceImpl implements InternshipService {
         Internship internship = internshipRepository.findInternshipByInternshipId(formResponseDTO.getInternshipId())
                 .orElseThrow(()-> new IllegalArgumentException("Internship not found"));
         Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new IllegalArgumentException("Student not found"));
+        List<Form> form = formRepository.findByInternshipAndStudentAndFormType(internship,student,FormType.INTERVIEW);
         for(FormDTO formDTO : formResponseDTO.getFormToCompile()){
-            Form form = formRepository.findByFormId(formDTO.getFormId()).orElseThrow(()->new IllegalArgumentException("Form not found"));
-            form.setResponse(formDTO.getResponse());
-            form.setStudent(student);
-            formRepository.save(form);
+            for(Form forms : form){
+                if(forms.getFormId() == formDTO.getFormId()){
+                    forms.setResponse(formDTO.getResponse());
+                    formRepository.save(forms);
+                }
+
+            }
+
         }
         internshipRepository.save(internship);
     }
