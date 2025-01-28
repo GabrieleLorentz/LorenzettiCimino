@@ -25,16 +25,16 @@ public class Form {
     private String request;
     private String response;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "internship_id")
     private Internship internship;
 
 
-    @ManyToOne(optional = true)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_email")
     private Student student;
 
-    @ManyToOne(optional = true)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_email")
     private Company company;
 
@@ -46,12 +46,12 @@ public class Form {
         this.internship = internship;
     }
 
-    public Form(String request, String response, Internship internship, FormType formType) {
+
+    public Form(String request,Internship internship, Company company, FormType formType) {
         this.request = request;
-        this.response = response;
+        this.response = null;
         this.internship = internship;
+        this.company = company;
         this.formType = formType;
     }
-
-
 }

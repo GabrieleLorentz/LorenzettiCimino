@@ -12,6 +12,8 @@ import com.example.s_and_c.Mapper.InternshipMapper;
 import com.example.s_and_c.Repositories.*;
 import com.example.s_and_c.Service.InternshipService;
 import com.example.s_and_c.Utils.InternshipException;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,17 +29,20 @@ public class InternshipServiceImpl implements InternshipService {
     private final StudentRepository studentRepository;
     private final FormRepository formRepository;
     private final QualificationRepository qualificationRepository;
+    private final EntityManager entityManager;
 
 
+    @Transactional
     @Override
     public List<InternshipDTO> createInternship(String email, InsertInternshipDTO insertInternshipDTO) {
 
         Company insertingCompany = companyRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Company not found"));
 
         Internship internship = InternshipMapper.maptoInternship(insertInternshipDTO, insertingCompany);
+        internshipRepository.save(internship);
         formRepository.saveAll(internship.getForm());
         qualificationRepository.saveAll(internship.getQualification_required());
-        internshipRepository.save(internship);
+
 
         return getAllInternshipsByEmail(insertingCompany);
     }
@@ -114,31 +119,48 @@ public class InternshipServiceImpl implements InternshipService {
 
     @Override
     public void addAcceptedStudent(String email, int internshipId, String authEmail) {
-        Student student = studentRepository.findByEmail(email).orElseThrow(() -> new InternshipException("Student not found",404));
-        Internship internship = internshipRepository.findById(internshipId).orElseThrow(()-> new InternshipException("Internship not found",404));
-        if(internship.getAcceptedStudents().contains(student) || internship.getSelectedStudents().contains(student)){
-            throw new InternshipException("Student already accepted",409);
+        Student student = studentRepository.findByEmail(email)
+                .orElseThrow(() -> new InternshipException("Student not found", 404));
+
+        Internship internship = internshipRepository.findById(internshipId)
+                .orElseThrow(() -> new InternshipException("Internship not found", 404));
+
+        if (internship.getAcceptedStudents().contains(student) ||
+                internship.getSelectedStudents().contains(student)) {
+            throw new InternshipException("Student already accepted", 409);
         }
-        if(authEmail.equals(internship.getCompany().getEmail()) && internship.getAppliedStudents().contains(student)){
-            internship.addAcceptedStudent(student);
-            internship.deleteAppliedStudent(student);
-            List<Form> forms = formRepository.findByInternshipAndCompanyAndFormType(internship, internship.getCompany(), FormType.INTERVIEW);
-            for(Form formList : forms){
-                Form form = new Form();
-                form.setFormType(FormType.INTERVIEW);
-                form.setInternship(internship);
-                form.setRequest(formList.getRequest());
-                form.setStudent(student);
-                form.setResponse(null);
-            }
 
-            internshipRepository.save(internship);
+        if (!authEmail.equals(internship.getCompany().getEmail())) {
+            throw new InternshipException("Student does not belong to this company", 401);
         }
-        else
-            throw new InternshipException("Student does not belong to this company",401);
 
+        if (!internship.getAppliedStudents().contains(student)) {
+            throw new InternshipException("Student has not applied for this internship", 400);
+        }
 
+        internship.addAcceptedStudent(student);
+        internship.deleteAppliedStudent(student);
 
+        List<Form> templateForms = formRepository.findByInternshipAndCompanyAndFormType(
+                internship,
+                internship.getCompany(),
+                FormType.INTERVIEW
+        );
+
+        List<Form> newForms = new ArrayList<>();
+        for (Form template : templateForms) {
+            Form newForm = new Form();
+            newForm.setFormType(FormType.INTERVIEW);
+            newForm.setInternship(internship);
+            newForm.setRequest(template.getRequest());
+            newForm.setStudent(student);
+            newForm.setResponse(null);
+            newForm.setCompany(internship.getCompany());
+            newForms.add(newForm);
+        }
+
+        internshipRepository.save(internship);
+        formRepository.saveAll(newForms);
     }
 
     @Override

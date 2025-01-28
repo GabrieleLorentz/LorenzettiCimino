@@ -178,11 +178,13 @@ public class StudentServiceImpl implements StudentService {
         List<Internship> internships = internshipRepository.findByAppliedStudentsContainingIgnoreCase(student);
         List<Internship> internshipsAccepted = internshipRepository.findByAcceptedStudentsContainingIgnoreCase(student);
         List<InternshipForStudentsDTO> internshipDTOList = new ArrayList<>();
+
         for(Internship internship : internships){
             internshipDTOList.add(InternshipMapper.mapToInternshipForAppliedStudentsDTO(internship));
         }
         for(Internship internship : internshipsAccepted){
-            internshipDTOList.add(InternshipMapper.maptoInternshipForStudentsDTO(internship));
+            List<Form> forms = formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.INTERVIEW );
+            internshipDTOList.add(InternshipMapper.mapToInternshipForAcceptedStudentDTO(internship,forms));
         }
         return internshipDTOList;
     }

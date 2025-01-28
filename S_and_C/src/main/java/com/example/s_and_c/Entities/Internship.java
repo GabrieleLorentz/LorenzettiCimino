@@ -40,12 +40,12 @@ public class Internship {
     @Column(nullable = false)
     private LocalDate endSelectionAcceptanceDate;
 
-    @OneToMany(mappedBy = "internship")
+    @OneToMany(mappedBy = "internship",fetch = FetchType.LAZY)
     private List<Qualification> qualification_required;
 
     private String description;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,fetch = FetchType.LAZY)
     @JoinColumn(name = "company_email",nullable = false)
     private Company company;
 

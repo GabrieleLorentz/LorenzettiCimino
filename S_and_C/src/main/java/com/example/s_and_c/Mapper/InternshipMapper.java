@@ -5,6 +5,7 @@ import com.example.s_and_c.DTO.InternshipDTOs.*;
 import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
 import com.example.s_and_c.Entities.*;
 import com.example.s_and_c.Entities.Status.FormType;
+import com.example.s_and_c.Repositories.FormRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
@@ -14,8 +15,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public class InternshipMapper {
-
-
 
     public static Internship maptoInternship(InsertInternshipDTO dto, Company company) {
         Internship internship = new Internship();
@@ -44,7 +43,7 @@ public class InternshipMapper {
         List<Form> questions = new ArrayList<>();
         if(dto.getQuestions() != null){ //during implementation
             for(String question: dto.getQuestions()){
-                questions.add(new Form(question,null,internship, FormType.INTERVIEW));
+                questions.add(new Form(question,internship,company, FormType.INTERVIEW));
             }
             internship.setForm(questions);
         }
@@ -98,10 +97,6 @@ public class InternshipMapper {
     }
 
     public static InternshipForStudentsDTO maptoInternshipForStudentsDTO(Internship internship) {
-        List<FormDTO> forms = new ArrayList<>();
-        for(Form form: internship.getForm()){
-            forms.add(FormMapper.mapToFormDTO(form));
-        }
         List<String> qualifications = new ArrayList<>();
         for(Qualification qualification: internship.getQualification_required())
             qualifications.add(qualification.getQualificationName());
@@ -115,8 +110,7 @@ public class InternshipMapper {
                 internship.getSalary(),
                 qualifications,
                 internship.getDescription(),
-                internship.getCompany().getName(),
-                forms
+                internship.getCompany().getName()
         );
     }
 
@@ -140,6 +134,29 @@ public class InternshipMapper {
                 appliedStudents,
                 acceptedStudents,
                 selectedStudents
+        );
+    }
+
+    public static InternshipForStudentsDTO mapToInternshipForAcceptedStudentDTO(Internship internship, List<Form> forms) {
+        List<FormDTO> formDTOList = new ArrayList<>();
+        for(Form form: forms){
+            formDTOList.add(FormMapper.mapToFormDTO(form));
+        }
+        List<String> qualifications = new ArrayList<>();
+        for(Qualification qualification: internship.getQualification_required())
+            qualifications.add(qualification.getQualificationName());
+        return new InternshipForStudentsDTO(
+                internship.getInternshipId(),
+                internship.getName(),
+                internship.getStartDate(),
+                internship.getEndDate(),
+                internship.getEndFormCompilingDate(),
+                internship.getEndSelectionAcceptanceDate(),
+                internship.getSalary(),
+                qualifications,
+                internship.getDescription(),
+                internship.getCompany().getName(),
+                formDTOList
         );
     }
 }
