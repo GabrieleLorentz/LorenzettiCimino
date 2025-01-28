@@ -6,6 +6,7 @@
     <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
       <input v-model="formData.email" type="email" placeholder="e-mail" class="text-input-signin" />
       <input v-model="formData.password" type="password" placeholder="password" class="text-input-signin" />
+      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       <button @click="submitForm" class="button">SIGN IN</button>
     </div>
   </div>
@@ -18,7 +19,8 @@ export default {
       formData: {
         email: '',
         password: ''
-      }
+      },
+      errorMessage: ''
     };
   },
   methods: {
@@ -48,12 +50,18 @@ export default {
                   window.location.href = '/company_home';
                 }
               });
-            } else {
+            } else if (response.status === 401) {
               console.log(response.status);
+              this.errorMessage = 'Incorrect email or password';
+            }else {
+              this.errorMessage = 'Error. Try again later'
             }
           })
           .then(data => {console.log('Risposta dal server:', data);})
-          .catch(error => {console.error('Errore:', error);});
+          .catch(error => {
+            console.error('Errore:', error);
+            this.errorMessage = 'A connection error occurred';
+          });
     }
   }
 };
@@ -78,6 +86,12 @@ export default {
   background-color: #f2a73b; /* Colore di sfondo al passaggio del mouse */
   color: #232526;
   cursor: pointer; /* Cambia il cursore quando ci passi sopra */
+}
+.error-message {
+  color: red;
+  margin: 10px 0;
+  text-align: center;
+  font-size: 25px;
 }
 </style>
 <script setup lang="ts">

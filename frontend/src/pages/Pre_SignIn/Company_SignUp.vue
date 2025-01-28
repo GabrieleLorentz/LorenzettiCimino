@@ -26,7 +26,8 @@ export default {
         surname: '',
         description: '',
         vat_number: ''
-      }
+      },
+      errorMessage: ''
     };
   },
   methods: {
@@ -49,12 +50,17 @@ export default {
 
                 this.$router.push('/company_home');
               });
-            } else {
-              throw new Error('Errore durante l\'invio dei dati');
+            } else if (response.status === 401) {
+              console.log(response.status);
+              this.errorMessage = 'User already exists';
+            }else {
+              this.errorMessage = 'Error. Try again later'
             }
           })
           .then(data => {console.log('Risposta dal server:',data);})
-          .catch(error => {console.error('Errore:', error);});
+          .catch(error => {
+            console.error('Errore:', error);
+            this.errorMessage = 'A connection error occurred';});
     }
   }
 };

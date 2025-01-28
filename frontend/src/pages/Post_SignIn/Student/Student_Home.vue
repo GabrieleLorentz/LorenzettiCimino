@@ -14,7 +14,12 @@
             <div style="border: 3px solid black; border-radius: 40px; padding: 10px; flex-direction: column;">
               <div style="display: flex; gap: 10px">
                 <p><strong>Name:</strong> {{ internship.name }}</p>
-                <p><strong>Company:</strong> {{ internship.company_name }}</p>
+                <div class="profile_cont">
+                  <p><strong>Company:</strong> {{ internship.company_name }}</p>
+                  <div class="profile">
+
+                  </div>
+                </div>
                 <p><strong>Start Date:</strong> {{ internship.startDate }}</p>
                 <p><strong>End Date:</strong> {{ internship.endDate }}</p>
               </div>
@@ -92,7 +97,12 @@
           <div v-for="internship in allInternships" style="padding: 5px">
             <div class="int">
               <p><strong>Name:</strong>{{ internship.name }}</p>
-              <p><strong>Company:</strong>{{ internship.company_name }}</p>
+              <div class="profile_cont">
+                <p><strong>Company:</strong>{{ internship.company_name }}</p>
+                <div class="profile">
+
+                </div>
+              </div>
               <p><strong>Start Date:</strong> {{ internship.startDate }}</p>
               <p><strong>End Date:</strong> {{ internship.endDate }}</p>
               <p><strong>Salary:</strong> {{ internship.salary }}</p>

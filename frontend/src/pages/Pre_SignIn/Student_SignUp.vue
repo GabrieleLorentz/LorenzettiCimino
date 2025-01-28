@@ -50,7 +50,8 @@ export default {
         description: '',
         vat_number: '',
         cv: []
-      }
+      },
+      errorMessage: ''
     };
   },
   methods: {
@@ -74,13 +75,18 @@ export default {
 
                 this.$router.push('/student_home');
               });
-            } else {
-              throw new Error('Errore durante l\'invio dei dati');
+            } else if (response.status === 401) {
+              console.log(response.status);
+              this.errorMessage = 'User already exists';
+            }else {
+              this.errorMessage = 'Error. Try again later'
             }
           })
           .then(data => {console.log('Risposta dal server:', data);})
-          .catch(error => {console.error('Errore:', error);});
-    },
+          .catch(error => {
+            console.error('Errore:', error);
+            this.errorMessage = 'A connection error occurred';});
+      },
     insertCV() {
     this.formData.cv = this.formData.cv
       .split('/')

@@ -37,7 +37,7 @@
               </div>
               <div style="display: flex; gap: 5px">
                 <button @click="openRequest(internship)" class="popup-button" style="font-size: 15px;">Request Students </button>
-                <button @click="" class="popup-button" style="font-size: 15px;">Response Students </button>
+                <button @click="openResponse(internship)" class="popup-button" style="font-size: 15px;">Response Students </button>
               </div>
             </div>
           </div>
@@ -61,11 +61,21 @@
                   </div>
                 </div>
                 <p> {{student.surname}}</p>
-                <button @click="accepted(student.email, selecteInternship.id)" >Yes</button>
+                <button class="yes" @click="accepted(student.email, selecteInternship.id)" >Yes</button>
+                <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
               </div>
               <button @click="closeRequest" class="popup-button" style="font-size: 20px;">Close</button>
             </div>
           </div>
+
+          <div v-if="showResponse" class="det">
+            <div class="det-content">
+              <h2>Forms</h2>
+
+              <button @click="closeResponse" class="popup-button" style="font-size: 20px;">Close</button>
+            </div>
+          </div>
+
         </div>
         <div v-else style="font-size: 30px">
           <p>No internships available.</p>
@@ -112,11 +122,17 @@
   border-radius: 15px;
   padding: 4px;
 }
+.yes:hover {
+  color: green;
+  font-size: 15px;
+}
 </style>
 
 <script setup lang="ts">
 import UpperPart from '@/pages/Post_SignIn/Utils/upper_part.vue';
 import {ref, onMounted} from "vue";
+
+const errorMessage = ref('');
 
 const internships = ref([]);
 
@@ -171,15 +187,31 @@ function accepted(email, internshipId) {
   })
       .then(response => {
         if (response.ok) {
+          errorMessage.value = '';
+          alert('Student successfully accepted!');
           return;
+        } else if (response.status === 409) {
+          errorMessage.value = 'student already accepted';
+        } else {
+          errorMessage.value = 'Error. Try again later'
         }
-        throw new Error("Errore nella richiesta al backend");
       })
       .then(data => {
         console.log("ciao")
       })
       .catch(error => {
-        console.error("Errore durante il recupero dei dati:", error);
+        console.error('Errore:', error);
+        errorMessage.value = 'A connection error occurred';
       });
+}
+
+const showResponse = ref(false);
+function openResponse(internship) {
+  selecteInternship.value = internship;
+  showResponse.value = true;
+}
+function closeResponse() {
+  showResponse.value = false;
+  selecteInternship.value = null;
 }
 </script>
