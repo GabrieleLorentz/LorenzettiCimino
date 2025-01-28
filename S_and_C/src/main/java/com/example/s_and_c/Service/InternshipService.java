@@ -1,5 +1,6 @@
 package com.example.s_and_c.Service;
 
+import com.example.s_and_c.DTO.FormDTO.FormResponseDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public interface InternshipService {
 
     List<InternshipForStudentsDTO> getAllForStudents();
 
-    void addFormResponse(InternshipForStudentsDTO internshipForStudentsDTO, String authEmail);
+    void addFormResponse(FormResponseDTO internshipForStudentsDTO, String authEmail);
 
     void addSelectedStudent(String email, int internshipId, String authEmail);
 }

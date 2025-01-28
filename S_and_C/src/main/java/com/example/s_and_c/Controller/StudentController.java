@@ -3,6 +3,7 @@ package com.example.s_and_c.Controller;
 import com.example.s_and_c.DTO.CompanyDTOs.CompanyDTO;
 import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
 import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
+import com.example.s_and_c.DTO.FormDTO.FormResponseDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
@@ -105,10 +106,10 @@ public class StudentController {
     }
 
     @PostMapping("/formResponses")
-    public ResponseEntity<StudentDTO> formResponses(@RequestBody InternshipForStudentsDTO internshipForStudentsDTO) {
+    public ResponseEntity<StudentDTO> formResponses(@RequestBody FormResponseDTO formResponseDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
-        internshipService.addFormResponse(internshipForStudentsDTO, authEmail);
+        internshipService.addFormResponse(formResponseDTO, authEmail);
         return ResponseEntity.ok().build();
     }
 

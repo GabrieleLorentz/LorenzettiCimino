@@ -1,6 +1,7 @@
 package com.example.s_and_c.Service.Impl;
 
 
+import com.example.s_and_c.DTO.FormDTO.FormResponseDTO;
 import com.example.s_and_c.DTO.FormDTO.FormWithStudentsDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.*;
 import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
@@ -137,14 +138,15 @@ public class InternshipServiceImpl implements InternshipService {
     }
 
     @Override
-    public void addFormResponse(InternshipForStudentsDTO internshipForStudentsDTO, String authEmail) {
-        System.out.println(internshipForStudentsDTO.getInternshipId());
-        Internship internship = internshipRepository.findInternshipByInternshipId(internshipForStudentsDTO.getInternshipId())
+    public void addFormResponse(FormResponseDTO formResponseDTO, String authEmail) {
+        System.out.println(formResponseDTO.getInternshipId());
+        Internship internship = internshipRepository.findInternshipByInternshipId(formResponseDTO.getInternshipId())
                 .orElseThrow(()-> new IllegalArgumentException("Internship not found"));
         Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new IllegalArgumentException("Student not found"));
-        for(Form form: internship.getForm()){
+        for(FormDTO formDTO : formResponseDTO.getFormToCompile()){
+            Form form = formRepository.findByFormId(formDTO.getFormId()).orElseThrow(()->new IllegalArgumentException("Form not found"));
+            form.setResponse(formDTO.getResponse());
             form.setStudent(student);
-            form.setResponse(internshipForStudentsDTO.getFormToCompile().get((int)form.getFormId()).getResponse());
             formRepository.save(form);
         }
         internshipRepository.save(internship);

@@ -15,8 +15,8 @@
               <div style="display: flex; gap: 10px">
                 <p><strong>Name:</strong> {{ internship.name }}</p>
                 <p><strong>Company:</strong> {{ internship.company_name }}</p>
-                <p><strong>Start Date:</strong> {{ internship.start_date }}</p>
-                <p><strong>End Date:</strong> {{ internship.end_date }}</p>
+                <p><strong>Start Date:</strong> {{ internship.startDate }}</p>
+                <p><strong>End Date:</strong> {{ internship.endDate }}</p>
               </div>
               <div style="display: flex; gap: 10px">
                 <p><strong>End Form CompilingDate:</strong> {{ internship.endFormCompilingDate }}</p>
@@ -26,7 +26,7 @@
               <div style="display: flex; gap: 5px">
                 <p><strong>Qualification required:</strong></p>
                 <ul style="width: 90%; padding-left: 1em;">
-                  <li v-for="(qualification, index) in internship.qualification_required" :key="index">
+                  <li v-for="(qualification, index) in internship.qualificationRequired" :key="index">
                     {{ qualification }}
                   </li>
                 </ul>
@@ -93,8 +93,8 @@
             <div class="int">
               <p><strong>Name:</strong>{{ internship.name }}</p>
               <p><strong>Company:</strong>{{ internship.company_name }}</p>
-              <p><strong>Start Date:</strong> {{ internship.start_date }}</p>
-              <p><strong>End Date:</strong> {{ internship.end_date }}</p>
+              <p><strong>Start Date:</strong> {{ internship.startDate }}</p>
+              <p><strong>End Date:</strong> {{ internship.endDate }}</p>
               <p><strong>Salary:</strong> {{ internship.salary }}</p>
               <button @click="openDetails(internship)" class="popup-button">Details</button>
             </div>
@@ -105,15 +105,15 @@
               <h2>Internship Details</h2>
               <p><strong>Name:</strong> {{ selectedInternship.name }}</p>
               <p><strong>Company:</strong> {{ selectedInternship.company_name }}</p>
-              <p><strong>Start Date:</strong> {{ selectedInternship.start_date }}</p>
-              <p><strong>End Date:</strong> {{ selectedInternship.end_date }}</p>
+              <p><strong>Start Date:</strong> {{ selectedInternship.startDate }}</p>
+              <p><strong>End Date:</strong> {{ selectedInternship.endDate }}</p>
               <p><strong>End Selection AcceptanceDate:</strong> {{ selectedInternship.endSelectionAcceptanceDate }}</p>
               <p><strong>End Form CompilingDate:</strong> {{ selectedInternship.endFormCompilingDate }}</p>
               <p><strong>Salary: $</strong> {{ selectedInternship.salary }}</p>
               <div style="display: flex; gap: 5px">
                 <p><strong>Qualification required:</strong></p>
                 <ul style="width: 90%; padding-left: 1em;">
-                  <li v-for="(qualification, index) in selectedInternship.qualification_required" :key="index">
+                  <li v-for="(qualification, index) in selectedInternship.qualificationRequired" :key="index">
                     {{ qualification }}
                   </li>
                 </ul>
@@ -251,27 +251,38 @@ function closeForm() {
   selectedForm.value = null;
 }
 
-function send(){
+function send() {
   const token = localStorage.getItem('token');
 
-  const form = selectedForm.value;
-  console.log(form);
+  // Restructure the form data to match the DTO
+  const formData = {
+    internshipId: selectedForm.value.internshipId,
+    formToCompile: selectedForm.value.formToCompile.map(form => ({
+      formId: form.formId,
+      request: form.request,
+      response: form.response
+    }))
+  };
+
   fetch('http://localhost:8080/api/student/formResponses', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ form })
+    body: JSON.stringify(formData)
   })
       .then(response => {
         if (response.ok) {
-          return;
+          closeForm(); // Close the form after successful submission
+          // Optionally refresh the internships list
+          receiveMy();
         } else {
-          console.log(response.status);
+          console.error('Form submission failed:', response.status);
         }
       })
-      .catch(error => {console.error('Errore errore', error);
+      .catch(error => {
+        console.error('Error submitting form:', error);
       });
 }
 

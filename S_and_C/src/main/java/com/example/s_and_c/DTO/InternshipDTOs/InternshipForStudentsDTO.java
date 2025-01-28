@@ -15,28 +15,28 @@ import java.util.List;
 public class InternshipForStudentsDTO {
     private long internshipId;
     private String name;
-    private LocalDate start_date;
-    private LocalDate End_date;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private LocalDate endFormCompilingDate;
     private LocalDate endSelectionAcceptanceDate;
     private int Salary;
-    private List<String> qualification_required;
+    private List<String> qualificationRequired;
     private String description;
     private String company_name;
     private List<FormDTO> formToCompile;
 
 
 
-    public InternshipForStudentsDTO(long internship_id, String name, LocalDate startDate, LocalDate endDate, LocalDate endFormCompilingDate,
+    public InternshipForStudentsDTO(long internshipId, String name, LocalDate startDate, LocalDate endDate, LocalDate endFormCompilingDate,
                                     LocalDate endSelectionAcceptanceDate, int salary, List<String> qualificationRequired, String description, String name1) {
-        this.internshipId = internship_id;
+        this.internshipId = internshipId;
         this.name = name;
-        this.start_date = startDate;
-        this.End_date = endDate;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.endFormCompilingDate = endFormCompilingDate;
         this.endSelectionAcceptanceDate = endSelectionAcceptanceDate;
         this.Salary = salary;
-        this.qualification_required = qualificationRequired;
+        this.qualificationRequired = qualificationRequired;
         this.description = description;
         this.company_name = name1;
     }
