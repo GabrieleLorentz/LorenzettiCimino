@@ -11,7 +11,7 @@
         </div>
         <div v-if="internships.length > 0" class="internships-container">
           <div v-for="internship in internships" :key="internship.id" style="padding: 5px">
-            <div style="border: 3px solid black; border-radius: 40px; padding: 10px; flex-direction: column;">
+            <div style="border: 3px solid black; border-radius: 40px; padding: 10px; display: flex; flex-direction: column; gap: 5px">
               <div style="display: flex; gap: 10px">
                 <p><strong>Name:</strong> {{ internship.name }}</p>
                 <p><strong>Company:</strong> {{ internship.companyName }}</p>
@@ -37,6 +37,7 @@
               </div>
               <div style="display: flex; gap: 5px">
                 <button @click="openRequest(internship)" class="popup-button" style="font-size: 15px;">Request Students </button>
+                <button @click="" class="popup-button" style="font-size: 15px;">Response Students </button>
               </div>
             </div>
           </div>
@@ -78,8 +79,8 @@
 .vertical_line {
   position: absolute;
   left: 50%;
-  top: 55px;
-  height: calc(100vh - 55px);
+  top: 58px;
+  height: calc(100vh - 58px);
   width: 2px;
   background-color: black;
 }

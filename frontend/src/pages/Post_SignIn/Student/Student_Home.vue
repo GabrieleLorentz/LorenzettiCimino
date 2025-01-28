@@ -124,7 +124,7 @@
               </div>
               <div style="display: flex; gap: 5px; margin-top: 5px">
                 <button @click="closeDetails" class="popup-button" style="font-size: 20px;">Close</button>
-                <button @click="request" :disabled="!sendStatus[selectedInternship.internship_id]" class="popup-button" style="font-size: 20px;">Request!</button>
+                <button @click="request" :disabled="!sendStatus[selectedInternship.internshipId]" class="popup-button" style="font-size: 20px;">Request!</button>
               </div>
             </div>
           </div>
@@ -294,8 +294,8 @@ function receiveAll() {
       })
       .then(data => {
         allInternships.value = data;
-        data.forEach((internship: { internship_id: number }) => {
-          sendStatus.value[internship.internship_id] = true; // Default: pulsante abilitato
+        data.forEach((internship: { internshipId: number }) => {
+          sendStatus.value[internship.internshipId] = true; // Default: pulsante abilitato
         });
       })
       .catch(error => {
@@ -364,7 +364,7 @@ function closeDetails() {
 function request() {
   const token = localStorage.getItem('token');
 
-  const id = selectedInternship.value.internship_id;
+  const id = selectedInternship.value.internshipId;
   console.log(id)
 
   fetch('http://localhost:8080/api/student/requestInternship', {

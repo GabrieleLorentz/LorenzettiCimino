@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-container1">
+  <div class="profile-container">
     <img @click="openPopup" src="/src/assets/+.svg" alt="+" class="icon3 icon_hover"/>
       <div v-if="showPopup" class="det1">
         <div class="det-content">
