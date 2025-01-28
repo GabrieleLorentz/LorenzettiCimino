@@ -13,6 +13,7 @@ import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
 import com.example.s_and_c.Service.InternshipService;
 import com.example.s_and_c.Service.StudentService;
+import com.example.s_and_c.Utils.InternshipException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @RestController
@@ -169,6 +172,14 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
+    @ExceptionHandler(InternshipException.class)
+    public ResponseEntity<Map<String, String>> handleInternshipException(InternshipException e) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", e.getMessage());
 
+        return ResponseEntity
+                .status(e.getStatusCode())
+                .body(response);
+    }
 
 }

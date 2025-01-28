@@ -11,6 +11,7 @@ import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.InternshipMapper;
 import com.example.s_and_c.Repositories.*;
 import com.example.s_and_c.Service.InternshipService;
+import com.example.s_and_c.Utils.InternshipException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -113,15 +114,18 @@ public class InternshipServiceImpl implements InternshipService {
 
     @Override
     public void addAcceptedStudent(String email, int internshipId, String authEmail) {
-        Student student = studentRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Student not found"));
-        Internship internship = internshipRepository.findById(internshipId).orElseThrow(()-> new IllegalArgumentException("Internship not found"));
-        if(authEmail.equals(internship.getCompany().getEmail())){
+        Student student = studentRepository.findByEmail(email).orElseThrow(() -> new InternshipException("Student not found",404));
+        Internship internship = internshipRepository.findById(internshipId).orElseThrow(()-> new InternshipException("Internship not found",404));
+        if(internship.getAcceptedStudents().contains(student) || internship.getSelectedStudents().contains(student)){
+            throw new InternshipException("Student already accepted",409);
+        }
+        if(authEmail.equals(internship.getCompany().getEmail()) && internship.getAppliedStudents().contains(student)){
             internship.addAcceptedStudent(student);
             internship.deleteAppliedStudent(student);
             internshipRepository.save(internship);
         }
         else
-            throw new IllegalArgumentException("Student is not accepted by internship");
+            throw new InternshipException("Student does not belong to this company",401);
 
 
 

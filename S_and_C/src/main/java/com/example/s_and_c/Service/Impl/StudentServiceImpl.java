@@ -23,6 +23,7 @@ import com.example.s_and_c.Repositories.FormRepository;
 import com.example.s_and_c.Repositories.InternshipRepository;
 import com.example.s_and_c.Repositories.StudentRepository;
 import com.example.s_and_c.Service.StudentService;
+import com.example.s_and_c.Utils.InternshipException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -158,13 +159,17 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void requestInternship(long internshipId, String authEmail) {
         System.out.println(internshipId);
-        Internship internship = internshipRepository.findById((int)internshipId).orElseThrow(()->new RuntimeException("Internship not found"));
-        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
+        Internship internship = internshipRepository.findById((int)internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
+        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new InternshipException("Student not found",404));
         if(internship.getAcceptedStudents().contains(student) || internship.getSelectedStudents().contains(student) || internship.getAppliedStudents().contains(student)){
-            throw new IllegalArgumentException("Student is already accepted by internship");
+            throw new InternshipException("Student already inserted",409);
         }
-        internship.addAppliedStudent(student);
-        internshipRepository.save(internship);
+        try {
+            internship.addAppliedStudent(student);
+            internshipRepository.save(internship);
+        } catch (Exception e) {
+            throw new InternshipException("Error saving internship request", 500);
+        }
     }
 
     @Override

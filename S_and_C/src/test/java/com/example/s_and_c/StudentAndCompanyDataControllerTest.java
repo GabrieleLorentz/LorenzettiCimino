@@ -8,6 +8,8 @@ import com.example.s_and_c.DTO.AuthDTOs.RegisterRequestDTO;
 import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
 import com.example.s_and_c.DTO.CompanyDTOs.CompanyDTO;
 import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
+import com.example.s_and_c.DTO.FormDTO.FormResponseDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InsertInternshipDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipIdDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
@@ -55,6 +57,8 @@ public class StudentAndCompanyDataControllerTest {
     private CompanyController companyController;
     private String studentToken;
     private String companyToken;
+    private long internshipId;
+    private List<FormDTO> formToCompileDTO = new ArrayList<>();
 
     @Autowired
     private AuthController authController;
@@ -311,9 +315,10 @@ public class StudentAndCompanyDataControllerTest {
                         .content(content))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON)).andReturn();
+        content = result.getResponse().getContentAsString();
        /* content = result.getResponse().getContentAsString();
 
-        ObjectMapper mapper = new ObjectMapper();
+
         mapper.registerModule(new JavaTimeModule());
         InternshipDTO internshipDTO2 = mapper.readValue(content, InternshipDTO.class);
         Assertions.assertEquals("prova", internshipDTO2.getName());
@@ -340,5 +345,51 @@ public class StudentAndCompanyDataControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andExpect(status().isOk());
+        internshipId = internshipIdDTO.getId();
+    }
+
+    @Test
+    @Order(11)
+    void whenStudentRequestInternship_thenUnauthorized() throws Exception {
+        InternshipIdDTO internshipIdDTO = new InternshipIdDTO();
+        Internship internship = internshipRepository
+                .findByCompany(companyRepository
+                        .findByEmail("prova01@gmail.com").orElseThrow(()->new RuntimeException(
+                                "Internship not found"
+                        ))).getFirst();
+        internshipIdDTO.setId(internship.getInternshipId());
+
+        String content = objectMapper.writeValueAsString(internshipIdDTO);
+        mockMvcS.perform(post("/api/student/requestInternship")
+                        .header("Authorization", "Bearer " + studentToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @Order(12)
+    void whenCompanyAcceptAppliedStudent_thenSuccess() throws Exception {
+
+        mockMvcS.perform(post("/api/company//studentAccepted/{email}_{internshipId}","prova0@gmail.com",internshipId)
+                        .header("Authorization", "Bearer " + companyToken))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @Order(13)
+    void whenCompanyAcceptAppliedStudent_thenConflict() throws Exception {
+
+        mockMvcS.perform(post("/api/company//studentAccepted/{email}_{internshipId}","prova0@gmail.com",internshipId)
+                        .header("Authorization", "Bearer " + companyToken)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @Order(14)
+    void whenStudentRetrieveInternshipsInfoAndSendFormResponses_thenSuccess() throws Exception {
+        //FormResponseDTO formResponseDTO = new FormResponseDTO();
+        //formResponseDTO.
     }
 }

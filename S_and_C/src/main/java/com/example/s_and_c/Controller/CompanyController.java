@@ -11,6 +11,7 @@ import com.example.s_and_c.DTO.InternshipDTOs.InternshipDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.Service.CompanyService;
 import com.example.s_and_c.Service.InternshipService;
+import com.example.s_and_c.Utils.InternshipException;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,9 @@ import org.springframework.security.core.context.SecurityContextChangedEvent;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @RestController
@@ -166,6 +169,14 @@ public class CompanyController {
         companyService.deleteCompany(email);
         return ResponseEntity.ok("Company deleted succesfully");
     }
+    @ExceptionHandler(InternshipException.class)
+    public ResponseEntity<Map<String, String>> handleInternshipException(InternshipException e) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", e.getMessage());
 
+        return ResponseEntity
+                .status(e.getStatusCode())
+                .body(response);
+    }
     
 }
