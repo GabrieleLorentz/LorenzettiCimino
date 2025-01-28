@@ -46,7 +46,20 @@
             <div class="det-content">
               <h2>Students</h2>
               <div v-for="student in selecteInternship.applicants" style="padding: 5px; display: flex; gap: 10px">
-                <p> {{student.name}} </p>
+                <div class="profile_cont">
+                  <p> {{student.name}} </p>
+                  <div class="profile">
+                    <p> {{student.name}} </p>
+                    <p> {{student.surname}} </p>
+                    <p> {{student.email}} </p>
+                    <textarea> {{student.description}} </textarea>
+                    <ul style="width: 90%; padding-left: 1em;">
+                      <li v-for="(row, index) in student.cv" :key="index">
+                        {{ row }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
                 <p> {{student.surname}}</p>
                 <button @click="accepted(student.email, selecteInternship.id)" >Yes</button>
               </div>
@@ -83,6 +96,21 @@
   height: calc(100vh - 58px);
   width: 2px;
   background-color: black;
+}
+.profile_cont {
+  position: relative;
+}
+.profile_cont:hover .profile{
+  display: block;
+}
+.profile {
+  display: none;
+  position: absolute;
+  left: 0;
+  background-color: #f2a73b;
+  border: 2px solid black;
+  border-radius: 15px;
+  padding: 4px;
 }
 </style>
 
