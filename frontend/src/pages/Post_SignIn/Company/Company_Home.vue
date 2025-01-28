@@ -25,7 +25,11 @@
               </div>
               <div style="display: flex; gap: 5px">
                 <p><strong>Qualification required:</strong></p>
-                <textarea readonly style="width: 90%;"> {{ internship.qualification_required }}</textarea>
+                <ul style="width: 90%; padding-left: 1em;">
+                  <li v-for="(qualification, index) in internship.qualification_required" :key="index">
+                    {{ qualification }}
+                  </li>
+                </ul>
               </div>
               <div style="display: flex; gap: 5px">
                 <p><strong>Description:</strong></p>
