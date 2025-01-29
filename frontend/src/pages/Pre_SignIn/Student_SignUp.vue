@@ -50,8 +50,7 @@ export default {
         description: '',
         vat_number: '',
         cv: []
-      },
-      errorMessage: ''
+      }
     };
   },
   methods: {
@@ -77,15 +76,16 @@ export default {
               });
             } else if (response.status === 401) {
               console.log(response.status);
-              this.errorMessage = 'User already exists';
+              alert('User already exists');
             }else {
-              this.errorMessage = 'Error. Try again later'
+              alert('Error. Try again later');
             }
           })
           .then(data => {console.log('Risposta dal server:', data);})
           .catch(error => {
             console.error('Errore:', error);
-            this.errorMessage = 'A connection error occurred';});
+            alert('A connection error occurred');
+          });
       },
     insertCV() {
     this.formData.cv = this.formData.cv

@@ -62,7 +62,6 @@
                 </div>
                 <p> {{student.surname}}</p>
                 <button class="yes" @click="accepted(student.email, selecteInternship.id)" >Yes</button>
-                <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
               </div>
               <button @click="closeRequest" class="popup-button" style="font-size: 20px;">Close</button>
             </div>
@@ -132,8 +131,6 @@
 import UpperPart from '@/pages/Post_SignIn/Utils/upper_part.vue';
 import {ref, onMounted} from "vue";
 
-const errorMessage = ref('');
-
 const internships = ref([]);
 
 function receiveData() {
@@ -187,13 +184,11 @@ function accepted(email, internshipId) {
   })
       .then(response => {
         if (response.ok) {
-          errorMessage.value = '';
-          alert('Student successfully accepted!');
           return;
         } else if (response.status === 409) {
-          errorMessage.value = 'student already accepted';
+          alert('Student already accepted');
         } else {
-          errorMessage.value = 'Error. Try again later'
+          alert('Error. Try again later');
         }
       })
       .then(data => {
@@ -201,7 +196,7 @@ function accepted(email, internshipId) {
       })
       .catch(error => {
         console.error('Errore:', error);
-        errorMessage.value = 'A connection error occurred';
+        alert('A connection error occurred');
       });
 }
 

@@ -26,16 +26,15 @@ export default {
         surname: '',
         description: '',
         vat_number: ''
-      },
-      errorMessage: ''
+      }
     };
   },
   methods: {
     submitForm() {
-      // Convert formData to JSON
+
       const jsonData = JSON.stringify(this.formData);
       console.log(jsonData);
-      // Esempio di invio al backend usando fetch
+
       fetch('http://localhost:8080/api/auth/registerCompany', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -52,15 +51,16 @@ export default {
               });
             } else if (response.status === 401) {
               console.log(response.status);
-              this.errorMessage = 'User already exists';
+              alert('User already exists');
             }else {
-              this.errorMessage = 'Error. Try again later'
+              alert('Error. Try again later')
             }
           })
           .then(data => {console.log('Risposta dal server:',data);})
           .catch(error => {
             console.error('Errore:', error);
-            this.errorMessage = 'A connection error occurred';});
+            alert('A connection error occurred');
+          });
     }
   }
 };
