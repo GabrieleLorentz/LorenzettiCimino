@@ -14,8 +14,13 @@ import com.example.s_and_c.DTO.InternshipDTOs.InsertInternshipDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipIdDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
+import com.example.s_and_c.Entities.Form;
 import com.example.s_and_c.Entities.Internship;
+import com.example.s_and_c.Entities.Status.FormType;
+import com.example.s_and_c.Entities.Student;
+import com.example.s_and_c.Mapper.FormMapper;
 import com.example.s_and_c.Repositories.*;
+import com.example.s_and_c.Utils.InternshipException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -389,7 +394,16 @@ public class StudentAndCompanyDataControllerTest {
     @Test
     @Order(14)
     void whenStudentRetrieveInternshipsInfoAndSendFormResponses_thenSuccess() throws Exception {
-        //FormResponseDTO formResponseDTO = new FormResponseDTO();
-        //formResponseDTO.
+        FormResponseDTO formResponseDTO = new FormResponseDTO();
+        Student student = studentRepository.findByEmail("prova0@gmail.com").orElseThrow(()->new InternshipException("Student not found",404));
+        Internship internship = internshipRepository.findInternshipByInternshipId(internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
+        List<FormDTO> formDTOList = new ArrayList<>();
+        List<Form> formList = formRepository.findByInternshipAndStudentAndFormType(internship,student, FormType.INTERVIEW);
+        for (Form form : formList) {
+            FormDTO dto = FormMapper.mapToFormDTO(form);
+            dto.setResponse("a");
+            formDTOList.add(dto);
+        }
+        FormResponseDTO formResponseDTOS = new FormResponseDTO(internshipId, formDTOList);
     }
 }

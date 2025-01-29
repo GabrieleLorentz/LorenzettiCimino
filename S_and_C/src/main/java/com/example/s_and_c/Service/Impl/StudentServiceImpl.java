@@ -184,6 +184,9 @@ public class StudentServiceImpl implements StudentService {
         }
         for(Internship internship : internshipsAccepted){
             List<Form> forms = formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.INTERVIEW );
+            for(Form form : forms){
+                System.out.println(form.getFormType());
+            }
             internshipDTOList.add(InternshipMapper.mapToInternshipForAcceptedStudentDTO(internship,forms));
         }
         return internshipDTOList;

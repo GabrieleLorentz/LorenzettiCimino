@@ -98,10 +98,11 @@ public class InternshipServiceImpl implements InternshipService {
     @Override
     public List<InternshipCompleteDTO> getMyInternship(String email) {
         Company company = companyRepository.findByEmail(email).orElseThrow(()->new RuntimeException("Company not found"));
-            List<FormWithStudentsDTO> compiledForms = new ArrayList<>();
+
             List<Internship> internships = internshipRepository.findByCompany(company);
             List<InternshipCompleteDTO> internshipCompleteDTOS = new ArrayList<>();
             for (Internship internship : internships) {
+                List<FormWithStudentsDTO> compiledForms = new ArrayList<>();
                 for(Student student: internship.getAcceptedStudents()){
                     List<Form> results = formRepository.findByInternshipAndStudentAndFormType(internship, student,FormType.INTERVIEW);
                     for(Form form: results){
@@ -175,22 +176,21 @@ public class InternshipServiceImpl implements InternshipService {
 
     @Override
     public void addFormResponse(FormResponseDTO formResponseDTO, String authEmail) {
-        System.out.println(formResponseDTO.getInternshipId());
         Internship internship = internshipRepository.findInternshipByInternshipId(formResponseDTO.getInternshipId())
                 .orElseThrow(()-> new IllegalArgumentException("Internship not found"));
-        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new IllegalArgumentException("Student not found"));
+
+        Student student = studentRepository.findByEmail(authEmail)
+                .orElseThrow(()->new IllegalArgumentException("Student not found"));
+
         List<Form> form = formRepository.findByInternshipAndStudentAndFormType(internship,student,FormType.INTERVIEW);
         for(FormDTO formDTO : formResponseDTO.getFormToCompile()){
             for(Form forms : form){
                 if(forms.getFormId() == formDTO.getFormId()){
                     forms.setResponse(formDTO.getResponse());
-                    formRepository.save(forms);
                 }
-
             }
-
+            formRepository.saveAll(form);
         }
-        internshipRepository.save(internship);
     }
 
     @Override
