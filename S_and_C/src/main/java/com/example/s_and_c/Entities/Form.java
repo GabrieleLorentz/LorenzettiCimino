@@ -54,4 +54,12 @@ public class Form {
         this.company = company;
         this.formType = formType;
     }
+
+    public Form(Form template, Student student) {
+        this.formType = template.getFormType();
+        this.internship = template.getInternship();
+        this.request = template.getRequest();
+        this.student = student;
+        this.response = null;
+    }
 }
