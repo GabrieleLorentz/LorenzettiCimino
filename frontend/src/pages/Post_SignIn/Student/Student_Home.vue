@@ -53,7 +53,7 @@
                 <p>{{form.request}}</p>
                 <textarea v-model="form.response" type="text" id="response" style="width: 90%; height: 50px" placeholder="Enter your response..."/>
               </div>
-              <div>
+              <div style=" display:flex; gap: 5px">
                 <button @click="closeForm" class="popup-button" style="font-size: 20px;">Close</button>
                 <button @click="send" class="popup-button" style="font-size: 20px;">Send</button>
               </div>
@@ -65,8 +65,6 @@
           <p>No internships available.</p>
         </div>
       </div>
-
-      <div class="vertical_line"></div>
 
       <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center;">
         <div style="display: flex; gap: 10px;">
@@ -165,10 +163,6 @@
   padding: 10px;
   display: flex;
   gap: 20px;
-}
-.text {
-  font-size: 24px;
-  font-weight: bold;
 }
 .search-bar {
   font-size: 20px;
@@ -284,8 +278,7 @@ function send() {
   })
       .then(response => {
         if (response.ok) {
-          closeForm(); // Close the form after successful submission
-          // Optionally refresh the internships list
+          closeForm();
           receiveMy();
         } else {
           console.error('Form submission failed:', response.status);

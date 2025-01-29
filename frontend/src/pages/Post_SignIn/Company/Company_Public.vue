@@ -24,8 +24,16 @@
         </div>
       </div>
       <div class="vertical_line2"></div>
-      <div style="flex: 1; padding: 20px;">
+      <div style="flex: 1;">
+        <div style="width: 100%; display: flex; justify-content: center;">
+          <span class="orange">Internships</span>
+          <span style="margin-left: 7px;" class="black">available</span>
+        </div>
 
+        <div style="width: 100%; display: flex; justify-content: center;">
+          <span class="orange">Reviews</span>
+          <span style="margin-left: 7px;" class="black">received</span>
+        </div>
       </div>
     </div>
   </div>

@@ -81,8 +81,6 @@
         </div>
       </div>
 
-      <div class="vertical_line"></div>
-
       <div style="flex: 1; padding: 20px;">
         <div class="my_collaboration">
           MY COLLABORATIONS IN PROGESS
@@ -97,14 +95,6 @@
 .internships-container {
   max-height: 540px;
   overflow-y: auto;
-}
-.vertical_line {
-  position: absolute;
-  left: 50%;
-  top: 58px;
-  height: calc(100vh - 58px);
-  width: 2px;
-  background-color: black;
 }
 .profile_cont {
   position: relative;
@@ -192,6 +182,7 @@ function accepted(email, internshipId) {
         }
       })
       .then(data => {
+        console.log(data)
         console.log("ciao")
       })
       .catch(error => {

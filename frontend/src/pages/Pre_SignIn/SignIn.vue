@@ -4,9 +4,11 @@
       <img src="/src/assets/logo.png"  alt="Logo"/>
     </div>
     <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
-      <input v-model="formData.email" type="email" placeholder="e-mail" class="text-input-signin" />
-      <input v-model="formData.password" type="password" placeholder="password" class="text-input-signin" />
-      <button @click="submitForm" class="button">SIGN IN</button>
+      <form @submit.prevent="submitForm">
+        <input v-model="formData.email" type="email" placeholder="e-mail" class="text-input-signin" />
+        <input v-model="formData.password" type="password" placeholder="password" class="text-input-signin" />
+        <button type="submit" class="button">SIGN IN</button>
+      </form>
     </div>
   </div>
 </template>

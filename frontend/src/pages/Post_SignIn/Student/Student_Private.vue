@@ -9,7 +9,7 @@
     </div>
 
     <div style="width: 100%; display: flex;">
-      <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center;">
+      <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
         <div class="data">
           <input v-model="editedData.name" type="text" class="editable-input"/>
         </div>
@@ -26,13 +26,25 @@
           <textarea v-model="editedData.description" class="editable-textarea"></textarea>
         </div>
         <div class="data">
-          <textarea v-model="editedData.cv" class="editable-textarea"></textarea>
+          <ul style="max-height: 70px; overflow-y: auto;">
+            <li v-for="(qualification, index) in editedData.cv" :key="index">
+              {{ qualification }}
+            </li>
+          </ul>
         </div>
         <button @click="saveAllChanges" class="save" :disabled="!hasChanges">SAVE</button>
       </div>
       <div class="vertical_line2"></div>
-      <div style="flex: 1; padding: 20px;">
+      <div style="flex: 1;">
+        <div style="width: 100%; display: flex; justify-content: center;">
+          <span class="black">My</span>
+          <span style="margin-left: 7px;" class="orange">review</span>
+        </div>
 
+        <div style="width: 100%; display: flex; justify-content: center;">
+          <span class="orange">Complaints</span>
+          <span style="margin-left: 7px;" class="black">received</span>
+        </div>
       </div>
     </div>
   </div>
@@ -50,7 +62,7 @@
 .data {
   background-color: white;
   color: black;
-  padding: 10px;
+  padding: 3px;
   border: 3px solid black;
   border-radius: 40px;
   font-size: 25px;

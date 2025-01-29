@@ -171,6 +171,7 @@ function addInternship() {
       .then(response => {
         if (response.ok) {
           return response.json().then(data => {
+            closePopup()
             console.log("Dati ricevuti:", data);
           });
         } else {
