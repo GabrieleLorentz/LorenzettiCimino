@@ -205,8 +205,7 @@
   background: white;
   padding: 15px;
   border-radius: 10px;
-  width: 700px;
-  max-width: 90%;
+  width: 90%;
 }
 .popup-button:disabled {
   background-color: #cccccc;

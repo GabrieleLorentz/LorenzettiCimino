@@ -68,9 +68,18 @@
           </div>
 
           <div v-if="showResponse" class="det">
-            <div class="det-content">
+            <div class="det-content internships-container">
               <h2>Forms</h2>
-
+              <div v-for="(responses, studentEmail) in groupedForms" :key="studentEmail" style="border-bottom: 2px solid black;">
+                <p><strong>Student Name:</strong> {{ responses[0].student.name }} {{ responses[0].student.surname }}</p>
+                <ul>
+                  <li v-for="(form, index) in responses" :key="index">
+                    <strong>Request:</strong> {{ form.request }} <br>
+                    <strong>Response:</strong> {{ form.response }}
+                  </li>
+                </ul>
+                <button class="yes" @click="selected(responses[0].student.email, selecteInternship.id)" >Yes</button>
+              </div>
               <button @click="closeResponse" class="popup-button" style="font-size: 20px;">Close</button>
             </div>
           </div>
@@ -119,7 +128,7 @@
 
 <script setup lang="ts">
 import UpperPart from '@/pages/Post_SignIn/Utils/upper_part.vue';
-import {ref, onMounted} from "vue";
+import {ref, onMounted, computed} from "vue";
 
 const internships = ref([]);
 
@@ -199,5 +208,46 @@ function openResponse(internship) {
 function closeResponse() {
   showResponse.value = false;
   selecteInternship.value = null;
+}
+const groupedForms = computed(() => {
+  if (!selecteInternship.value || !selecteInternship.value.formWithStudents) return {};
+
+  return selecteInternship.value.formWithStudents.reduce((acc, form) => {
+    const email = form.student.email;
+    if (!acc[email]) {
+      acc[email] = [];
+    }
+    acc[email].push(form);
+    return acc;
+  }, {});
+});
+function selected(email, internshipId) {
+  const token = localStorage.getItem('token');
+  console.log(selecteInternship)
+
+  fetch(`http://localhost:8080/api/company/studentSelected/${email}_${internshipId}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+
+    },
+  })
+      .then(response => {
+        if (response.ok) {
+          return;
+        } else if (response.status === 409) {
+          alert('Student already selected');
+        } else {
+          alert('Error. Try again later');
+        }
+      })
+      .then(data => {
+        console.log(data)
+        console.log("ciao")
+      })
+      .catch(error => {
+        console.error('Errore:', error);
+        alert('A connection error occurred');
+      });
 }
 </script>
