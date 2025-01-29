@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -150,13 +152,7 @@ public class InternshipServiceImpl implements InternshipService {
 
         List<Form> newForms = new ArrayList<>();
         for (Form template : templateForms) {
-            Form newForm = new Form();
-            newForm.setFormType(FormType.INTERVIEW);
-            newForm.setInternship(internship);
-            newForm.setRequest(template.getRequest());
-            newForm.setStudent(student);
-            newForm.setResponse(null);
-            newForm.setCompany(internship.getCompany());
+            Form newForm = new Form(template,student);
             newForms.add(newForm);
         }
 
@@ -182,15 +178,19 @@ public class InternshipServiceImpl implements InternshipService {
         Student student = studentRepository.findByEmail(authEmail)
                 .orElseThrow(()->new IllegalArgumentException("Student not found"));
 
-        List<Form> form = formRepository.findByInternshipAndStudentAndFormType(internship,student,FormType.INTERVIEW);
-        for(FormDTO formDTO : formResponseDTO.getFormToCompile()){
-            for(Form forms : form){
-                if(forms.getFormId() == formDTO.getFormId()){
-                    forms.setResponse(formDTO.getResponse());
-                }
+        List<Form> forms = formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.INTERVIEW);
+
+        Map<Long, Form> formMap = forms.stream()
+                .collect(Collectors.toMap(Form::getFormId, form -> form));
+
+        for (FormDTO formDTO : formResponseDTO.getFormToCompile()) {
+            Form form = formMap.get(formDTO.getFormId());
+            if (form != null) {
+                form.setResponse(formDTO.getResponse());
             }
-            formRepository.saveAll(form);
         }
+
+        formRepository.saveAll(forms);
     }
 
     @Override

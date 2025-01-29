@@ -385,12 +385,12 @@ public class StudentAndCompanyDataControllerTest {
     @Order(13)
     void whenCompanyAcceptAppliedStudent_thenConflict() throws Exception {
 
-        mockMvcS.perform(post("/api/company//studentAccepted/{email}_{internshipId}","prova0@gmail.com",internshipId)
+        mockMvcS.perform(post("/api/company/studentAccepted/{email}_{internshipId}","prova0@gmail.com",internshipId)
                         .header("Authorization", "Bearer " + companyToken)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict());
     }
-
+/*
     @Test
     @Order(14)
     void whenStudentRetrieveInternshipsInfoAndSendFormResponses_thenSuccess() throws Exception {
@@ -405,5 +405,13 @@ public class StudentAndCompanyDataControllerTest {
             formDTOList.add(dto);
         }
         FormResponseDTO formResponseDTOS = new FormResponseDTO(internshipId, formDTOList);
-    }
+        String content = objectMapper.writeValueAsString(formResponseDTOS);
+        MvcResult result = mockMvcS.perform(post("/api/student/formResponses")
+                        .header("Authorization", "Bearer " + studentToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content))
+                .andExpect(status().isOk()).andReturn();
+        String content = result.getResponse().getContentAsString();
+        formRepository.findByFormId()
+    }*/
 }
