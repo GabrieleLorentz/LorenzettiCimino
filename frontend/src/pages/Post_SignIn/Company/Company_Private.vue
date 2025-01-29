@@ -9,7 +9,7 @@
     </div>
 
     <div style="width: 100%; display: flex;">
-      <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center;">
+      <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
         <div class="data">
           <input v-model="editedData.name" type="text" class="editable-input"/>
         </div>
@@ -28,8 +28,16 @@
         <button @click="saveAllChanges" class="save" :disabled="!hasChanges">SAVE</button>
       </div>
       <div class="vertical_line2"></div>
-      <div style="flex: 1; padding: 20px;">
+      <div style="flex: 1;">
+        <div style="width: 100%; display: flex; justify-content: center;">
+          <span class="black">My</span>
+          <span style="margin-left: 7px;" class="orange">review</span>
+        </div>
 
+        <div style="width: 100%; display: flex; justify-content: center;">
+          <span class="orange">Complaints</span>
+          <span style="margin-left: 7px;" class="black">received</span>
+        </div>
       </div>
     </div>
   </div>

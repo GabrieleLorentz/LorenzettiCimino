@@ -23,12 +23,19 @@
           <textarea class="editable-textarea">{{originalData.description}}</textarea>
         </div>
         <div class="data">
-          <textarea class="editable-textarea">{{originalData.cv}}</textarea>
+          <ul style="max-height: 70px; overflow-y: auto;">
+            <li v-for="(qualification, index) in originalData.cv" :key="index">
+              {{ qualification }}
+            </li>
+          </ul>
         </div>
       </div>
       <div class="vertical_line2"></div>
-      <div style="flex: 1; padding: 20px;">
-
+      <div style="flex: 1;">
+        <div style="width: 100%; display: flex; justify-content: center;">
+          <span class="orange">Reviews</span>
+          <span style="margin-left: 7px;" class="black">received</span>
+        </div>
       </div>
     </div>
   </div>
