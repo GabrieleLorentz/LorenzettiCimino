@@ -174,9 +174,10 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<InternshipForStudentsDTO> getPersonalInternships(String authEmail) {
-        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
+        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new InternshipException("Student not found",404));
         List<Internship> internships = internshipRepository.findByAppliedStudentsContainingIgnoreCase(student);
         List<Internship> internshipsAccepted = internshipRepository.findByAcceptedStudentsContainingIgnoreCase(student);
+        List<Internship> internshipsSelected = internshipRepository.findBySelectedStudentsContainingIgnoreCase(student);
         List<InternshipForStudentsDTO> internshipDTOList = new ArrayList<>();
 
         for(Internship internship : internships){
@@ -188,6 +189,11 @@ public class StudentServiceImpl implements StudentService {
                 System.out.println(form.getFormType());
             }
             internshipDTOList.add(InternshipMapper.mapToInternshipForAcceptedStudentDTO(internship,forms));
+        }
+        for(Internship internship : internshipsSelected){
+            List<Form> forms = formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.REVIEW );
+            forms.addAll(formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.FEEDBACK ));
+            forms.addAll(formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.COMPLAINT ));
         }
         return internshipDTOList;
     }

@@ -38,7 +38,7 @@ public class InternshipServiceImpl implements InternshipService {
     @Override
     public List<InternshipDTO> createInternship(String email, InsertInternshipDTO insertInternshipDTO) {
 
-        Company insertingCompany = companyRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Company not found"));
+        Company insertingCompany = companyRepository.findByEmail(email).orElseThrow(()-> new InternshipException("Company not found",404));
 
         Internship internship = InternshipMapper.maptoInternship(insertInternshipDTO, insertingCompany);
         internshipRepository.save(internship);
@@ -99,7 +99,7 @@ public class InternshipServiceImpl implements InternshipService {
 
     @Override
     public List<InternshipCompleteDTO> getMyInternship(String email) {
-        Company company = companyRepository.findByEmail(email).orElseThrow(()->new RuntimeException("Company not found"));
+        Company company = companyRepository.findByEmail(email).orElseThrow(()->new InternshipException("Company not found",404));
 
             List<Internship> internships = internshipRepository.findByCompany(company);
             List<InternshipCompleteDTO> internshipCompleteDTOS = new ArrayList<>();
@@ -116,7 +116,6 @@ public class InternshipServiceImpl implements InternshipService {
             }
 
             return internshipCompleteDTOS;
-
 
     }
 
@@ -173,10 +172,10 @@ public class InternshipServiceImpl implements InternshipService {
     @Override
     public void addFormResponse(FormResponseDTO formResponseDTO, String authEmail) {
         Internship internship = internshipRepository.findInternshipByInternshipId(formResponseDTO.getInternshipId())
-                .orElseThrow(()-> new IllegalArgumentException("Internship not found"));
+                .orElseThrow(()-> new InternshipException("Internship not found",404));
 
         Student student = studentRepository.findByEmail(authEmail)
-                .orElseThrow(()->new IllegalArgumentException("Student not found"));
+                .orElseThrow(()->new InternshipException("Student not found",404));
 
         List<Form> forms = formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.INTERVIEW);
 
@@ -199,9 +198,20 @@ public class InternshipServiceImpl implements InternshipService {
         List<Internship> internships = internshipRepository.findByCompany(company);
         Internship internship = internshipRepository.findById(internshipId).orElseThrow(()->new IllegalArgumentException("Internship not found"));
         if(!internships.contains(internship)){
-            throw new IllegalArgumentException("Internship not found");
+            throw new InternshipException("Internship not found",404);
         }
         Student student = studentRepository.findByEmail(email).orElseThrow(()->new IllegalArgumentException("Student not found"));
+        if (internship.getSelectedStudents().contains(student)) {
+            throw new InternshipException("Student already accepted", 409);
+        }
+
+        if (!authEmail.equals(internship.getCompany().getEmail())) {
+            throw new InternshipException("Student does not belong to this company", 401);
+        }
+
+        if (internship.getAppliedStudents().contains(student) || !internship.getAcceptedStudents().contains(student)) {
+            throw new InternshipException("Student has not been selected for this internship", 400);
+        }
         internship.addSelectedStudent(student);
         internship.deleteAcceptedStudent(student);
         internshipRepository.save(internship);

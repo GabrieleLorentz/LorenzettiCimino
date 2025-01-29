@@ -36,4 +36,5 @@ public interface InternshipRepository extends JpaRepository<Internship, Integer>
     List<Internship> findByAcceptedStudentsContainingIgnoreCase(Student student);
 
 
+    List<Internship> findBySelectedStudentsContainingIgnoreCase(Student attr0);
 }

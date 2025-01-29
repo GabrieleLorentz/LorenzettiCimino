@@ -390,7 +390,7 @@ public class StudentAndCompanyDataControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict());
     }
-/*
+
     @Test
     @Order(14)
     void whenStudentRetrieveInternshipsInfoAndSendFormResponses_thenSuccess() throws Exception {
@@ -406,12 +406,17 @@ public class StudentAndCompanyDataControllerTest {
         }
         FormResponseDTO formResponseDTOS = new FormResponseDTO(internshipId, formDTOList);
         String content = objectMapper.writeValueAsString(formResponseDTOS);
-        MvcResult result = mockMvcS.perform(post("/api/student/formResponses")
+        mockMvcS.perform(post("/api/student/formResponses")
                         .header("Authorization", "Bearer " + studentToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andExpect(status().isOk()).andReturn();
-        String content = result.getResponse().getContentAsString();
-        formRepository.findByFormId()
-    }*/
+        formRepository.findByStudentAndFormType(student,FormType.INTERVIEW).forEach(form -> {
+            for(FormDTO forms : formResponseDTOS.getFormToCompile()){
+                if(Long.compare(forms.getFormId(),form.getFormId())==0){
+                    Assertions.assertEquals(form.getResponse(),forms.getResponse());
+                }
+            }
+        });
+    }
 }
