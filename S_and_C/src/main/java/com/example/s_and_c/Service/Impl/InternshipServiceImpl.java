@@ -110,6 +110,7 @@ public class InternshipServiceImpl implements InternshipService {
                                 new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname())));
                     }
                 }
+
                 internshipCompleteDTOS.add(InternshipMapper.maptoInternshipCompleteDTO(internship,compiledForms));
             }
 

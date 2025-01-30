@@ -61,6 +61,10 @@ public class InternshipMapper {
         List<String> qualifications = new ArrayList<>();
         for(Qualification qualification: internship.getQualification_required())
             qualifications.add(qualification.getQualificationName());
+        List<ShortStudentDTO> selectedStudents = new ArrayList<>();
+        for(Student student: internship.getSelectedStudents()){
+            new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname());
+        }
         return new InternshipCompleteDTO(
                 internship.getInternshipId(),
                 internship.getName(),
@@ -72,6 +76,7 @@ public class InternshipMapper {
                 qualifications,
                 internship.getDescription(),
                 appliedStudents,
+                selectedStudents,
                 compiledForms,
                 internship.getCompany().getName()
         );

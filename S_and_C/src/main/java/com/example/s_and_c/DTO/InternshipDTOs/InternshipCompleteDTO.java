@@ -25,6 +25,7 @@ public class InternshipCompleteDTO {
     private List<String> qualification_required;
     private String description;
     private List<ShortStudentDTO> applicants;
+    private List<ShortStudentDTO> selected;
     private List<FormWithStudentsDTO> formWithStudents;
     private String companyName;
 

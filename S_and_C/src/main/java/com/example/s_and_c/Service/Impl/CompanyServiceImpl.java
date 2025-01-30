@@ -174,7 +174,7 @@ public class CompanyServiceImpl implements CompanyService {
      */
     @Override
     public void handleFeedBackReceived(String authEmail, FeedBackDTO feedBackDTO) {
-        Internship internship = internshipRepository.findById(feedBackDTO.getInternshipId()).orElseThrow(()->new RuntimeException("Internship not found"));
+        Internship internship = internshipRepository.findById(feedBackDTO.getInternshipId()).orElseThrow(()->new InternshipException("Internship not found",404));
 
         if(!internship.getCompany().getEmail().equals(authEmail)){
             throw new InternshipException("Internship does not belong to this company",409);
@@ -226,7 +226,6 @@ public class CompanyServiceImpl implements CompanyService {
     /**
      * @param authEmail
      * @param reviewDTO
-     * @return
      */
     @Override
     public void handleReviewReceived(String authEmail, ReviewDTO reviewDTO) {
