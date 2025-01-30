@@ -13,11 +13,9 @@ import com.example.s_and_c.Service.CompanyService;
 import com.example.s_and_c.Service.InternshipService;
 import com.example.s_and_c.Utils.InternshipException;
 import lombok.AllArgsConstructor;
-import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextChangedEvent;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -114,36 +112,21 @@ public class CompanyController {
         return ResponseEntity.ok(companyDTO);
     }
 
-    @GetMapping("/complaint/{internship_id}")
-    public ResponseEntity<List<ComplaintDTO>> handleComplaintToSend( @PathVariable int internship_id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String authEmail = auth.getName();
-        List<ComplaintDTO> complaintDTO = companyService.handleComplaintToSend(authEmail,internship_id);
-        return ResponseEntity.ok(complaintDTO);
-    }
 
     @PostMapping("/sendComplaints")
     public ResponseEntity<CompanyDTO> complaints(@RequestBody ComplaintDTO complaintDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
-        companyService.handleComplaint(authEmail, complaintDTO);
+        companyService.handleComplaintReceived(authEmail, complaintDTO);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/feedback/{internship_id}")
-    public ResponseEntity<List<FeedBackDTO>> handleFeedBackToSend(@PathVariable ("internship_id") int internshipId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String authEmail = auth.getName();
-        List<FeedBackDTO> feedBackDTOS = companyService.handleFeedBackToSend(authEmail,internshipId);
-        return ResponseEntity.ok(feedBackDTOS);
-    }
 
-
-    @PostMapping("/feedback")
+    @PostMapping("/sendFfeedback")
     public ResponseEntity<CompanyDTO> feedback(@RequestBody FeedBackDTO feedBackDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
-        companyService.handleFeedBack(authEmail, feedBackDTO);
+        companyService.handleFeedBackReceived(authEmail, feedBackDTO);
         return ResponseEntity.ok().build();
     }
 

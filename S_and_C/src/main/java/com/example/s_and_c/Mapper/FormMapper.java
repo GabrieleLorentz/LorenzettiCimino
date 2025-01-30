@@ -26,7 +26,7 @@ public class FormMapper {
         );
     }
 
-    public static ComplaintDTO mapToComplaintDTO(Form form) {
+    /*public static ComplaintDTO mapToComplaintDTO(Form form) {
         FormDTO formDTO = FormMapper.mapToFormDTO(form);
         List<FormDTO> formDTOS= new ArrayList<>();
         formDTOS.add(formDTO);
@@ -34,9 +34,9 @@ public class FormMapper {
                 (int) form.getInternship().getInternshipId(),
                 formDTOS
         );
-    }
+    }*/
 
-    public static FeedBackDTO mapToFeedBackDTO(String authEmail, Form formIter) {
+    /*public static FeedBackDTO mapToFeedBackDTO(String authEmail, Form formIter) {
         FormDTO formDTO = FormMapper.mapToFormDTO(formIter);
         List<FormDTO> formDTOS= new ArrayList<>();
         formDTOS.add(formDTO);
@@ -45,7 +45,7 @@ public class FormMapper {
                 (int) formIter.getInternship().getInternshipId(),
                 formDTOS
         );
-    }
+    }*/
 
     public static ReviewDTO mapToReviewDTO(String authEmail, Form formIter) {
         FormDTO formDTO = FormMapper.mapToFormDTO(formIter);

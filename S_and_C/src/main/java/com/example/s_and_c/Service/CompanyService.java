@@ -19,15 +19,13 @@ public interface CompanyService {
 
     void deleteCompany(String email);
 
-    void handleComplaint(String authEmail, ComplaintDTO internshipId);
 
-    void handleFeedBack(String authEmail, FeedBackDTO feedBackDTO);
+    void handleFeedBackReceived(String authEmail, FeedBackDTO feedBackDTO);
 
     void handleReview(String authEmail, ReviewDTO formDTO);
 
-    List<ComplaintDTO> handleComplaintToSend(String authEmail, int internshipId);
+    void handleComplaintReceived(String authEmail, ComplaintDTO complaintDTO);
 
-    List<FeedBackDTO> handleFeedBackToSend(String authEmail, int internshipId);
 
     List<ReviewDTO> handleReviewToSend(String authEmail, int internshipId);
 }

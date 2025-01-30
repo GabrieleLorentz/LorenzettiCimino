@@ -23,15 +23,11 @@ public interface StudentService {
 
     List<InternshipForStudentsDTO> getPersonalInternships(String authEmail);
 
-    void handleComplaint(String authEmail, ComplaintDTO internshipId);
+    void handleComplaintReceived(String authEmail, ComplaintDTO internshipId);
 
     void handleFeedBack(String authEmail, FeedBackDTO feedBackDTO);
 
     void handleReview(String authEmail, ReviewDTO formDTO);
-
-    List<ComplaintDTO> handleComplaintToSend(String authEmail, int internshipId);
-
-    List<FeedBackDTO> handleFeedBackToSend(String authEmail, int internshipId);
 
     List<ReviewDTO> handleReviewToSend(String authEmail, int internshipId);
 }

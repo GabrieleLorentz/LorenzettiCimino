@@ -198,46 +198,32 @@ public class StudentServiceImpl implements StudentService {
         }
         return internshipDTOList;
     }
-    /**
-     * @param authEmail
-     * @param internshipId
-     * @return
-     */
+
+
     @Override
-    public List<ComplaintDTO> handleComplaintToSend(String authEmail, int internshipId) {
-        Internship internship = internshipRepository.findById(internshipId).orElseThrow(()->new RuntimeException("Internship not found"));
+    public void handleComplaintReceived(String authEmail, ComplaintDTO complaintDTO) {
         Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
+        Internship internship = internshipRepository.findById(complaintDTO.getInternshipId()).orElseThrow(()->new RuntimeException("Internship not found"));
+
         if(!internship.getSelectedStudents().contains(student)){
-            throw new DataIntegrityViolationException("Internship does not belong to this company");
+            throw new InternshipException("THE STUDENT AND THE COMPANY ARE NOT CORRELATED",409);
         }
         Form form = new Form();
         form.setFormType(FormType.COMPLAINT);
         form.setRequest("Tell us your complaint:");
-        form.setResponse(null);
+        form.setResponse(complaintDTO.getComplaint());
         form.setStudent(student);
         form.setInternship(internship);
         formRepository.save(form);
+
+
+        /*
+        //Code for new methods
         List<Form> formList = formRepository.findByInternshipAndStudentAndFormType(internship,student, FormType.COMPLAINT);
         List<ComplaintDTO> complaintDTOList = new ArrayList<>();
         for(Form formIter : formList){
             complaintDTOList.add(FormMapper.mapToComplaintDTO(formIter));
-        }
-        return complaintDTOList;
-    }
-
-    @Override
-    public void handleComplaint(String authEmail, ComplaintDTO complaintDTO) {
-        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
-        Internship internship = internshipRepository.findById(complaintDTO.getInternship_id()).orElseThrow(()->new RuntimeException("Internship not found"));
-        List<Form> formList = formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.COMPLAINT);
-        for (Form form : formList) {
-            for( FormDTO formDTO : complaintDTO.getComplaints()){
-                if(formDTO.getFormId() == form.getFormId()){
-                    form.setResponse(formDTO.getResponse());
-                    formRepository.save(form);
-                }
-            }
-        }
+        }*/
 
     }
 
@@ -249,52 +235,36 @@ public class StudentServiceImpl implements StudentService {
     public void handleFeedBack(String authEmail, FeedBackDTO feedBackDTO) {
         Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
         Internship internship = internshipRepository.findById(feedBackDTO.getInternship_id()).orElseThrow(()->new RuntimeException("Internship not found"));
-        List<Form> formList = formRepository.findByInternshipAndStudentAndFormType(internship, student,FormType.FEEDBACK);
-        for (Form form : formList) {
-            for( FormDTO formDTO : feedBackDTO.getFeedbacks()){
-                if(formDTO.getFormId() == form.getFormId()){
-                    form.setResponse(formDTO.getResponse());
-                    formRepository.save(form);
-                }
-            }
-        }
-    }
 
-    /**
-     * @param authEmail
-     * @param internshipId
-     * @return
-     */
-    @Override
-    public List<FeedBackDTO> handleFeedBackToSend(String authEmail, int internshipId) {
-        Internship internship = internshipRepository.findById(internshipId).orElseThrow(()->new RuntimeException("Internship not found"));
-        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
-        if(!internship.getSelectedStudents().contains(student)){
-            throw new DataIntegrityViolationException("Internship does not belong to this company");
-        }
         List<String> requests = new ArrayList<>();
         requests.add("The service/product met my expectations:");
         requests.add("I found the experience user-friendly and intuitive");
         requests.add("The staff/team was helpful and professional.");
         requests.add("I would recommend this service/product to others");
         requests.add("I am satisfied with the overall quality.");
-        for(String request : requests){
+        for (int i = 0; i < 5; i++) {
             Form form = new Form();
             form.setFormType(FormType.FEEDBACK);
-            form.setRequest(request);
-            form.setResponse(null);
+            form.setRequest(requests.get(i));
+            form.setResponse(feedBackDTO.getFeedbacks().get(i));
             form.setStudent(student);
             form.setInternship(internship);
             formRepository.save(form);
         }
 
-        List<Form> formList = formRepository.findByInternshipAndCompanyAndFormType(internship, internship.getCompany(),FormType.FEEDBACK);
+    }
+
+
+
+
+
+        /*List<Form> formList = formRepository.findByInternshipAndCompanyAndFormType(internship, internship.getCompany(),FormType.FEEDBACK);
         List<FeedBackDTO> feedBackDTOList = new ArrayList<>();
         for(Form formIter : formList){
             feedBackDTOList.add(FormMapper.mapToFeedBackDTO(authEmail,formIter));
         }
-        return feedBackDTOList;
-    }
+        return feedBackDTOList;*/
+
 
     /**
      * @param authEmail

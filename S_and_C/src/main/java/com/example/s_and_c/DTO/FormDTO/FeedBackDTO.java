@@ -17,5 +17,5 @@ public class FeedBackDTO {
 
     private String email;
     private int internship_id;
-    private List<FormDTO> feedbacks = new ArrayList<>();
+    private List<String> feedbacks = new ArrayList<>();
 }
