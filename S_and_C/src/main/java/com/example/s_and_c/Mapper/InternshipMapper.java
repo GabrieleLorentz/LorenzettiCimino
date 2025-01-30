@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InternshipMapper {
 
-    static FormRepository formRepository;
+    private final FormRepository formRepository;
 
     public static Internship maptoInternship(InsertInternshipDTO dto, Company company) {
         Internship internship = new Internship();
@@ -55,29 +55,15 @@ public class InternshipMapper {
         return internship;
     }
 
-    public static InternshipCompleteDTO maptoInternshipCompleteDTO(Internship internship, List<FormWithStudentsDTO> compiledForms) {
+    public static InternshipCompleteDTO maptoInternshipCompleteDTO(Internship internship, List<FormWithStudentsDTO> compiledForms, List<ShortStudentDTO> appliedStudents) {
 
-        List<ShortStudentDTO> appliedStudents = new ArrayList<>();
-        for(Student student: internship.getAppliedStudents()){
-            List<Form> form_cv = formRepository.findByInternshipAndStudentAndFormType(internship, student,FormType.CV);
-            List<String> cv = new ArrayList<>();
-            for(Form form : form_cv){
-                cv.add(form.getResponse());
-            }
-            appliedStudents.add(new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname(), student.getDescription(), cv));
-        }
 
         List<String> qualifications = new ArrayList<>();
         for(Qualification qualification: internship.getQualification_required())
             qualifications.add(qualification.getQualificationName());
         List<ShortStudentDTO> selectedStudents = new ArrayList<>();
         for(Student student: internship.getSelectedStudents()){
-            List<Form> form_cv = formRepository.findByInternshipAndStudentAndFormType(internship, student,FormType.CV);
-            List<String> cv = new ArrayList<>();
-            for(Form form : form_cv){
-                cv.add(form.getResponse());
-            }
-            new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname(),student.getDescription(), cv);
+            new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname(),student.getDescription());
         }
         return new InternshipCompleteDTO(
                 internship.getInternshipId(),
@@ -98,21 +84,7 @@ public class InternshipMapper {
     }
 
     public static InternshipForStudentsDTO mapToInternshipForAppliedStudentsDTO(Internship internship) {
-        List<String> qualifications = new ArrayList<>();
-        for(Qualification qualification: internship.getQualification_required())
-            qualifications.add(qualification.getQualificationName());
-        return new InternshipForStudentsDTO(
-                internship.getInternshipId(),
-                internship.getName(),
-                internship.getStartDate(),
-                internship.getEndDate(),
-                internship.getEndFormCompilingDate(),
-                internship.getEndSelectionAcceptanceDate(),
-                internship.getSalary(),
-                qualifications,
-                internship.getDescription(),
-                internship.getCompany().getName()
-        );
+        return maptoInternshipForStudentsDTO(internship);
     }
 
     public static InternshipForStudentsDTO maptoInternshipForStudentsDTO(Internship internship) {

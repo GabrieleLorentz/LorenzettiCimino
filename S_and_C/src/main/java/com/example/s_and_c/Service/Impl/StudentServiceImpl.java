@@ -21,6 +21,7 @@ import com.example.s_and_c.Repositories.FormRepository;
 import com.example.s_and_c.Repositories.InternshipRepository;
 import com.example.s_and_c.Repositories.StudentRepository;
 import com.example.s_and_c.Service.StudentService;
+import com.example.s_and_c.Utils.DateUtils;
 import com.example.s_and_c.Utils.InternshipException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -29,10 +30,12 @@ import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +49,7 @@ public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
     private InternshipRepository internshipRepository;
     private final PasswordEncoder passwordEncoder;
+    private final DateUtils dateUtils;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -156,8 +160,11 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void requestInternship(long internshipId, String authEmail) {
-        System.out.println(internshipId);
         Internship internship = internshipRepository.findById((int)internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
+        if (LocalDate.now().isAfter(internship.getEndFormCompilingDate())) {
+            throw new InternshipException("form compiling time is expired",400);
+        }
+
         Student student = studentRepository.getStudentByEmail(authEmail).orElseThrow(()->new InternshipException("Student not found",404));
         if(internship.getAcceptedStudents().contains(student) || internship.getSelectedStudents().contains(student) || internship.getAppliedStudents().contains(student)){
             throw new InternshipException("Student already inserted",409);
@@ -202,7 +209,12 @@ public class StudentServiceImpl implements StudentService {
     public void handleComplaintReceived(String authEmail, ComplaintDTO complaintDTO) {
         Student student = studentRepository.getStudentByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
         Internship internship = internshipRepository.findById(complaintDTO.getInternshipId()).orElseThrow(()->new RuntimeException("Internship not found"));
-
+        if (LocalDate.now().isBefore(internship.getStartDate())) {
+            throw new InternshipException("Internship has not started yet",400);
+        }
+        if (LocalDate.now().isAfter(internship.getEndDate())) {
+            throw new InternshipException("Internship has already ended",400);
+        }
         if(!internship.getSelectedStudents().contains(student) || complaintDTO.getComplaint().isBlank()){
             throw new InternshipException("THE STUDENT AND THE COMPANY ARE NOT CORRELATED",409);
         }
@@ -236,6 +248,8 @@ public class StudentServiceImpl implements StudentService {
         if(!internship.getSelectedStudents().contains(student) || feedBackDTO.getFeedbacks().isEmpty()){
             throw new InternshipException("THE STUDENT AND THE COMPANY ARE NOT CORRELATED",409);
         }
+        CompanyServiceImpl.checkDate(internship, dateUtils);
+
         List<String> requests = new ArrayList<>();
         requests.add("The service/product met my expectations:");
         requests.add("I found the experience user-friendly and intuitive");

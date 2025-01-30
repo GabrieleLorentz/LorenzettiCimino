@@ -14,6 +14,7 @@ import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.CompanyMapper;
 import com.example.s_and_c.Repositories.*;
 import com.example.s_and_c.Service.CompanyService;
+import com.example.s_and_c.Utils.DateUtils;
 import com.example.s_and_c.Utils.InternshipException;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
@@ -25,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,6 +41,7 @@ public class CompanyServiceImpl implements CompanyService {
     private InternshipRepository internshipRepository;
     private final AuthService authService;
     private final FormRepository formRepository;
+    private final DateUtils dateUtils;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -179,6 +182,7 @@ public class CompanyServiceImpl implements CompanyService {
         if(!internship.getCompany().getEmail().equals(authEmail)){
             throw new InternshipException("Internship does not belong to this company",409);
         }
+        checkDate(internship, dateUtils);
         List<String> requests = new ArrayList<>();
         requests.add("The service/product met my expectations:");
         requests.add("I found the experience user-friendly and intuitive.");
@@ -203,6 +207,20 @@ public class CompanyServiceImpl implements CompanyService {
                 }
             }
         }*/
+    }
+
+    static void checkDate(Internship internship, DateUtils dateUtils) {
+        if (LocalDate.now().isBefore(dateUtils.getMidDate(internship.getStartDate(),internship.getEndDate()))) {
+            throw new InternshipException("Feedback can not be inserted yet",400);
+        }
+        if (LocalDate.now().isAfter(
+                dateUtils.getMidDate(internship.getStartDate(),internship.getEndDate()).plusWeeks(1)) &&
+                LocalDate.now().isBefore(internship.getEndDate())) {
+            throw new InternshipException("Feedback can not be inserted yet",400);
+        }
+        if(LocalDate.now().isAfter(internship.getEndDate().plusWeeks(1))){
+            throw new InternshipException("Feedback can not be inserted anymore",400);
+        }
     }
 
     /*
@@ -234,6 +252,12 @@ public class CompanyServiceImpl implements CompanyService {
         Student student = studentRepository.getStudentByEmail(reviewDTO.getStudEmailForCompanyOnly()).orElseThrow(()->new InternshipException("Student not found",404));
         if(!internship.getCompany().getEmail().equals(authEmail)){
             throw new InternshipException("Internship does not belong to this company",409);
+        }
+        if(LocalDate.now().isBefore(internship.getEndDate())){
+            throw new InternshipException("is not time to review",400);
+        }
+        if(!formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.REVIEW).isEmpty()){
+            throw new InternshipException("Review already inserted",409);
         }
         List<String> requests = new ArrayList<>();
         requests.add("How do you rate this experience?");

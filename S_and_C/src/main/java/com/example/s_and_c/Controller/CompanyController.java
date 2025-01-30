@@ -122,7 +122,7 @@ public class CompanyController {
     }
 
 
-    @PostMapping("/sendFfeedback")
+    @PostMapping("/sendFeedback")
     public ResponseEntity<CompanyDTO> feedback(@RequestBody FeedBackDTO feedBackDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();

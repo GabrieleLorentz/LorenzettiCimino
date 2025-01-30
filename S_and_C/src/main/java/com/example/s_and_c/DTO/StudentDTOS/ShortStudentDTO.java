@@ -18,5 +18,8 @@ public class ShortStudentDTO {
     private String surname;
     private String description;
     private List<String> cv;
+
+    public ShortStudentDTO(String email, String name, String surname, String description) {
+    }
 }
 

@@ -15,8 +15,10 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,6 +40,12 @@ public class InternshipServiceImpl implements InternshipService {
         Company insertingCompany = companyRepository.findByEmail(email).orElseThrow(()-> new InternshipException("Company not found",404));
 
         Internship internship = InternshipMapper.maptoInternship(insertInternshipDTO, insertingCompany);
+        if(LocalDate.now().isAfter(internship.getStartDate()) ||
+                LocalDate.now().isAfter(internship.getEndDate()) ||
+                LocalDate.now().isAfter(internship.getEndFormCompilingDate()) ||
+                LocalDate.now().isAfter(internship.getEndSelectionAcceptanceDate())) {
+            throw new InternshipException("Not correct dates",400);
+        }
         internshipRepository.save(internship);
         formRepository.saveAll(internship.getForm());
         qualificationRepository.saveAll(internship.getQualification_required());
@@ -100,11 +108,24 @@ public class InternshipServiceImpl implements InternshipService {
 
             List<Internship> internships = internshipRepository.findByCompany(company);
             List<InternshipCompleteDTO> internshipCompleteDTOS = new ArrayList<>();
+
+
             for (Internship internship : internships) {
+                List<ShortStudentDTO> appliedStudents = new ArrayList<>();
+
+
+                //appliedStudent
+                for(Student student: internship.getAppliedStudents()){
+                List<Form> form_cv = formRepository.findByInternshipAndStudentAndFormType(internship, student,FormType.CV);
+                List<String> cv = new ArrayList<>();
+                for(Form form : form_cv){
+                    cv.add(form.getResponse());
+                }
+                appliedStudents.add(new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname(), student.getDescription(), cv));
+                }
                 List<FormWithStudentsDTO> compiledForms = new ArrayList<>();
 
-
-
+                //acceptedStudent
                 for(Student student: internship.getAcceptedStudents()){
                     List<Form> form_cv = formRepository.findByInternshipAndStudentAndFormType(internship, student,FormType.CV);
                     List<String> cv = new ArrayList<>();
@@ -118,7 +139,9 @@ public class InternshipServiceImpl implements InternshipService {
                     }
                 }
 
-                internshipCompleteDTOS.add(InternshipMapper.maptoInternshipCompleteDTO(internship,compiledForms));
+
+
+                internshipCompleteDTOS.add(InternshipMapper.maptoInternshipCompleteDTO(internship,compiledForms,appliedStudents));
             }
 
             return internshipCompleteDTOS;
