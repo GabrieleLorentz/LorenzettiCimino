@@ -11,7 +11,6 @@ import com.example.s_and_c.Mapper.InternshipMapper;
 import com.example.s_and_c.Repositories.*;
 import com.example.s_and_c.Service.InternshipService;
 import com.example.s_and_c.Utils.InternshipException;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -77,7 +76,7 @@ public class InternshipServiceImpl implements InternshipService {
         for(Form form : cv){
             cv_string.add(form.getResponse());
         }
-        selectedStudents.add(new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname(), cv_string));
+        selectedStudents.add(new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname(), student.getDescription(), cv_string));
     }
 
 
@@ -103,11 +102,19 @@ public class InternshipServiceImpl implements InternshipService {
             List<InternshipCompleteDTO> internshipCompleteDTOS = new ArrayList<>();
             for (Internship internship : internships) {
                 List<FormWithStudentsDTO> compiledForms = new ArrayList<>();
+
+
+
                 for(Student student: internship.getAcceptedStudents()){
+                    List<Form> form_cv = formRepository.findByInternshipAndStudentAndFormType(internship, student,FormType.CV);
+                    List<String> cv = new ArrayList<>();
+                    for(Form form : form_cv){
+                        cv.add(form.getResponse());
+                    }
                     List<Form> results = formRepository.findByInternshipAndStudentAndFormType(internship, student,FormType.INTERVIEW);
                     for(Form form: results){
                         compiledForms.add(new FormWithStudentsDTO(form.getFormId(), form.getRequest(), form.getResponse(),
-                                new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname())));
+                                new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname(), student.getDescription(), cv)));
                     }
                 }
 

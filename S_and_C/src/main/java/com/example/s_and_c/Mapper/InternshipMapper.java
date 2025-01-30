@@ -16,6 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InternshipMapper {
 
+    static FormRepository formRepository;
+
     public static Internship maptoInternship(InsertInternshipDTO dto, Company company) {
         Internship internship = new Internship();
         internship.setName(dto.getName());
@@ -56,14 +58,26 @@ public class InternshipMapper {
     public static InternshipCompleteDTO maptoInternshipCompleteDTO(Internship internship, List<FormWithStudentsDTO> compiledForms) {
 
         List<ShortStudentDTO> appliedStudents = new ArrayList<>();
-        for(Student student: internship.getAppliedStudents())
-            appliedStudents.add(new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname()));
+        for(Student student: internship.getAppliedStudents()){
+            List<Form> form_cv = formRepository.findByInternshipAndStudentAndFormType(internship, student,FormType.CV);
+            List<String> cv = new ArrayList<>();
+            for(Form form : form_cv){
+                cv.add(form.getResponse());
+            }
+            appliedStudents.add(new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname(), student.getDescription(), cv));
+        }
+
         List<String> qualifications = new ArrayList<>();
         for(Qualification qualification: internship.getQualification_required())
             qualifications.add(qualification.getQualificationName());
         List<ShortStudentDTO> selectedStudents = new ArrayList<>();
         for(Student student: internship.getSelectedStudents()){
-            new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname());
+            List<Form> form_cv = formRepository.findByInternshipAndStudentAndFormType(internship, student,FormType.CV);
+            List<String> cv = new ArrayList<>();
+            for(Form form : form_cv){
+                cv.add(form.getResponse());
+            }
+            new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname(),student.getDescription(), cv);
         }
         return new InternshipCompleteDTO(
                 internship.getInternshipId(),
