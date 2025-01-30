@@ -155,7 +155,7 @@ public class CompanyServiceImpl implements CompanyService {
         Form form = new Form();
         form.setFormType(FormType.COMPLAINT);
         form.setRequest("Tell us your complaint:");
-        form.setResponse(null);
+        form.setResponse(complaintDTO.getComplaint());
         form.setCompany(internship.getCompany());
         form.setInternship(internship);
         formRepository.save(form);
