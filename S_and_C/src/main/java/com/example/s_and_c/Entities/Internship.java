@@ -94,12 +94,20 @@ public class Internship {
         appliedStudents.remove(student);
     }
 
-    public void addAcceptedStudent(Student student) {acceptedStudents.add(student);}
+    public void addAcceptedStudent(Student student) {
+        acceptedStudents.add(student);
+    }
 
-    public void deleteAcceptedStudent(Student student) {acceptedStudents.remove(student);}
+    public void deleteAcceptedStudent(Student student) {
+        acceptedStudents.remove(student);
+    }
 
-    public void addSelectedStudent(Student student) {selectedStudents.add(student);}
+    public void addSelectedStudent(Student student) {
+        selectedStudents.add(student);
+    }
 
-    public void deleteSelectedStudent(Student student) {selectedStudents.remove(student);}
+    public void deleteSelectedStudent(Student student) {
+        selectedStudents.remove(student);
+    }
 
 }
