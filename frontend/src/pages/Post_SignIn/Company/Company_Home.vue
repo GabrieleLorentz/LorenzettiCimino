@@ -38,6 +38,7 @@
               <div style="display: flex; gap: 5px">
                 <button @click="openRequest(internship)" class="popup-button" style="font-size: 15px;">Request Students </button>
                 <button @click="openResponse(internship)" class="popup-button" style="font-size: 15px;">Response Students </button>
+                <button @click="openSelected(internship)" class="popup-button" style="font-size: 15px;">Selected Students </button>
               </div>
             </div>
           </div>
@@ -45,7 +46,7 @@
           <div v-if="showRequest" class="det">
             <div class="det-content">
               <h2>Students</h2>
-              <div v-for="student in selecteInternship.applicants" style="padding: 5px; display: flex; gap: 10px">
+              <div v-for="student in selectedInternship.applicants" style="padding: 5px; display: flex; gap: 10px">
                 <div class="profile_cont">
                   <p> {{student.name}} </p>
                   <div class="profile">
@@ -61,7 +62,7 @@
                   </div>
                 </div>
                 <p> {{student.surname}}</p>
-                <button class="yes" @click="accepted(student.email, selecteInternship.id)" >Yes</button>
+                <button class="yes" @click="accepted(student.email, selectedInternship.id)" >Yes</button>
               </div>
               <button @click="closeRequest" class="popup-button" style="font-size: 20px;">Close</button>
             </div>
@@ -78,9 +79,22 @@
                     <strong>Response:</strong> {{ form.response }}
                   </li>
                 </ul>
-                <button class="yes" @click="selected(responses[0].student.email, selecteInternship.id)" >Yes</button>
+                <button class="yes" @click="selected(responses[0].student.email, selectedInternship.id)" >Yes</button>
               </div>
               <button @click="closeResponse" class="popup-button" style="font-size: 20px;">Close</button>
+            </div>
+          </div>
+
+          <div v-if="showSelected" class="det">
+            <div class="det-content">
+              <h2>Students</h2>
+              <div v-for="student in selectedInternship.selected" style="padding: 5px; display: flex; gap: 10px">
+                <div class="profile_cont" style="display: flex; gap: 5px">
+                  <p> {{student.name}} </p>
+                  <p> {{student.surname}} </p>
+                </div>
+              </div>
+              <button @click="closeSelected" class="popup-button" style="font-size: 20px;">Close</button>
             </div>
           </div>
 
@@ -120,38 +134,64 @@
                 <p><strong>Description:</strong></p>
                 <textarea readonly style="width: 90%;"> {{ internship.description }}</textarea>
               </div>
-              <div style="display: flex; gap: 5px;">
-                <div class="profile-container">
-                  <button class="popup-button" style="font-size: 15px;">Complaint</button>
-                  <div class="popupCom">
-                    <textarea v-model="complaint_" placeholder="Write a complaint"></textarea>
-                    <button @click="RecComplaint(internship.id)" class="popup-button">Send</button>
-                  </div>
-                </div>
-                <div class="profile-container">
-                  <button class="popup-button" style="font-size: 15px;">Feedback</button>
-                  <div class="popupCom" style="min-width: 350px; left: -100px">
-                    <div v-for="(question, index) in questions" :key="index">
-                      <label>{{ question }}</label>
-                      <select v-model="feedback_[index]">
-                        <option disabled value="">Please select one</option>
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                      </select>
+              <button @click="openStudent(internship)" class="popup-button" style="font-size: 15px;">Selected Students </button>
+              <div v-if="showStudent" class="det">
+                <div class="det-content">
+                  <h2>Students</h2>
+                  <div v-for="student in selectedInternship.selected" style="padding: 5px; display: flex; gap: 10px">
+                    <div class="profile_cont" style="display: flex; gap: 50px">
+                      <div style="display: flex; gap: 5px">
+                        <p style="font-size: 20px"> {{student.name}} </p>
+                        <p style="font-size: 20px"> {{student.surname}} </p>
+                      </div>
+                      <div style="display: flex; gap: 10px">
+                        <div class="profile-container">
+                          <button class="popup-button" style="font-size: 15px;">Complaint</button>
+                          <div class="popupCom">
+                            <textarea v-model="complaint_" placeholder="Write a complaint"></textarea>
+                            <button @click="RecComplaint(internship.id)" class="popup-button">Send</button>
+                          </div>
+                        </div>
+                        <div class="profile-container">
+                          <button class="popup-button" style="font-size: 15px;">Feedback</button>
+                          <div class="popupCom" style="min-width: 350px; left: -100px;">
+                            <div v-for="(question, index) in questionsFeed" :key="index">
+                              <label>{{ question }}</label>
+                              <select v-model="feedback_[index]">
+                                <option disabled value="">Please select one</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                              </select>
+                            </div>
+                            <button @click="RecFeedback(internship.id, student.email)" class="popup-button">Send</button>
+                          </div>
+                        </div>
+                        <div class="profile-container">
+                          <button class="popup-button" style="font-size: 15px;">Review</button>
+                          <div class="popupCom" style="min-width: 350px;">
+                            <p>{{questionsRev[0]}}</p>
+                            <select v-model="review_[0]">
+                              <option disabled value="">Please select one</option>
+                              <option value="0">0</option>
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value="4">4</option>
+                              <option value="5">5</option>
+                            </select>
+                            <p>{{questionsRev[1]}}</p>
+                            <textarea v-model="review_[1]"></textarea>
+                            <button @click="RecReview(internship.id, student.email)" class="popup-button">Send</button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <button @click="RecFeedback(internship.id, internship.student.email)" class="popup-button">Send</button>
                   </div>
-                </div>
-                <div class="profile-container">
-                  <button class="popup-button" style="font-size: 15px;">Review</button>
-                  <div class="popupCom">
-
-                    <button @click="RecReview(internship.id)" class="popup-button">Send</button>
-                  </div>
+                  <button @click="closeStudent" class="popup-button" style="font-size: 20px;">Close</button>
                 </div>
               </div>
             </div>
@@ -243,19 +283,20 @@ onMounted(() => {
   receiveData();
 });
 
+const selectedInternship = ref(null);
+
 const showRequest = ref(false);
-const selecteInternship = ref(null);
 function openRequest(internship) {
-  selecteInternship.value = internship;
+  selectedInternship.value = internship;
   showRequest.value = true;
 }
 function closeRequest() {
   showRequest.value = false;
-  selecteInternship.value = null;
+  selectedInternship.value = null;
 }
 function accepted(email, internshipId) {
   const token = localStorage.getItem('token');
-  console.log(selecteInternship)
+  console.log(selectedInternship)
 
   fetch(`http://localhost:8080/api/company/studentAccepted/${email}_${internshipId}`, {
     method: 'POST',
@@ -284,17 +325,17 @@ function accepted(email, internshipId) {
 
 const showResponse = ref(false);
 function openResponse(internship) {
-  selecteInternship.value = internship;
+  selectedInternship.value = internship;
   showResponse.value = true;
 }
 function closeResponse() {
   showResponse.value = false;
-  selecteInternship.value = null;
+  selectedInternship.value = null;
 }
 const groupedForms = computed(() => {
-  if (!selecteInternship.value || !selecteInternship.value.formWithStudents) return {};
+  if (!selectedInternship.value || !selectedInternship.value.formWithStudents) return {};
 
-  return selecteInternship.value.formWithStudents.reduce((acc, form) => {
+  return selectedInternship.value.formWithStudents.reduce((acc, form) => {
     const email = form.student.email;
     if (!acc[email]) {
       acc[email] = [];
@@ -305,7 +346,7 @@ const groupedForms = computed(() => {
 });
 function selected(email, internshipId) {
   const token = localStorage.getItem('token');
-  console.log(selecteInternship)
+  console.log(selectedInternship)
 
   fetch(`http://localhost:8080/api/company/studentSelected/${email}_${internshipId}`, {
     method: 'POST',
@@ -330,6 +371,26 @@ function selected(email, internshipId) {
         console.error('Errore:', error);
         alert('A connection error occurred');
       });
+}
+
+const showSelected = ref(false);
+function openSelected(internship) {
+  selectedInternship.value = internship;
+  showSelected.value = true;
+}
+function closeSelected() {
+  showSelected.value = false;
+  selectedInternship.value = null;
+}
+
+const showStudent = ref(false);
+function openStudent(internship) {
+  selectedInternship.value = internship;
+  showStudent.value = true;
+}
+function closeStudent() {
+  showStudent.value = false;
+  selectedInternship.value = null;
 }
 
 const complaint_ = ref('');
@@ -367,7 +428,7 @@ function RecComplaint(intId) {
         alert('A connection error occurred');
       });
 }
-const questions = ref<string[]>([
+const questionsFeed = ref<string[]>([
   "The service/product met my expectations:",
   "I found the experience user-friendly and intuitive.",
   "The staff/team was helpful and professional.",
@@ -375,7 +436,7 @@ const questions = ref<string[]>([
   "I am satisfied with the overall quality."
 ]);
 const feedback_ = ref<string[]>([]);
-watch(questions, (newQuestions) => {
+watch(questionsFeed, (newQuestions) => {
   feedback_.value = newQuestions.map(() => "");
 }, { immediate: true });
 function RecFeedback(intId, email) {
@@ -383,8 +444,8 @@ function RecFeedback(intId, email) {
 
   const formFeed = {
     internshipId: intId,
-    feedbacks: feedback_.value,
-    studEmailForCompanyOnly: email
+    studEmailForCompanyOnly: email,
+    feedbacks: feedback_.value
   }
 
   fetch(`http://localhost:8080/api/company/sendFfeedback`, {
@@ -413,18 +474,25 @@ function RecFeedback(intId, email) {
         alert('A connection error occurred');
       });
 }
-function RecReview(intId) {
+const questionsRev = ref<string[]>([
+  "How do you rate this experience?",
+  "What are your suggestions?"
+]);
+const review_ = ref<string[]>([]);
+function RecReview(intId, email) {
   const token = localStorage.getItem('token');
 
   const formRev = {
     internshipId: intId,
-
+    studEmailForCompanyOnly: email,
+    review: review_.value
   }
 
   fetch(`http://localhost:8080/api/company/sendReview`, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify(formRev)
   })

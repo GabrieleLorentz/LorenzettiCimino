@@ -2,7 +2,7 @@
   <div class="profile-container">
     <img @click="openPopup" src="/src/assets/+.svg" alt="+" class="icon3 icon_hover"/>
       <div v-if="showPopup" class="det1">
-        <div class="det-content">
+        <div class="det-content1">
           <p>ADD INTERNSHIP</p>
 
           <div class="form">
@@ -59,6 +59,12 @@
   cursor: pointer;
   /*margin-top: 5px;
   margin-right: -5px;*/
+}
+.det-content1 {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  width: 50%;
 }
 .det-content1 p {
   font-size: 25px;
