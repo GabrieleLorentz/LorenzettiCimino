@@ -9,8 +9,8 @@
         <div class="my_collaboration">
           MY INTERNSHIP
         </div>
-        <div v-if="internships.length > 0" class="internships-container">
-          <div v-for="internship in internships" :key="internship.id" style="padding: 5px">
+        <div v-if="upcomingInternships.length > 0" class="internships-container">
+          <div v-for="internship in upcomingInternships" :key="internship.id" style="padding: 5px">
             <div style="border: 3px solid black; border-radius: 40px; padding: 10px; display: flex; flex-direction: column; gap: 5px">
               <div style="display: flex; gap: 10px">
                 <p><strong>Name:</strong> {{ internship.name }}</p>
@@ -94,6 +94,69 @@
         <div class="my_collaboration">
           MY COLLABORATIONS IN PROGESS
         </div>
+        <div v-if="ongoingInternships.length > 0" class="internships-container">
+          <div v-for="internship in ongoingInternships" :key="internship.id" style="padding: 5px">
+            <div style="border: 3px solid black; border-radius: 40px; padding: 10px; display: flex; flex-direction: column; gap: 5px">
+              <div style="display: flex; gap: 10px">
+                <p><strong>Name:</strong> {{ internship.name }}</p>
+                <p><strong>Company:</strong> {{ internship.companyName }}</p>
+                <p><strong>Start Date:</strong> {{ internship.startDate }}</p>
+                <p><strong>End Date:</strong> {{ internship.endDate }}</p>
+              </div>
+              <div style="display: flex; gap: 10px">
+                <p><strong>End Selection AcceptanceDate:</strong> {{ internship.endSelectionAcceptanceDate }}</p>
+                <p><strong>End Form CompilingDate:</strong> {{ internship.endFormCompilingDate }}</p>
+                <p><strong>Salary: $</strong> {{ internship.salary }}</p>
+              </div>
+              <div style="display: flex; gap: 5px">
+                <p><strong>Qualification required:</strong></p>
+                <ul style="width: 90%; padding-left: 1em;">
+                  <li v-for="(qualification, index) in internship.qualification_required" :key="index">
+                    {{ qualification }}
+                  </li>
+                </ul>
+              </div>
+              <div style="display: flex; gap: 5px">
+                <p><strong>Description:</strong></p>
+                <textarea readonly style="width: 90%;"> {{ internship.description }}</textarea>
+              </div>
+              <div style="display: flex; gap: 5px;">
+                <div class="profile-container">
+                  <button class="popup-button" style="font-size: 15px;">Complaint</button>
+                  <div class="popupCom">
+                    <textarea v-model="complaint_" placeholder="Write a complaint"></textarea>
+                    <button @click="RecComplaint(internship.id)" class="popup-button">Send</button>
+                  </div>
+                </div>
+                <div class="profile-container">
+                  <button class="popup-button" style="font-size: 15px;">Feedback</button>
+                  <div class="popupCom" style="min-width: 350px; left: -100px">
+                    <div v-for="(question, index) in questions" :key="index">
+                      <label>{{ question }}</label>
+                      <select v-model="feedback_[index]">
+                        <option disabled value="">Please select one</option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select>
+                    </div>
+                    <button @click="RecFeedback(internship.id, internship.student.email)" class="popup-button">Send</button>
+                  </div>
+                </div>
+                <div class="profile-container">
+                  <button class="popup-button" style="font-size: 15px;">Review</button>
+                  <div class="popupCom">
+
+                    <button @click="RecReview(internship.id)" class="popup-button">Send</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -103,6 +166,7 @@
 <style>
 .internships-container {
   max-height: 540px;
+  min-height: 540px;
   overflow-y: auto;
 }
 .profile_cont {
@@ -124,13 +188,32 @@
   color: green;
   font-size: 15px;
 }
+.profile-container:hover .popupCom {
+  display: block;
+}
+.popupCom {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 22px;
+  background-color: #f2a73b;
+  border: 2px solid black;
+  border-radius: 15px;
+  padding: 4px;
+}
 </style>
 
 <script setup lang="ts">
 import UpperPart from '@/pages/Post_SignIn/Utils/upper_part.vue';
-import {ref, onMounted, computed} from "vue";
+import {ref, onMounted, computed, watch} from "vue";
 
 const internships = ref([]);
+const ongoingInternships = computed(() => {
+  return internships.value.filter(internship => new Date(internship.startDate) <= new Date());
+});
+const upcomingInternships = computed(() => {
+  return internships.value.filter(internship => new Date(internship.startDate) > new Date());
+});
 
 function receiveData() {
   const token = localStorage.getItem('token');
@@ -178,7 +261,6 @@ function accepted(email, internshipId) {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`
-
     },
   })
       .then(response => {
@@ -229,7 +311,6 @@ function selected(email, internshipId) {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`
-
     },
   })
       .then(response => {
@@ -237,6 +318,121 @@ function selected(email, internshipId) {
           return;
         } else if (response.status === 409) {
           alert('Student already selected');
+        } else {
+          alert('Error. Try again later');
+        }
+      })
+      .then(data => {
+        console.log(data)
+        console.log("ciao")
+      })
+      .catch(error => {
+        console.error('Errore:', error);
+        alert('A connection error occurred');
+      });
+}
+
+const complaint_ = ref('');
+function RecComplaint(intId) {
+  const token = localStorage.getItem('token');
+
+  const formComp = {
+    internshipId: intId,
+    complaint: complaint_.value
+  }
+
+  fetch(`http://localhost:8080/api/company/sendComplaints`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formComp)
+  })
+      .then(response => {
+        if (response.ok) {
+          return;
+        } else if (response.status === 409) {
+          alert('Student not selected for this internship');
+        } else {
+          alert('Error. Try again later');
+        }
+      })
+      .then(data => {
+        console.log(data)
+        console.log("ciao")
+      })
+      .catch(error => {
+        console.error('Errore:', error);
+        alert('A connection error occurred');
+      });
+}
+const questions = ref<string[]>([
+  "The service/product met my expectations:",
+  "I found the experience user-friendly and intuitive.",
+  "The staff/team was helpful and professional.",
+  "I would recommend this service/product to others.",
+  "I am satisfied with the overall quality."
+]);
+const feedback_ = ref<string[]>([]);
+watch(questions, (newQuestions) => {
+  feedback_.value = newQuestions.map(() => "");
+}, { immediate: true });
+function RecFeedback(intId, email) {
+  const token = localStorage.getItem('token');
+
+  const formFeed = {
+    internshipId: intId,
+    feedbacks: feedback_.value,
+    studEmailForCompanyOnly: email
+  }
+
+  fetch(`http://localhost:8080/api/company/sendFfeedback`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formFeed)
+  })
+      .then(response => {
+        if (response.ok) {
+          return;
+        } else if (response.status === 409) {
+          alert('Student not selected for this internship');
+        } else {
+          alert('Error. Try again later');
+        }
+      })
+      .then(data => {
+        console.log(data)
+        console.log("ciao")
+      })
+      .catch(error => {
+        console.error('Errore:', error);
+        alert('A connection error occurred');
+      });
+}
+function RecReview(intId) {
+  const token = localStorage.getItem('token');
+
+  const formRev = {
+    internshipId: intId,
+
+  }
+
+  fetch(`http://localhost:8080/api/company/sendReview`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(formRev)
+  })
+      .then(response => {
+        if (response.ok) {
+          return;
+        } else if (response.status === 409) {
+          alert('Student not selected for this internship');
         } else {
           alert('Error. Try again later');
         }

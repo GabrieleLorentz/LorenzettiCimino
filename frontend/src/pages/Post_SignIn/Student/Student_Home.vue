@@ -1,4 +1,4 @@
-<template xmlns="http://www.w3.org/1999/html">
+<template>
   <div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start">
 
     <UpperPart></UpperPart>
@@ -257,7 +257,6 @@ function closeForm() {
 function send() {
   const token = localStorage.getItem('token');
 
-  // Restructure the form data to match the DTO
   const formData = {
     internshipId: selectedForm.value.internshipId,
     formToCompile: selectedForm.value.formToCompile.map(form => ({

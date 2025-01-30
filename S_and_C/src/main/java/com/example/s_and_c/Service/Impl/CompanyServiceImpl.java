@@ -181,9 +181,9 @@ public class CompanyServiceImpl implements CompanyService {
         }
         List<String> requests = new ArrayList<>();
         requests.add("The service/product met my expectations:");
-        requests.add("I found the experience user-friendly and intuitive");
+        requests.add("I found the experience user-friendly and intuitive.");
         requests.add("The staff/team was helpful and professional.");
-        requests.add("I would recommend this service/product to others");
+        requests.add("I would recommend this service/product to others.");
         requests.add("I am satisfied with the overall quality.");
         for (int i = 0; i < 5; i++) {
             Form form = new Form();
