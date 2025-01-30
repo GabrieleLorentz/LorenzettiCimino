@@ -22,4 +22,6 @@ public interface InternshipService {
     void addFormResponse(FormResponseDTO internshipForStudentsDTO, String authEmail);
 
     void addSelectedStudent(String email, int internshipId, String authEmail);
+
+    void renounce(int internshipId, String authEmail);
 }

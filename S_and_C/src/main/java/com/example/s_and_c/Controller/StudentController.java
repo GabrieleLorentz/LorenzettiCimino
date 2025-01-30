@@ -116,6 +116,14 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/renounce_{internshipId}")
+    public ResponseEntity<StudentDTO> internshipRenounce(@RequestParam int internshipId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+        internshipService.renounce(internshipId, authEmail);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{email}")
     public ResponseEntity<String> deleteStudent(
             @PathVariable("email") String email) {

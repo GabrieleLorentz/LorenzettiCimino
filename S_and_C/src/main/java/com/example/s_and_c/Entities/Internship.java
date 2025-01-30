@@ -100,4 +100,6 @@ public class Internship {
 
     public void addSelectedStudent(Student student) {selectedStudents.add(student);}
 
+    public void deleteSelectedStudent(Student student) {selectedStudents.remove(student);}
+
 }
