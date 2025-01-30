@@ -20,6 +20,10 @@ public class ShortStudentDTO {
     private List<String> cv;
 
     public ShortStudentDTO(String email, String name, String surname, String description) {
+        this.email = email;
+        this.name = name;
+        this.surname = surname;
+        this.description = description;
     }
 }
 

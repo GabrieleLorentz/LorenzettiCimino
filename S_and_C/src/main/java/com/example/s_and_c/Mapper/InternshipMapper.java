@@ -55,15 +55,15 @@ public class InternshipMapper {
         return internship;
     }
 
-    public static InternshipCompleteDTO maptoInternshipCompleteDTO(Internship internship, List<FormWithStudentsDTO> compiledForms, List<ShortStudentDTO> appliedStudents) {
-
+    public static InternshipCompleteDTO maptoInternshipCompleteDTO(Internship internship, List<FormWithStudentsDTO> compiledForms,
+                                                                   List<ShortStudentDTO> appliedStudents) {
 
         List<String> qualifications = new ArrayList<>();
         for(Qualification qualification: internship.getQualification_required())
             qualifications.add(qualification.getQualificationName());
         List<ShortStudentDTO> selectedStudents = new ArrayList<>();
         for(Student student: internship.getSelectedStudents()){
-            new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname(),student.getDescription());
+            selectedStudents.add(new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname(),student.getDescription()));
         }
         return new InternshipCompleteDTO(
                 internship.getInternshipId(),
@@ -106,7 +106,8 @@ public class InternshipMapper {
     }
 
 
-    public static InternshipDTO maptoInternshipDTO(Internship internship, List<ShortStudentDTO> appliedStudents, List<ShortStudentDTO> acceptedStudents, List<ShortStudentDTO> selectedStudents) {
+    public static InternshipDTO maptoInternshipDTO(Internship internship, List<ShortStudentDTO> appliedStudents,
+                                                   List<ShortStudentDTO> acceptedStudents, List<ShortStudentDTO> selectedStudents) {
 
         List<String> qualifications = new ArrayList<>();
         for(Qualification qualification: internship.getQualification_required())

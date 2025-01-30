@@ -28,16 +28,4 @@ public class InternshipCompleteDTO {
     private List<ShortStudentDTO> selected;
     private List<FormWithStudentsDTO> formWithStudents;
     private String companyName;
-
-    public InternshipCompleteDTO(long id, String name, LocalDate start_date, LocalDate end_date,
-                                 int salary, List<String> qualification_required, String description, String companyName) {
-        this.id = id;
-        this.name = name;
-        this.startDate = start_date;
-        this.endDate = end_date;
-        Salary = salary;
-        this.qualification_required = qualification_required;
-        this.description = description;
-        this.companyName = companyName;
-    }
 }
