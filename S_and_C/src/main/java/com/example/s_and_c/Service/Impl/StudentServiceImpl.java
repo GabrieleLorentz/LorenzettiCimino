@@ -205,7 +205,7 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
         Internship internship = internshipRepository.findById(complaintDTO.getInternshipId()).orElseThrow(()->new RuntimeException("Internship not found"));
 
-        if(!internship.getSelectedStudents().contains(student)){
+        if(!internship.getSelectedStudents().contains(student) || complaintDTO.getComplaint().isBlank()){
             throw new InternshipException("THE STUDENT AND THE COMPANY ARE NOT CORRELATED",409);
         }
         Form form = new Form();
