@@ -27,7 +27,6 @@ public interface StudentService {
 
     void handleFeedBack(String authEmail, FeedBackDTO feedBackDTO);
 
-    void handleReview(String authEmail, ReviewDTO formDTO);
 
-    List<ReviewDTO> handleReviewToSend(String authEmail, int internshipId);
+    void handleReviewReceived(String authEmail, ReviewDTO reviewDTO);
 }

@@ -11,16 +11,18 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FormRepository extends JpaRepository<Form, Integer> {
-    List<Form> findByInternship(Internship internship);
+    //List<Form> findByInternship(Internship internship);
 
 
-    Optional<Form> findByFormId(long formId);
+    //Optional<Form> findByFormId(long formId);
 
-    List<Form> findByInternshipAndStudent(Internship internship, Student student);
+    //List<Form> findByInternshipAndStudent(Internship internship, Student student);
 
     List<Form> findByInternshipAndCompanyAndFormType(Internship internship, Company company, FormType formType);
 
     List<Form> findByInternshipAndStudentAndFormType(Internship internship,Student student, FormType formType);
+
+    List<Form> findByInternshipAndCompanyAndStudentAndFormType(Internship internship,Company company, Student student, FormType formType);
 
     List<Form> findByStudentAndFormType(Student student, FormType formType);
 }

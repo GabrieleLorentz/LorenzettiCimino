@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReviewDTO {
-    private String counterpartEmail;
-    private int internship_id;
-    private List<FormDTO> review;
+    private String studEmailForCompanyOnly;
+    private int internshipId;
+    private List<String> review;
 }

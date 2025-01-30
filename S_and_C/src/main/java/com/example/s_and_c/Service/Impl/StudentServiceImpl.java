@@ -3,7 +3,6 @@ package com.example.s_and_c.Service.Impl;
 import com.example.s_and_c.DTO.AuthDTOs.AuthRequestDTO;
 import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
 import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
-import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
@@ -15,7 +14,6 @@ import com.example.s_and_c.Entities.Status.FormType;
 import com.example.s_and_c.Entities.Status.Role;
 import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
-import com.example.s_and_c.Mapper.FormMapper;
 import com.example.s_and_c.Mapper.InternshipMapper;
 import com.example.s_and_c.Mapper.StudentMapper;
 import com.example.s_and_c.Repositories.CompanyRepository;
@@ -53,7 +51,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentDTO getStudent(String email) {
-        Student student = studentRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Student with id " + email + " not found"));
+        Student student = studentRepository.getStudentByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Student with id " + email + " not found"));
         List<Form> formsCV = formRepository.findByStudentAndFormType(student, FormType.CV);
         List<String> formDTOS = new ArrayList<>();
         for(Form form : formsCV)
@@ -78,7 +76,7 @@ public class StudentServiceImpl implements StudentService {
     @Transactional
     @Override
     public UpdatedStudentDTO updateStudent(String email, @NotNull UpdatedStudentDTO studentDTO) {
-        Student student = studentRepository.findByEmail(email)
+        Student student = studentRepository.getStudentByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Student with id " + email + " not found"));
         List<Form> forms = formRepository.findByStudentAndFormType(student, FormType.CV);
         try {
@@ -160,7 +158,7 @@ public class StudentServiceImpl implements StudentService {
     public void requestInternship(long internshipId, String authEmail) {
         System.out.println(internshipId);
         Internship internship = internshipRepository.findById((int)internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
-        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new InternshipException("Student not found",404));
+        Student student = studentRepository.getStudentByEmail(authEmail).orElseThrow(()->new InternshipException("Student not found",404));
         if(internship.getAcceptedStudents().contains(student) || internship.getSelectedStudents().contains(student) || internship.getAppliedStudents().contains(student)){
             throw new InternshipException("Student already inserted",409);
         }
@@ -174,7 +172,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<InternshipForStudentsDTO> getPersonalInternships(String authEmail) {
-        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new InternshipException("Student not found",404));
+        Student student = studentRepository.getStudentByEmail(authEmail).orElseThrow(()->new InternshipException("Student not found",404));
         List<Internship> internships = internshipRepository.findByAppliedStudentsContainingIgnoreCase(student);
         List<Internship> internshipsAccepted = internshipRepository.findByAcceptedStudentsContainingIgnoreCase(student);
         List<Internship> internshipsSelected = internshipRepository.findBySelectedStudentsContainingIgnoreCase(student);
@@ -202,7 +200,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void handleComplaintReceived(String authEmail, ComplaintDTO complaintDTO) {
-        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
+        Student student = studentRepository.getStudentByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
         Internship internship = internshipRepository.findById(complaintDTO.getInternshipId()).orElseThrow(()->new RuntimeException("Internship not found"));
 
         if(!internship.getSelectedStudents().contains(student) || complaintDTO.getComplaint().isBlank()){
@@ -233,9 +231,11 @@ public class StudentServiceImpl implements StudentService {
      */
     @Override
     public void handleFeedBack(String authEmail, FeedBackDTO feedBackDTO) {
-        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
-        Internship internship = internshipRepository.findById(feedBackDTO.getInternship_id()).orElseThrow(()->new RuntimeException("Internship not found"));
-
+        Student student = studentRepository.getStudentByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
+        Internship internship = internshipRepository.findById(feedBackDTO.getInternshipId()).orElseThrow(()->new RuntimeException("Internship not found"));
+        if(!internship.getSelectedStudents().contains(student) || feedBackDTO.getFeedbacks().isEmpty()){
+            throw new InternshipException("THE STUDENT AND THE COMPANY ARE NOT CORRELATED",409);
+        }
         List<String> requests = new ArrayList<>();
         requests.add("The service/product met my expectations:");
         requests.add("I found the experience user-friendly and intuitive");
@@ -266,42 +266,37 @@ public class StudentServiceImpl implements StudentService {
         return feedBackDTOList;*/
 
 
-    /**
-     * @param authEmail
-     * @param internshipId
-     * @return
-     */
+
     @Override
-    public List<ReviewDTO> handleReviewToSend(String authEmail, int internshipId) {
-        Internship internship = internshipRepository.findById(internshipId).orElseThrow(()->new RuntimeException("Internship not found"));
-        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
+    public void handleReviewReceived(String authEmail, ReviewDTO reviewDTO) {
+        Internship internship = internshipRepository.findById(reviewDTO.getInternshipId()).orElseThrow(()->new RuntimeException("Internship not found"));
+        Student student = studentRepository.getStudentByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
+
+        if(formRepository.findByInternshipAndCompanyAndStudentAndFormType(internship,null,student, FormType.REVIEW) != null){
+            throw new InternshipException("Student has already inserted a review",409);
+        }
+
         if(!internship.getSelectedStudents().contains(student)){
-            throw new DataIntegrityViolationException("Internship does not belong to this company");
+            throw new InternshipException("THE STUDENT AND THE COMPANY ARE NOT CORRELATED",409);
         }
         List<String> requests = new ArrayList<>();
         requests.add("How do you rate this experience?");
         requests.add("What are your suggestions?");
-        for(String request : requests){
+        for (int i = 0; i < 2; i++) {
             Form form = new Form();
             form.setFormType(FormType.REVIEW);
-            form.setRequest(request);
-            form.setResponse(null);
-            form.setCompany(internship.getCompany());
+            form.setRequest(requests.get(i));
+            form.setResponse(reviewDTO.getReview().get(i));
+            form.setStudent(student);
             form.setInternship(internship);
             formRepository.save(form);
         }
-        List<Form> formList = formRepository.findByInternshipAndCompanyAndFormType(internship, internship.getCompany(),FormType.REVIEW);
-        List<ReviewDTO> reviewDTOList = new ArrayList<>();
-        for(Form formIter : formList){
-            reviewDTOList.add(FormMapper.mapToReviewDTO(authEmail,formIter));
-        }
-        return reviewDTOList;
     }
 
-    /**
+    /*
      * @param authEmail
      * @param reviewDTO
-     */
+     *
     @Override
     public void handleReview(String authEmail, ReviewDTO reviewDTO) {
         Internship internship = internshipRepository.findById(reviewDTO.getInternship_id()).orElseThrow(()->new RuntimeException("Internship not found"));

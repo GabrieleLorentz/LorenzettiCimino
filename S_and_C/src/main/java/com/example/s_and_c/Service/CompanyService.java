@@ -9,7 +9,6 @@ import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
 import java.util.List;
 
 public interface CompanyService {
-    CompanyDTO createCompany(CompanyDTO companyDTO);
 
     CompanyDTO getCompany(String email);
 
@@ -22,10 +21,9 @@ public interface CompanyService {
 
     void handleFeedBackReceived(String authEmail, FeedBackDTO feedBackDTO);
 
-    void handleReview(String authEmail, ReviewDTO formDTO);
 
     void handleComplaintReceived(String authEmail, ComplaintDTO complaintDTO);
 
 
-    List<ReviewDTO> handleReviewToSend(String authEmail, int internshipId);
+    void handleReviewReceived(String authEmail, ReviewDTO reviewDTO);
 }

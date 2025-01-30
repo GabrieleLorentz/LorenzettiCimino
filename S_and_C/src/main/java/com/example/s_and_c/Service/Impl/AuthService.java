@@ -24,8 +24,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import static com.example.s_and_c.config.CustomUserDetailsService.*;
-
 @Service
 @RequiredArgsConstructor
 public class AuthService implements AuthorizationService {
@@ -69,7 +67,7 @@ public class AuthService implements AuthorizationService {
 
     public UserTokenDTO registerCompany(RegisterRequestDTO request) {
 
-        if (studentRepository.findByEmail(request.getEmail()).isPresent()) {
+        if (studentRepository.getStudentByEmail(request.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
         }
 

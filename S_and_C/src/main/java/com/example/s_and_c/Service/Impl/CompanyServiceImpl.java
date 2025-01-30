@@ -6,14 +6,12 @@ import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
 import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
 import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
 import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
-import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
 import com.example.s_and_c.Entities.*;
 import com.example.s_and_c.Entities.Status.FormType;
 import com.example.s_and_c.Entities.Status.Role;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.CompanyMapper;
-import com.example.s_and_c.Mapper.FormMapper;
 import com.example.s_and_c.Repositories.*;
 import com.example.s_and_c.Service.CompanyService;
 import com.example.s_and_c.Utils.InternshipException;
@@ -44,14 +42,6 @@ public class CompanyServiceImpl implements CompanyService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Override
-    public CompanyDTO createCompany(CompanyDTO companyDTO) {
-
-        Company company = CompanyMapper.mapToCompany(companyDTO);
-        Company savedCompany = companyRepository.save(company);
-
-        return CompanyMapper.mapToCompanyDTO(savedCompany);
-    }
 
     @Override
     public CompanyDTO getCompany(String email) {
@@ -73,7 +63,7 @@ public class CompanyServiceImpl implements CompanyService {
 
         try {
             if (!companyDTO.getEmail().equals(company.getEmail())) {
-                if(studentRepository.findByEmail(companyDTO.getEmail()).isPresent()) {
+                if(studentRepository.getStudentByEmail(companyDTO.getEmail()).isPresent()) {
                     throw new ResponseStatusException(HttpStatus.CONFLICT,"Student with email " + companyDTO.getEmail() + " already exists");
                 }
                 Company newCompany = new Company();
@@ -184,7 +174,7 @@ public class CompanyServiceImpl implements CompanyService {
      */
     @Override
     public void handleFeedBackReceived(String authEmail, FeedBackDTO feedBackDTO) {
-        Internship internship = internshipRepository.findById(feedBackDTO.getInternship_id()).orElseThrow(()->new RuntimeException("Internship not found"));
+        Internship internship = internshipRepository.findById(feedBackDTO.getInternshipId()).orElseThrow(()->new RuntimeException("Internship not found"));
 
         if(!internship.getCompany().getEmail().equals(authEmail)){
             throw new InternshipException("Internship does not belong to this company",409);
@@ -235,54 +225,34 @@ public class CompanyServiceImpl implements CompanyService {
 
     /**
      * @param authEmail
-     * @param internshipId
+     * @param reviewDTO
      * @return
      */
     @Override
-    public List<ReviewDTO> handleReviewToSend(String authEmail, int internshipId) {
-        Internship internship = internshipRepository.findById(internshipId).orElseThrow(()->new RuntimeException("Internship not found"));
+    public void handleReviewReceived(String authEmail, ReviewDTO reviewDTO) {
+        Internship internship = internshipRepository.findById(reviewDTO.getInternshipId()).orElseThrow(()->new InternshipException("Internship not found",404));
+
+        Student student = studentRepository.getStudentByEmail(reviewDTO.getStudEmailForCompanyOnly()).orElseThrow(()->new InternshipException("Student not found",404));
         if(!internship.getCompany().getEmail().equals(authEmail)){
-            throw new DataIntegrityViolationException("Internship does not belong to this company");
+            throw new InternshipException("Internship does not belong to this company",409);
         }
         List<String> requests = new ArrayList<>();
         requests.add("How do you rate this experience?");
         requests.add("What are your suggestions?");
-        for(String request : requests){
+        for (int i = 0; i < 2; i++) {
             Form form = new Form();
             form.setFormType(FormType.REVIEW);
-            form.setRequest(request);
-            form.setResponse(null);
+            form.setRequest(requests.get(i));
+            form.setResponse(reviewDTO.getReview().get(i));
             form.setCompany(internship.getCompany());
+            form.setStudent(student);
             form.setInternship(internship);
             formRepository.save(form);
         }
-        List<Form> formList = formRepository.findByInternshipAndCompanyAndFormType(internship, internship.getCompany(),FormType.REVIEW);
-        List<ReviewDTO> reviewDTOList = new ArrayList<>();
-        for(Form formIter : formList){
-            reviewDTOList.add(FormMapper.mapToReviewDTO(authEmail,formIter));
-        }
-        return reviewDTOList;
-    }
-
-    /**
-     * @param authEmail
-     * @param reviewDTO
-     */
-    @Override
-    public void handleReview(String authEmail, ReviewDTO reviewDTO) {
-        Company company = companyRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
-        Internship internship = internshipRepository.findById(reviewDTO.getInternship_id()).orElseThrow(()->new RuntimeException("Internship not found"));
-        List<Form> formList = formRepository.findByInternshipAndCompanyAndFormType(internship, company, FormType.REVIEW);
-        for (Form form : formList) {
-            for( FormDTO formDTO : reviewDTO.getReview()){
-                if(formDTO.getFormId() == form.getFormId()){
-                    form.setResponse(formDTO.getResponse());
-                    formRepository.save(form);
-                }
-            }
-        }
 
     }
+
+
 
 
 }

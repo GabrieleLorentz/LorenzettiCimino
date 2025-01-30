@@ -14,6 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 public class FeedBackDTO {
 
-    private int internship_id;
+    private int internshipId;
     private List<String> feedbacks = new ArrayList<>();
 }

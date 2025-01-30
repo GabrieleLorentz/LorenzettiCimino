@@ -143,19 +143,11 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/review/{internship_id}")
-    public ResponseEntity<List<ReviewDTO>> handleReviewToSend(@PathVariable ("internship_id") int internshipId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String authEmail = auth.getName();
-        List<ReviewDTO> reviewDTOS = studentService.handleReviewToSend(authEmail,internshipId);
-        return ResponseEntity.ok(reviewDTOS);
-    }
-
-    @PostMapping("/review")
+    @PostMapping("/sendReview")
     public ResponseEntity<CompanyDTO> review(@RequestBody ReviewDTO reviewDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
-        studentService.handleReview(authEmail, reviewDTO);
+        studentService.handleReviewReceived(authEmail, reviewDTO);
         return ResponseEntity.ok().build();
     }
 

@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
-import java.util.Optional;
 
 @Component
 public class CustomAuthenticationManager implements AuthenticationManager {
@@ -34,7 +33,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
         String password = authentication.getCredentials().toString();
 
         // Try to find student
-        Student student = studentRepository.findByEmail(email).orElse(null);
+        Student student = studentRepository.getStudentByEmail(email).orElse(null);
         if (student != null && passwordEncoder.matches(password, student.getPassword())) {
             return new UsernamePasswordAuthenticationToken(
                     email,

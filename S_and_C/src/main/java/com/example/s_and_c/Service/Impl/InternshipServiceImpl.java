@@ -7,7 +7,6 @@ import com.example.s_and_c.DTO.InternshipDTOs.*;
 import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
 import com.example.s_and_c.Entities.*;
 import com.example.s_and_c.Entities.Status.FormType;
-import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.InternshipMapper;
 import com.example.s_and_c.Repositories.*;
 import com.example.s_and_c.Service.InternshipService;
@@ -31,7 +30,6 @@ public class InternshipServiceImpl implements InternshipService {
     private final StudentRepository studentRepository;
     private final FormRepository formRepository;
     private final QualificationRepository qualificationRepository;
-    private final EntityManager entityManager;
 
 
     @Transactional
@@ -121,7 +119,7 @@ public class InternshipServiceImpl implements InternshipService {
 
     @Override
     public void addAcceptedStudent(String email, int internshipId, String authEmail) {
-        Student student = studentRepository.findByEmail(email)
+        Student student = studentRepository.getStudentByEmail(email)
                 .orElseThrow(() -> new InternshipException("Student not found", 404));
 
         Internship internship = internshipRepository.findById(internshipId)
@@ -174,7 +172,7 @@ public class InternshipServiceImpl implements InternshipService {
         Internship internship = internshipRepository.findInternshipByInternshipId(formResponseDTO.getInternshipId())
                 .orElseThrow(()-> new InternshipException("Internship not found",404));
 
-        Student student = studentRepository.findByEmail(authEmail)
+        Student student = studentRepository.getStudentByEmail(authEmail)
                 .orElseThrow(()->new InternshipException("Student not found",404));
 
         List<Form> forms = formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.INTERVIEW);
@@ -200,7 +198,7 @@ public class InternshipServiceImpl implements InternshipService {
         if(!internships.contains(internship)){
             throw new InternshipException("Internship not found",404);
         }
-        Student student = studentRepository.findByEmail(email).orElseThrow(()->new IllegalArgumentException("Student not found"));
+        Student student = studentRepository.getStudentByEmail(email).orElseThrow(()->new IllegalArgumentException("Student not found"));
         if (internship.getSelectedStudents().contains(student)) {
             throw new InternshipException("Student already accepted", 409);
         }

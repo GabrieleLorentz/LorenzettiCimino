@@ -47,7 +47,7 @@ public class FormMapper {
         );
     }*/
 
-    public static ReviewDTO mapToReviewDTO(String authEmail, Form formIter) {
+    /*public static ReviewDTO mapToReviewDTO(String authEmail, Form formIter) {
         FormDTO formDTO = FormMapper.mapToFormDTO(formIter);
         List<FormDTO> formDTOS= new ArrayList<>();
         formDTOS.add(formDTO);
@@ -56,5 +56,5 @@ public class FormMapper {
                 (int) formIter.getInternship().getInternshipId(),
                 formDTOS
         );
-    }
+    }*/
 }

@@ -395,7 +395,7 @@ public class StudentAndCompanyDataControllerTest {
     @Order(14)
     void whenStudentRetrieveInternshipsInfoAndSendFormResponses_thenSuccess() throws Exception {
         FormResponseDTO formResponseDTO = new FormResponseDTO();
-        Student student = studentRepository.findByEmail("prova0@gmail.com").orElseThrow(()->new InternshipException("Student not found",404));
+        Student student = studentRepository.getStudentByEmail("prova0@gmail.com").orElseThrow(()->new InternshipException("Student not found",404));
         Internship internship = internshipRepository.findInternshipByInternshipId(internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
         List<FormDTO> formDTOList = new ArrayList<>();
         List<Form> formList = formRepository.findByInternshipAndStudentAndFormType(internship,student, FormType.INTERVIEW);
