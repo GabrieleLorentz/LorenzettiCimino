@@ -100,7 +100,7 @@ public class InternshipServiceImpl implements InternshipService {
 
         List<InternshipForStudentsDTO> internshipDTOS = new ArrayList<>();
         for (Internship internship : results) {
-            InternshipForStudentsDTO internshipDTO = InternshipMapper.maptoInternshipForStudentsDTO(internship);
+            InternshipForStudentsDTO internshipDTO = InternshipMapper.maptoInternshipForStudentsDTO(internship, false, false, false);
             internshipDTOS.add(internshipDTO);
         }
         return internshipDTOS;
@@ -197,7 +197,7 @@ public class InternshipServiceImpl implements InternshipService {
         List<Internship> internships = internshipRepository.findAll();
         List<InternshipForStudentsDTO> internshipForStudentsDTOS = new ArrayList<>();
         for(Internship internship : internships){
-            internshipForStudentsDTOS.add(InternshipMapper.maptoInternshipForStudentsDTO(internship));
+            internshipForStudentsDTOS.add(InternshipMapper.maptoInternshipForStudentsDTO(internship, false, false, false));
         }
         return internshipForStudentsDTOS;
     }

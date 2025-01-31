@@ -83,11 +83,11 @@ public class InternshipMapper {
 
     }
 
-    public static InternshipForStudentsDTO mapToInternshipForAppliedStudentsDTO(Internship internship) {
-        return maptoInternshipForStudentsDTO(internship);
+    public static InternshipForStudentsDTO mapToInternshipForAppliedStudentsDTO(Internship internship, Boolean isApplied, boolean isAccepted, boolean isSelected) {
+        return maptoInternshipForStudentsDTO(internship, isApplied, !isAccepted, !isSelected);
     }
 
-    public static InternshipForStudentsDTO maptoInternshipForStudentsDTO(Internship internship) {
+    public static InternshipForStudentsDTO maptoInternshipForStudentsDTO(Internship internship, Boolean isApplied, boolean isAccepted, boolean isSelected) {
         List<String> qualifications = new ArrayList<>();
         for(Qualification qualification: internship.getQualification_required())
             qualifications.add(qualification.getQualificationName());
@@ -101,7 +101,10 @@ public class InternshipMapper {
                 internship.getSalary(),
                 qualifications,
                 internship.getDescription(),
-                internship.getCompany().getName()
+                internship.getCompany().getName(),
+                isApplied,
+                isAccepted,
+                isSelected
         );
     }
 
@@ -129,7 +132,7 @@ public class InternshipMapper {
         );
     }
 
-    public static InternshipForStudentsDTO mapToInternshipForAcceptedStudentDTO(Internship internship, List<Form> forms) {
+    public static InternshipForStudentsDTO mapToInternshipForAcceptedStudentDTO(Internship internship, List<Form> forms, boolean isApplied, Boolean isAccepted, boolean isSelected) {
         List<FormDTO> formDTOList = new ArrayList<>();
         for(Form form: forms){
             formDTOList.add(FormMapper.mapToFormDTO(form));
@@ -148,7 +151,10 @@ public class InternshipMapper {
                 qualifications,
                 internship.getDescription(),
                 internship.getCompany().getName(),
-                formDTOList
+                formDTOList,
+                isApplied,
+                isAccepted,
+                isSelected
         );
     }
 }

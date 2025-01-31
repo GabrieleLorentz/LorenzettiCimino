@@ -24,11 +24,14 @@ public class InternshipForStudentsDTO {
     private String description;
     private String company_name;
     private List<FormDTO> formToCompile;
+    private Boolean isApplied;
+    private Boolean isAccepted;
+    private Boolean isSelected;
 
 
 
     public InternshipForStudentsDTO(long internshipId, String name, LocalDate startDate, LocalDate endDate, LocalDate endFormCompilingDate,
-                                    LocalDate endSelectionAcceptanceDate, int salary, List<String> qualificationRequired, String description, String name1) {
+                                    LocalDate endSelectionAcceptanceDate, int salary, List<String> qualificationRequired, String description, String name1,Boolean isApplied, boolean isAccepted, boolean isSelected) {
         this.internshipId = internshipId;
         this.name = name;
         this.startDate = startDate;
@@ -39,5 +42,9 @@ public class InternshipForStudentsDTO {
         this.qualificationRequired = qualificationRequired;
         this.description = description;
         this.company_name = name1;
+        this.isApplied = isApplied;
+        this.isAccepted = isAccepted;
+        this.isSelected = isSelected;
     }
+
 }

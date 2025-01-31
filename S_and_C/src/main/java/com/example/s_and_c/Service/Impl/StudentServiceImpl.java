@@ -182,22 +182,23 @@ public class StudentServiceImpl implements StudentService {
         List<Internship> internshipsAccepted = internshipRepository.findByAcceptedStudentsContainingIgnoreCase(student);
         List<Internship> internshipsSelected = internshipRepository.findBySelectedStudentsContainingIgnoreCase(student);
         List<InternshipForStudentsDTO> internshipDTOList = new ArrayList<>();
+        Boolean isApplied = true,isAccepted = true,isSelected = true;
 
         for(Internship internship : internships){
-            internshipDTOList.add(InternshipMapper.mapToInternshipForAppliedStudentsDTO(internship));
+            internshipDTOList.add(InternshipMapper.mapToInternshipForAppliedStudentsDTO(internship, isApplied, !isAccepted, !isSelected));
         }
         for(Internship internship : internshipsAccepted){
             List<Form> forms = formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.INTERVIEW );
             for(Form form : forms){
                 System.out.println(form.getFormType());
             }
-            internshipDTOList.add(InternshipMapper.mapToInternshipForAcceptedStudentDTO(internship,forms));
+            internshipDTOList.add(InternshipMapper.mapToInternshipForAcceptedStudentDTO(internship,forms, !isApplied, isAccepted, !isSelected));
         }
         for(Internship internship : internshipsSelected){
             List<Form> forms = formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.REVIEW );
             forms.addAll(formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.FEEDBACK ));
             forms.addAll(formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.COMPLAINT ));
-            internshipDTOList.add(InternshipMapper.mapToInternshipForAcceptedStudentDTO(internship,forms));
+            internshipDTOList.add(InternshipMapper.mapToInternshipForAcceptedStudentDTO(internship,forms, !isApplied, isAccepted, !isSelected));
         }
         return internshipDTOList;
     }
