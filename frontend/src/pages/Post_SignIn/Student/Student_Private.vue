@@ -34,31 +34,40 @@
         </div>
         <button @click="saveAllChanges" class="save" :disabled="!hasChanges">SAVE</button>
       </div>
-      <div class="vertical_line2"></div>
+
       <div style="flex: 1;">
+
         <div style="width: 100%; display: flex; justify-content: center;">
           <span class="black">My</span>
           <span style="margin-left: 7px;" class="orange">review</span>
+        </div>
+        <div v-if="Object.keys(groupedReviews).length > 0" style="overflow-y: auto; max-height: 225px;">
+          <div v-for="(reviews, internshipKey) in groupedReviews" :key="internshipKey" style="padding: 10px; border-bottom: 2px solid #ccc;">
+            <h3 style="margin-bottom: 5px;">{{ internshipKey }}</h3>
+            <div v-for="(review, index) in reviews" :key="index" style="padding-left: 10px; margin-bottom: 10px;">
+              <p><strong>Question:</strong> {{ review.request }}</p>
+              <textarea readonly>Answer: {{ review.response }}</textarea>
+            </div>
+          </div>
         </div>
 
         <div style="width: 100%; display: flex; justify-content: center;">
           <span class="orange">Complaints</span>
           <span style="margin-left: 7px;" class="black">received</span>
         </div>
+        <div v-if="complaint.length > 0" style="overflow-y: auto; max-height: 225px;">
+          <div v-for="complaint in complaint" style="padding: 10px; border-bottom: 2px solid #ccc;">
+            <h3 style="margin-bottom: 5px;">{{ complaint.internship.companyName - complaint.internship.internshipName }}</h3>
+            <textarea readonly>{{ complaint.response }}</textarea>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 </template>
 
 <style>
-.vertical_line2 {
-  position: absolute;
-  left: 50%;
-  top: 120px;
-  height: calc(100vh - 120px);
-  width: 2px;
-  background-color: black;
-}
 .data {
   background-color: white;
   color: black;
@@ -221,7 +230,50 @@ function saveAllChanges() {
       .catch(error => {console.error('Errore errore', error);});
 }
 
+const myReview = ref([]);
+const complaint = ref([]);
+function receiveMyReview() {
+  const token = localStorage.getItem('token');
+
+  fetch('http://localhost:8080/api/student/myForms', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Errore nella richiesta al backend");
+      })
+      .then(data => {
+        console.log("Dati ricevuti dal server:", data);
+        myReview.value = data.filter(item => item.formType === "REVIEW");
+        complaint.value = data.filter(item => item.formType === "COMPLAINT");
+      })
+      .catch(error => {
+        console.error("Errore durante il recupero dei dati:", error);
+      });
+}
+
 onMounted(() => {
   receiveData();
+  receiveMyReview();
+});
+
+const groupedReviews = computed(() => {
+  const grouped: Record<string, any> = {};
+
+  myReview.value.forEach(review => {
+    const internshipKey = `${review.internship.internshipName} - ${review.internship.companyName}`;
+
+    if (!grouped[internshipKey]) {
+      grouped[internshipKey] = [];
+    }
+    grouped[internshipKey].push(review);
+  });
+
+  return grouped;
 });
 </script>

@@ -4,7 +4,7 @@
       <button class="popup-button" style="font-size: 15px;">Complaint</button>
       <div class="popupCom">
         <textarea v-model="complaint_" placeholder="Write a complaint"></textarea>
-        <button @click="RecComplaint(internship.id)" class="popup-button">Send</button>
+        <button @click="RecComplaint(internship.id, student.email)" class="popup-button">Send</button>
       </div>
     </div>
     <div class="profile-container">
@@ -70,11 +70,12 @@ const { internship, student } = defineProps<{
 }>();
 
 const complaint_ = ref('');
-function RecComplaint(intId) {
+function RecComplaint(intId, email) {
   const token = localStorage.getItem('token');
 
   const formComp = {
     internshipId: intId,
+    studEmailForCompanyOnly: email,
     complaint: complaint_.value
   }
 
