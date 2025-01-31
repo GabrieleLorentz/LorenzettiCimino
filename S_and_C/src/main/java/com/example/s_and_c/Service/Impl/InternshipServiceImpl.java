@@ -115,10 +115,13 @@ public class InternshipServiceImpl implements InternshipService {
 
 
             for (Internship internship : internships) {
+                if(LocalDate.now().isAfter(internship.getEndFormCompilingDate())){
+                    internshipRepository.deleteByAppliedStudentsContainingIgnoreCase(internship.getAppliedStudents());
+                    internshipRepository.deleteByAcceptedStudentsContainingIgnoreCase(internship.getAcceptedStudents());
+                }
+                //appliedStudent
                 List<ShortStudentDTO> appliedStudents = new ArrayList<>();
 
-
-                //appliedStudent
                 for(Student student: internship.getAppliedStudents()){
                 List<Form> form_cv = formRepository.findByInternshipAndStudentAndFormType(internship, student,FormType.CV);
                 List<String> cv = new ArrayList<>();
@@ -142,10 +145,13 @@ public class InternshipServiceImpl implements InternshipService {
                                 new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname(), student.getDescription(), cv)));
                     }
                 }
+                //selectedStudents
+                List<ShortStudentDTO> selectedStudents = new ArrayList<>();
+                for(Student student: internship.getSelectedStudents()){
+                    selectedStudents.add(new ShortStudentDTO(student.getEmail(), student.getName(), student.getSurname(),student.getDescription()));
+                }
 
-
-
-                internshipCompleteDTOS.add(InternshipMapper.maptoInternshipCompleteDTO(internship,compiledForms,appliedStudents));
+                internshipCompleteDTOS.add(InternshipMapper.maptoInternshipCompleteDTO(internship,compiledForms,appliedStudents,selectedStudents));
             }
 
             return internshipCompleteDTOS;
