@@ -84,11 +84,6 @@ public class InternshipMapper {
     }
 
     @Contract("_, _, _, _ -> new")
-    public static @NotNull InternshipForStudentsDTO mapToInternshipForAppliedStudentsDTO(Internship internship, Boolean isApplied, boolean isAccepted, boolean isSelected) {
-        return maptoInternshipForStudentsDTO(internship, isApplied, !isAccepted, !isSelected);
-    }
-
-    @Contract("_, _, _, _ -> new")
     public static @NotNull InternshipForStudentsDTO maptoInternshipForStudentsDTO(@NotNull Internship internship, Boolean isApplied, boolean isAccepted, boolean isSelected) {
         List<String> qualifications = new ArrayList<>();
         for(Qualification qualification: internship.getQualification_required())
@@ -161,4 +156,5 @@ public class InternshipMapper {
                 isSelected
         );
     }
+
 }

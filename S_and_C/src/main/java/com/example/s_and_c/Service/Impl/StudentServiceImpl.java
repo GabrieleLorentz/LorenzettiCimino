@@ -190,7 +190,7 @@ public class StudentServiceImpl implements StudentService {
             if(LocalDate.now().isAfter(internship.getEndFormCompilingDate())){
                 internshipRepository.deleteByAppliedStudentsContainingIgnoreCase(student);
             }
-            internshipDTOList.add(InternshipMapper.mapToInternshipForAppliedStudentsDTO(internship, isApplied, !isAccepted, !isSelected));
+            internshipDTOList.add(InternshipMapper.maptoInternshipForStudentsDTO(internship, isApplied, !isAccepted, !isSelected));
         }
         for(Internship internship : internshipsAccepted){
             if(LocalDate.now().isAfter(internship.getEndFormCompilingDate())){
