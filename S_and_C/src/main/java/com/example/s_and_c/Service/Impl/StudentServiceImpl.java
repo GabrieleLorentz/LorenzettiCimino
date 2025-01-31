@@ -28,9 +28,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -147,8 +145,8 @@ public class StudentServiceImpl implements StudentService {
                 return StudentMapper.mapToUpdatedStudentDTO(studentRepository.save(student),form, token);
             }
             return StudentMapper.mapToUpdatedStudentDTO(studentRepository.save(student), forms);
-        } catch (DataIntegrityViolationException e) {
-            throw new DataIntegrityViolationException("Inserted Data violate constraint");
+        } catch (InternshipException e) {
+            throw new InternshipException("Inserted Data violate constraint",409);
         }
     }
 
@@ -249,6 +247,7 @@ public class StudentServiceImpl implements StudentService {
             throw new InternshipException("THE STUDENT AND THE COMPANY ARE NOT CORRELATED",409);
         }
         CompanyServiceImpl.checkDate(internship, dateUtils);
+
 
         List<String> requests = new ArrayList<>();
         requests.add("The service/product met my expectations:");

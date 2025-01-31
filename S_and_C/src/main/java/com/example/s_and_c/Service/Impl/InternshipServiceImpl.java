@@ -45,12 +45,17 @@ public class InternshipServiceImpl implements InternshipService {
                 LocalDate.now().isAfter(internship.getEndSelectionAcceptanceDate())) {
             throw new InternshipException("Not correct dates",400);
         }
-        internshipRepository.save(internship);
-        formRepository.saveAll(internship.getForm());
-        qualificationRepository.saveAll(internship.getQualification_required());
+        if(internship.getEndFormCompilingDate().isBefore(internship.getEndSelectionAcceptanceDate() )&&
+                internship.getEndSelectionAcceptanceDate().isBefore(internship.getStartDate()) &&
+                internship.getStartDate().isBefore(internship.getEndDate())) {
+            internshipRepository.save(internship);
+            formRepository.saveAll(internship.getForm());
+            qualificationRepository.saveAll(internship.getQualification_required());
+            return getAllInternshipsByEmail(insertingCompany);
+        }
+        else
+            throw new InternshipException("Not correct dates",400);
 
-
-        return getAllInternshipsByEmail(insertingCompany);
     }
 
     private List<InternshipDTO> getAllInternshipsByEmail(Company insCompany) {

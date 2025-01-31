@@ -394,7 +394,6 @@ public class StudentAndCompanyDataControllerTest {
     @Test
     @Order(14)
     void whenStudentRetrieveInternshipsInfoAndSendFormResponses_thenSuccess() throws Exception {
-        FormResponseDTO formResponseDTO = new FormResponseDTO();
         Student student = studentRepository.getStudentByEmail("prova0@gmail.com").orElseThrow(()->new InternshipException("Student not found",404));
         Internship internship = internshipRepository.findInternshipByInternshipId(internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
         List<FormDTO> formDTOList = new ArrayList<>();
@@ -413,7 +412,7 @@ public class StudentAndCompanyDataControllerTest {
                 .andExpect(status().isOk()).andReturn();
         formRepository.findByStudentAndFormType(student,FormType.INTERVIEW).forEach(form -> {
             for(FormDTO forms : formResponseDTOS.getFormToCompile()){
-                if(Long.compare(forms.getFormId(),form.getFormId())==0){
+                if(forms.getFormId() == form.getFormId()){
                     Assertions.assertEquals(form.getResponse(),forms.getResponse());
                 }
             }
