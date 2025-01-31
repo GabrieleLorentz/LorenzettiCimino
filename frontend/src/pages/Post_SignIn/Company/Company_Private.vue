@@ -34,7 +34,7 @@
           <span class="black">My</span>
           <span style="margin-left: 7px;" class="orange">review</span>
         </div>
-        <div v-if="Object.keys(groupedReviews).length > 0" style="overflow-y: auto; max-height: 225px;">
+        <div v-if="Object.keys(groupedReviews).length > 0" style="overflow-y: auto; max-height: 260px;">
           <div v-for="(reviews, internshipKey) in groupedReviews" :key="internshipKey" style="padding: 10px; border-bottom: 2px solid #ccc;">
             <h3 style="margin-bottom: 5px;">{{ internshipKey }}</h3>
             <div v-for="(review, index) in reviews" :key="index" style="padding-left: 10px; margin-bottom: 10px;">
@@ -42,6 +42,9 @@
               <textarea readonly>Answer: {{ review.response }}</textarea>
             </div>
           </div>
+        </div>
+        <div v-else>
+          <p style="font-size: 20px; text-align: center;">No reviews made</p>
         </div>
 
         <div style="width: 100%; display: flex; justify-content: center;">
@@ -53,6 +56,9 @@
             <h3 style="margin-bottom: 5px;">{{ complaint.student.name }} - {{complaint.internship.internshipName }}</h3>
             <textarea readonly>{{ complaint.response }}</textarea>
           </div>
+        </div>
+        <div v-else>
+          <p style="font-size: 20px; text-align: center;">No complaint received</p>
         </div>
 
       </div>
