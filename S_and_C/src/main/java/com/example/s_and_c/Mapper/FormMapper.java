@@ -6,6 +6,7 @@ import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.FormCompleteDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.ShortInternshipDTO;
 import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
 import com.example.s_and_c.Entities.Form;
 import com.example.s_and_c.Entities.Internship;
@@ -28,6 +29,7 @@ public class FormMapper {
                     form.getFormId(),
                     form.getRequest(),
                     form.getResponse(),
+                    new ShortInternshipDTO(form.getInternship().getName(),form.getInternship().getCompany().getName()),
                     new ShortStudentDTO(form.getStudent().getEmail(), form.getStudent().getName(), form.getStudent().getSurname(), form.getStudent().getDescription()),
                     form.getFormType()
             );
@@ -37,6 +39,7 @@ public class FormMapper {
                     form.getFormId(),
                     form.getRequest(),
                     form.getResponse(),
+                    new ShortInternshipDTO(form.getInternship().getName(),form.getInternship().getCompany().getName()),
                     new ShortCompanyDTO(form.getCompany().getEmail(), form.getCompany().getName(), form.getCompany().getDescription(), form.getCompany().getVat_number()),
                     form.getFormType()
             );

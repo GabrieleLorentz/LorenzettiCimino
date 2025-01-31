@@ -16,22 +16,25 @@ public class FormCompleteDTO {
     private long formId;
     private String request;
     private String response;
+    private ShortInternshipDTO internship;
     private ShortStudentDTO student;
     private ShortCompanyDTO company;
     private FormType formType;
 
-    public FormCompleteDTO(long formId, String request, String response, ShortStudentDTO student, FormType formType) {
+    public FormCompleteDTO(long formId, String request, String response, ShortInternshipDTO internship, ShortStudentDTO student, FormType formType) {
         this.formId = formId;
         this.request = request;
         this.response = response;
+        this.internship = internship;
         this.student = student;
         this.formType = formType;
     }
 
-    public FormCompleteDTO(long formId, String request, String response, ShortCompanyDTO company, FormType formType) {
+    public FormCompleteDTO(long formId, String request, String response, ShortInternshipDTO internship, ShortCompanyDTO company, FormType formType) {
         this.formId = formId;
         this.request = request;
         this.response = response;
+        this.internship = internship;
         this.company = company;
         this.formType = formType;
     }

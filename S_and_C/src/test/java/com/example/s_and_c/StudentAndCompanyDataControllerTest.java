@@ -11,6 +11,7 @@ import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
 import com.example.s_and_c.DTO.FormDTO.FormResponseDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InsertInternshipDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipIdDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
@@ -21,7 +22,9 @@ import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Mapper.FormMapper;
 import com.example.s_and_c.Repositories.*;
 import com.example.s_and_c.Utils.InternshipException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +98,8 @@ public class StudentAndCompanyDataControllerTest {
                 .build();
         mockMvcS = MockMvcBuilders.standaloneSetup(studentController)
                 .build();
+        objectMapper.registerModule(new JavaTimeModule()); // ✅ Supporto per LocalDate
+
         regAndLogin();
     }
 
@@ -355,6 +360,22 @@ public class StudentAndCompanyDataControllerTest {
 
     @Test
     @Order(11)
+    void whenRequestAfterRetrievedInternship_thenSuccess() throws Exception {
+         MvcResult result = mockMvcS.perform(get("/api/student/myInternships")
+                        .header("Authorization", "Bearer " + studentToken)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON)).andReturn();
+        String content = result.getResponse().getContentAsString();
+        List<InternshipForStudentsDTO> internshipForStudentsDTOList = objectMapper.readValue(content, new TypeReference<List<InternshipForStudentsDTO>>() {});
+        Assertions.assertFalse(internshipForStudentsDTOList.isEmpty());
+        for(InternshipForStudentsDTO internshipForStudentsDTO : internshipForStudentsDTOList) {
+            Assertions.assertEquals(internshipId, internshipForStudentsDTO.getInternshipId());
+        }
+    }
+
+    @Test
+    @Order(12)
     void whenStudentRequestInternship_thenUnauthorized() throws Exception {
         InternshipIdDTO internshipIdDTO = new InternshipIdDTO();
         Internship internship = internshipRepository
@@ -373,7 +394,7 @@ public class StudentAndCompanyDataControllerTest {
     }
 
     @Test
-    @Order(12)
+    @Order(13)
     void whenCompanyAcceptAppliedStudent_thenSuccess() throws Exception {
 
         mockMvcS.perform(post("/api/company//studentAccepted/{email}_{internshipId}","prova0@gmail.com",internshipId)
@@ -382,7 +403,7 @@ public class StudentAndCompanyDataControllerTest {
     }
 
     @Test
-    @Order(13)
+    @Order(14)
     void whenCompanyAcceptAppliedStudent_thenConflict() throws Exception {
 
         mockMvcS.perform(post("/api/company/studentAccepted/{email}_{internshipId}","prova0@gmail.com",internshipId)
@@ -392,7 +413,7 @@ public class StudentAndCompanyDataControllerTest {
     }
 
     @Test
-    @Order(14)
+    @Order(15)
     void whenStudentRetrieveInternshipsInfoAndSendFormResponses_thenSuccess() throws Exception {
         Student student = studentRepository.getStudentByEmail("prova0@gmail.com").orElseThrow(()->new InternshipException("Student not found",404));
         Internship internship = internshipRepository.findInternshipByInternshipId(internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
