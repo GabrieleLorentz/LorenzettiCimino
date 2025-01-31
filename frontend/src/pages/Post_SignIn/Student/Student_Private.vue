@@ -57,7 +57,7 @@
         </div>
         <div v-if="complaint.length > 0" style="overflow-y: auto; max-height: 225px;">
           <div v-for="complaint in complaint" style="padding: 10px; border-bottom: 2px solid #ccc;">
-            <h3 style="margin-bottom: 5px;">{{ complaint.internship.companyName - complaint.internship.internshipName }}</h3>
+            <h3 style="margin-bottom: 5px;">{{ complaint.internship.companyName }} - {{ complaint.internship.internshipName }}</h3>
             <textarea readonly>{{ complaint.response }}</textarea>
           </div>
         </div>
@@ -229,6 +229,10 @@ function saveAllChanges() {
       })
       .catch(error => {console.error('Errore errore', error);});
 }
+
+onMounted(() => {
+  receiveData();
+});
 
 const myReview = ref([]);
 const complaint = ref([]);

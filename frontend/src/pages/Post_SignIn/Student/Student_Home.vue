@@ -40,7 +40,7 @@
                 <p><strong>Description:</strong></p>
                 <textarea readonly style="width: 90%;"> {{ internship.description }}</textarea>
               </div>
-              <div v-if="internship.isSccepted===true && internship.formToCompile && isBeforeDeadline(internship.endFormCompilingDate)" style="display: flex; gap: 5px">
+              <div v-if="internship.isAccepted===true && internship.formToCompile && isBeforeDeadline(internship.endFormCompilingDate)" style="display: flex; gap: 5px">
                 <button @click="openForm(internship)" class="popup-button">Form</button>
               </div>
               <div v-if="internship.isSelected===true && isBeforeDeadline(internship.startDate)" style="display: flex; gap: 5px">
