@@ -12,5 +12,6 @@ import lombok.Setter;
 public class ComplaintDTO {
     private int internshipId;
     private String complaint;
+    private String studentEmailForCompanyOnly;
 
 }

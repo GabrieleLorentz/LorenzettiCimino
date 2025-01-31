@@ -141,14 +141,16 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public void handleComplaintReceived(String authEmail, ComplaintDTO complaintDTO) {
-        Internship internship = internshipRepository.findById(complaintDTO.getInternshipId()).orElseThrow(()->new RuntimeException("Internship not found"));
+        Internship internship = internshipRepository.findById(complaintDTO.getInternshipId()).orElseThrow(()->new InternshipException("Internship not found",404));
+        Student student = studentRepository.getStudentByEmail(complaintDTO.getStudentEmailForCompanyOnly()).orElseThrow(()->new InternshipException("Student not found",404));
         if(!internship.getCompany().getEmail().equals(authEmail)){
-            throw new DataIntegrityViolationException("Internship does not belong to this company");
+            throw new InternshipException("Internship does not belong to this company",404);
         }
         Form form = new Form();
         form.setFormType(FormType.COMPLAINT);
         form.setRequest("Tell us your complaint:");
         form.setResponse(complaintDTO.getComplaint());
+        form.setStudent(student);
         form.setCompany(internship.getCompany());
         form.setInternship(internship);
         formRepository.save(form);
