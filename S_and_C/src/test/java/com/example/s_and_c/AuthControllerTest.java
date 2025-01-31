@@ -4,6 +4,7 @@ import com.example.s_and_c.DTO.AuthDTOs.AuthRequestDTO;
 import com.example.s_and_c.DTO.AuthDTOs.RegisterRequestDTO;
 import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
 import com.example.s_and_c.Entities.Status.Role;
+import com.example.s_and_c.Repositories.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,12 +40,33 @@ public class AuthControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
+    @Autowired
+    private QualificationRepository qualificationRepository;
+    @Autowired
+    private FormRepository formRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
+    @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
+    private InternshipRepository internshipRepository;
+
+    @BeforeAll
+    public void cleanDatabase() throws Exception {
+        qualificationRepository.deleteAll();
+        formRepository.deleteAll();
+        companyRepository.deleteAll();
+        studentRepository.deleteAll();
+        internshipRepository.deleteAll();
+        setup();
+    }
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
     @Test
+    @Order(1)
     public void testRegisterStudent() throws Exception {
         List<String> cv = new ArrayList<>();
         cv.add("12345");
@@ -62,6 +84,7 @@ public class AuthControllerTest {
     }
 
     @Test
+    @Order(2)
     public void testRegisterCompany() throws Exception {
         Long vat = 41L;
         RegisterRequestDTO registerRequestDTO = new RegisterRequestDTO("prova@gmail.com","prova","prova",null,"prova",vat,null);
@@ -80,17 +103,18 @@ public class AuthControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/registerCompany")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonBody))
-                .andExpect(status().isConflict());
+                .andExpect(status().isOk());
 
         RegisterRequestDTO registerRequestDTO3 = new RegisterRequestDTO("prova2@gmail.com","prova","prova",null,"prova",vat,null);
         jsonBody = objectMapper.writeValueAsString(registerRequestDTO2);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/registerCompany")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonBody))
-                .andExpect(status().isOk());
+                .andExpect(status().isConflict());
     }
 
     @Test
+    @Order(3)
     public void login() throws Exception {
         AuthRequestDTO authRequestDTO = new AuthRequestDTO("prova@gmail.com","prova1");
         ObjectMapper objectMapper = new ObjectMapper();

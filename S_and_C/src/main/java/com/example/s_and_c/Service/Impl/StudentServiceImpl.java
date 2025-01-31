@@ -3,6 +3,7 @@ package com.example.s_and_c.Service.Impl;
 import com.example.s_and_c.DTO.AuthDTOs.AuthRequestDTO;
 import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
 import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
@@ -14,6 +15,7 @@ import com.example.s_and_c.Entities.Status.FormType;
 import com.example.s_and_c.Entities.Status.Role;
 import com.example.s_and_c.Entities.Student;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
+import com.example.s_and_c.Mapper.FormMapper;
 import com.example.s_and_c.Mapper.InternshipMapper;
 import com.example.s_and_c.Mapper.StudentMapper;
 import com.example.s_and_c.Repositories.CompanyRepository;
@@ -178,27 +180,24 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<InternshipForStudentsDTO> getPersonalInternships(String authEmail) {
         Student student = studentRepository.getStudentByEmail(authEmail).orElseThrow(()->new InternshipException("Student not found",404));
-        List<Internship> internships = internshipRepository.findByAppliedStudentsContainingIgnoreCase(student);
+        List<Internship> internshipsApplied = internshipRepository.findByAppliedStudentsContainingIgnoreCase(student);
         List<Internship> internshipsAccepted = internshipRepository.findByAcceptedStudentsContainingIgnoreCase(student);
         List<Internship> internshipsSelected = internshipRepository.findBySelectedStudentsContainingIgnoreCase(student);
         List<InternshipForStudentsDTO> internshipDTOList = new ArrayList<>();
-        Boolean isApplied = true,isAccepted = true,isSelected = true;
+        boolean isApplied = true,isAccepted = true,isSelected = true;
 
-        for(Internship internship : internships){
+        for(Internship internship : internshipsApplied){
             internshipDTOList.add(InternshipMapper.mapToInternshipForAppliedStudentsDTO(internship, isApplied, !isAccepted, !isSelected));
         }
         for(Internship internship : internshipsAccepted){
             List<Form> forms = formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.INTERVIEW );
-            for(Form form : forms){
-                System.out.println(form.getFormType());
-            }
             internshipDTOList.add(InternshipMapper.mapToInternshipForAcceptedStudentDTO(internship,forms, !isApplied, isAccepted, !isSelected));
         }
         for(Internship internship : internshipsSelected){
             List<Form> forms = formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.REVIEW );
             forms.addAll(formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.FEEDBACK ));
             forms.addAll(formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.COMPLAINT ));
-            internshipDTOList.add(InternshipMapper.mapToInternshipForAcceptedStudentDTO(internship,forms, !isApplied, isAccepted, !isSelected));
+            internshipDTOList.add(InternshipMapper.mapToInternshipForAcceptedStudentDTO(internship,forms, !isApplied, !isAccepted, isSelected));
         }
         return internshipDTOList;
     }
@@ -305,6 +304,17 @@ public class StudentServiceImpl implements StudentService {
             form.setInternship(internship);
             formRepository.save(form);
         }
+    }
+
+    @Override
+    public List<FormDTO> getMyForms(String authEmail) {
+        Student student = studentRepository.getStudentByEmail(authEmail).orElseThrow(()->new InternshipException("Student not found",404));
+        List<Form> forms = formRepository.findByStudent(student);
+        List<FormDTO> formDTOs = new ArrayList<>();
+        for(Form form : forms){
+           formDTOs.add(FormMapper.mapToFormDTO(form));
+        }
+        return formDTOs;
     }
 
     /*

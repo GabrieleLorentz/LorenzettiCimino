@@ -7,6 +7,8 @@ import com.example.s_and_c.Entities.*;
 import com.example.s_and_c.Entities.Status.FormType;
 import com.example.s_and_c.Repositories.FormRepository;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -18,7 +20,7 @@ public class InternshipMapper {
 
     private final FormRepository formRepository;
 
-    public static Internship maptoInternship(InsertInternshipDTO dto, Company company) {
+    public static @NotNull Internship maptoInternship(InsertInternshipDTO dto, Company company) {
         Internship internship = new Internship();
         internship.setName(dto.getName());
         System.out.println(dto);
@@ -55,8 +57,9 @@ public class InternshipMapper {
         return internship;
     }
 
-    public static InternshipCompleteDTO maptoInternshipCompleteDTO(Internship internship, List<FormWithStudentsDTO> compiledForms,
-                                                                   List<ShortStudentDTO> appliedStudents, List<ShortStudentDTO> selectedStudents) {
+    @Contract("_, _, _, _ -> new")
+    public static @NotNull InternshipCompleteDTO maptoInternshipCompleteDTO(@NotNull Internship internship, List<FormWithStudentsDTO> compiledForms,
+                                                                            List<ShortStudentDTO> appliedStudents, List<ShortStudentDTO> selectedStudents) {
 
         List<String> qualifications = new ArrayList<>();
         for(Qualification qualification: internship.getQualification_required())
@@ -80,11 +83,13 @@ public class InternshipMapper {
 
     }
 
-    public static InternshipForStudentsDTO mapToInternshipForAppliedStudentsDTO(Internship internship, Boolean isApplied, boolean isAccepted, boolean isSelected) {
+    @Contract("_, _, _, _ -> new")
+    public static @NotNull InternshipForStudentsDTO mapToInternshipForAppliedStudentsDTO(Internship internship, Boolean isApplied, boolean isAccepted, boolean isSelected) {
         return maptoInternshipForStudentsDTO(internship, isApplied, !isAccepted, !isSelected);
     }
 
-    public static InternshipForStudentsDTO maptoInternshipForStudentsDTO(Internship internship, Boolean isApplied, boolean isAccepted, boolean isSelected) {
+    @Contract("_, _, _, _ -> new")
+    public static @NotNull InternshipForStudentsDTO maptoInternshipForStudentsDTO(@NotNull Internship internship, Boolean isApplied, boolean isAccepted, boolean isSelected) {
         List<String> qualifications = new ArrayList<>();
         for(Qualification qualification: internship.getQualification_required())
             qualifications.add(qualification.getQualificationName());
@@ -106,8 +111,9 @@ public class InternshipMapper {
     }
 
 
-    public static InternshipDTO maptoInternshipDTO(Internship internship, List<ShortStudentDTO> appliedStudents,
-                                                   List<ShortStudentDTO> acceptedStudents, List<ShortStudentDTO> selectedStudents) {
+    @Contract("_, _, _, _ -> new")
+    public static @NotNull InternshipDTO maptoInternshipDTO(@NotNull Internship internship, List<ShortStudentDTO> appliedStudents,
+                                                            List<ShortStudentDTO> acceptedStudents, List<ShortStudentDTO> selectedStudents) {
 
         List<String> qualifications = new ArrayList<>();
         for(Qualification qualification: internship.getQualification_required())
@@ -129,7 +135,8 @@ public class InternshipMapper {
         );
     }
 
-    public static InternshipForStudentsDTO mapToInternshipForAcceptedStudentDTO(Internship internship, List<Form> forms, boolean isApplied, Boolean isAccepted, boolean isSelected) {
+    @Contract("_, _, _, _, _ -> new")
+    public static @NotNull InternshipForStudentsDTO mapToInternshipForAcceptedStudentDTO(Internship internship, @NotNull List<Form> forms, boolean isApplied, Boolean isAccepted, boolean isSelected) {
         List<FormDTO> formDTOList = new ArrayList<>();
         for(Form form: forms){
             formDTOList.add(FormMapper.mapToFormDTO(form));

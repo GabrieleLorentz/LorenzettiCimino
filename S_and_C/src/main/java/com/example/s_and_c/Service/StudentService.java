@@ -2,6 +2,7 @@ package com.example.s_and_c.Service;
 
 import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
 import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
@@ -29,4 +30,6 @@ public interface StudentService {
 
 
     void handleReviewReceived(String authEmail, ReviewDTO reviewDTO);
+
+    List<FormDTO> getMyForms(String authEmail);
 }
