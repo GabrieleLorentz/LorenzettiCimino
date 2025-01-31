@@ -40,8 +40,11 @@
                 <p><strong>Description:</strong></p>
                 <textarea readonly style="width: 90%;"> {{ internship.description }}</textarea>
               </div>
-              <div v-if="internship.formToCompile" style="display: flex; gap: 5px">
+              <div v-if="internship.formToCompile && isBeforeDeadline(internship.endFormCompilingDate)" style="display: flex; gap: 5px">
                 <button @click="openForm(internship)" class="popup-button">Form</button>
+              </div>
+              <div v-if="isBetweenDates(internship.endSelectionAcceptanceDate, internship.startDate)" style="display: flex; gap: 5px">
+                <button @click="renounce(internship)" class="popup-button">Renounce!</button>
               </div>
             </div>
           </div>
@@ -242,6 +245,21 @@ function receiveMy() {
       });
 }
 
+function isBeforeDeadline(dateString) {
+  if (!dateString) return false;
+  const deadline = new Date(dateString);
+  const today = new Date();
+  return today <= deadline;
+}
+function isBetweenDates(endSelectionAcceptanceDate, startDate) {
+  if (!endSelectionAcceptanceDate || !startDate) return false;
+  const endSelectionDate = new Date(endSelectionAcceptanceDate);
+  const start = new Date(startDate);
+  const today = new Date();
+
+  return today > endSelectionDate && today < start;
+}
+
 const showForm = ref(false);
 const selectedForm = ref(null);
 function openForm(internship){
@@ -286,6 +304,28 @@ function send() {
         console.error('Error submitting form:', error);
       });
 }
+
+function renounce(intId) {
+  const token = localStorage.getItem('token');
+
+  fetch(`http://localhost:8080/api/student/renounce/${intId}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  })
+      .then(response => {
+        if (response.ok) {
+          receiveMy();
+        } else {
+          console.error('Form submission failed:', response.status);
+        }
+      })
+      .catch(error => {
+        console.error('Error submitting form:', error);
+      });
+}
+
 
 const allInternships = ref([]);
 const sendStatus = ref<Record<number, boolean>>({});

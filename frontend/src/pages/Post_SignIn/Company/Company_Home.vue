@@ -344,11 +344,11 @@ const groupedForms = computed(() => {
     return acc;
   }, {});
 });
-function selected(email, internshipId) {
+function selected(email, intId) {
   const token = localStorage.getItem('token');
   console.log(selectedInternship)
 
-  fetch(`http://localhost:8080/api/company/studentSelected/${email}_${internshipId}`, {
+  fetch(`http://localhost:8080/api/company/studentSelected/${email}_${intId}`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`
@@ -448,7 +448,7 @@ function RecFeedback(intId, email) {
     feedbacks: feedback_.value
   }
 
-  fetch(`http://localhost:8080/api/company/sendFfeedback`, {
+  fetch(`http://localhost:8080/api/company/sendFeedback`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
