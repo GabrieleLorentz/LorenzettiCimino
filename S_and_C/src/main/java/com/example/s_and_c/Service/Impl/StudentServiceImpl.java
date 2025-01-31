@@ -3,7 +3,7 @@ package com.example.s_and_c.Service.Impl;
 import com.example.s_and_c.DTO.AuthDTOs.AuthRequestDTO;
 import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
 import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
-import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.FormCompleteDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
@@ -313,12 +313,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<FormDTO> getMyForms(String authEmail) {
+    public List<FormCompleteDTO> getMyForms(String authEmail) {
         Student student = studentRepository.getStudentByEmail(authEmail).orElseThrow(()->new InternshipException("Student not found",404));
         List<Form> forms = formRepository.findByStudent(student);
-        List<FormDTO> formDTOs = new ArrayList<>();
+        List<FormCompleteDTO> formDTOs = new ArrayList<>();
         for(Form form : forms){
-           formDTOs.add(FormMapper.mapToFormDTO(form));
+           formDTOs.add(FormMapper.mapToCompleteFormDTO(form));
         }
         return formDTOs;
     }

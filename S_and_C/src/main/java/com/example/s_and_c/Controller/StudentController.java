@@ -157,7 +157,7 @@ public class StudentController {
     }
 
     @GetMapping("/myForms")
-    public ResponseEntity<List<FormDTO>> getMyForms() {
+    public ResponseEntity<List<FormCompleteDTO>> getMyForms() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
         return new ResponseEntity<>(studentService.getMyForms(authEmail),HttpStatus.OK);
