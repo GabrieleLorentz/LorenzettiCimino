@@ -227,6 +227,7 @@ public class StudentServiceImpl implements StudentService {
         form.setRequest("Tell us your complaint:");
         form.setResponse(complaintDTO.getComplaint());
         form.setStudent(student);
+        form.setCompany(internship.getCompany());
         form.setInternship(internship);
         formRepository.save(form);
 

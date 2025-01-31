@@ -34,6 +34,15 @@ public class FormMapper {
                     form.getFormType()
             );
         }
+        if(form.getFormType().equals(FormType.COMPLAINT)){
+            return new FormCompleteDTO(form.getFormId(),
+                    form.getRequest(),
+                    form.getResponse(),
+                    new ShortInternshipDTO(form.getInternship().getName(),form.getInternship().getCompany().getName()),
+                    new ShortStudentDTO(form.getStudent().getEmail(), form.getStudent().getName(), form.getStudent().getSurname(), form.getStudent().getDescription()),
+                    new ShortCompanyDTO(form.getCompany().getEmail(), form.getCompany().getName(), form.getCompany().getDescription(), form.getCompany().getVat_number()),
+                    form.getFormType());
+        }
         if (form.getStudent() != null) {
             return new FormCompleteDTO(
                     form.getFormId(),
