@@ -238,6 +238,8 @@ public class InternshipServiceImpl implements InternshipService {
     @Override
     public void renounce(int internshipId, String authEmail) {
         Internship internship = internshipRepository.findById(internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
+        if(LocalDate.now().isAfter(internship.getStartDate()))
+            throw new InternshipException("Internship already started", 400);
         Student student = studentRepository.getStudentByEmail(authEmail)
                 .orElseThrow(() -> new InternshipException("Student not found", 404));
         if(!internship.getSelectedStudents().contains(student)){

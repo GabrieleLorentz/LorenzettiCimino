@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface InternshipRepository extends JpaRepository<Internship, Integer> {
-    Optional<Internship> findInternshipByInternshipId(long internshipId);;
+    Optional<Internship> findInternshipByInternshipId(long internshipId);
 
     List<Internship> findByCompany(Company company);
 
@@ -41,4 +41,8 @@ public interface InternshipRepository extends JpaRepository<Internship, Integer>
     void deleteByAppliedStudentsContainingIgnoreCase(List<Student> appliedStudents);
 
     void deleteByAcceptedStudentsContainingIgnoreCase(List<Student> appliedStudents);
+
+    void deleteByAppliedStudentsContainingIgnoreCase(Student appliedStudent);
+
+    void deleteByAcceptedStudentsContainingIgnoreCase(Student selectedStudent);
 }

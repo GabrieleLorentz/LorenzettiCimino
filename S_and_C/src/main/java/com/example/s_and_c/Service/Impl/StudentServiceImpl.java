@@ -187,9 +187,15 @@ public class StudentServiceImpl implements StudentService {
         boolean isApplied = true,isAccepted = true,isSelected = true;
 
         for(Internship internship : internshipsApplied){
+            if(LocalDate.now().isAfter(internship.getEndFormCompilingDate())){
+                internshipRepository.deleteByAppliedStudentsContainingIgnoreCase(student);
+            }
             internshipDTOList.add(InternshipMapper.mapToInternshipForAppliedStudentsDTO(internship, isApplied, !isAccepted, !isSelected));
         }
         for(Internship internship : internshipsAccepted){
+            if(LocalDate.now().isAfter(internship.getEndFormCompilingDate())){
+                internshipRepository.deleteByAcceptedStudentsContainingIgnoreCase(student);
+            }
             List<Form> forms = formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.INTERVIEW );
             internshipDTOList.add(InternshipMapper.mapToInternshipForAcceptedStudentDTO(internship,forms, !isApplied, isAccepted, !isSelected));
         }
