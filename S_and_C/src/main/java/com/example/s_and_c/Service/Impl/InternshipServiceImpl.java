@@ -237,7 +237,7 @@ public class InternshipServiceImpl implements InternshipService {
      */
     @Override
     public void renounce(int internshipId, String authEmail) {
-        Internship internship = internshipRepository.findById(internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
+        Internship internship = internshipRepository.findInternshipByInternshipId(internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
         if(LocalDate.now().isAfter(internship.getStartDate()))
             throw new InternshipException("Internship already started", 400);
         Student student = studentRepository.getStudentByEmail(authEmail)
@@ -250,10 +250,10 @@ public class InternshipServiceImpl implements InternshipService {
     }
 
     @Override
-    public void addSelectedStudent(String email, int internshipId, String authEmail) {
+    public void addSelectedStudent(String email, long internshipId, String authEmail) {
         Company company = companyRepository.findByEmail(authEmail).orElseThrow(()->new InternshipException("Company not found",404));
         List<Internship> internships = internshipRepository.findByCompany(company);
-        Internship internship = internshipRepository.findById(internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
+        Internship internship = internshipRepository.findInternshipByInternshipId(internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
         if(!internships.contains(internship)){
             throw new InternshipException("Internship not found",404);
         }
