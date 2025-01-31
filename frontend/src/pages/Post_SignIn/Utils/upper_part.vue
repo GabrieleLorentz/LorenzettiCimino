@@ -98,24 +98,19 @@ export default {
   display: none;
   position: absolute;
   right: 0;
-  /*top: 100%;*/
   background-color: #f2a73b;
   border: 2px solid black;
   border-radius: 15px;
   padding: 4px;
-  /*min-width: 120px;
-  /*z-index: 1000;*/
 }
 .popup-link {
   display: block;
-  /*padding: 8px;*/
   font-size: 25px;
   color: black;
   text-decoration: none;
   text-align: center;
 }
 .popup-link:hover {
-  /*background-color: #f2a73b;*/
   color: white;
   cursor: pointer;
 }

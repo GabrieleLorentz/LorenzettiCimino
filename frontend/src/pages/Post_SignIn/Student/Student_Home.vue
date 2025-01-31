@@ -11,7 +11,7 @@
         </div>
         <div v-if="myInternships.length > 0" class="internships-container">
           <div v-for="internship in myInternships" style="padding: 5px">
-            <div style="border: 3px solid black; border-radius: 40px; padding: 10px; flex-direction: column;">
+            <div style="border: 3px solid black; border-radius: 40px; padding: 10px; display: flex; flex-direction: column; gap: 5px">
               <div style="display: flex; gap: 10px">
                 <p><strong>Name:</strong> {{ internship.name }}</p>
                 <div class="profile_cont">
@@ -43,8 +43,11 @@
               <div v-if="internship.formToCompile && isBeforeDeadline(internship.endFormCompilingDate)" style="display: flex; gap: 5px">
                 <button @click="openForm(internship)" class="popup-button">Form</button>
               </div>
-              <div v-if="isBetweenDates(internship.endSelectionAcceptanceDate, internship.startDate)" style="display: flex; gap: 5px">
+              <div v-if="internship.isSelected===true && isBeforeDeadline(internship.startDate)" style="display: flex; gap: 5px">
                 <button @click="renounce(internship)" class="popup-button">Renounce!</button>
+              </div>
+              <div>
+                <buttons :internship="internship" :student="null" />
               </div>
             </div>
           </div>
@@ -141,9 +144,6 @@
           </div>
 
         </div>
-        <div v-else style="font-size: 30px">
-          <p>No internships available.</p>
-        </div>
       </div>
 
     </div>
@@ -219,6 +219,7 @@
 <script setup lang="ts">
 import UpperPart from "@/pages/Post_SignIn/Utils/upper_part.vue";
 import {onMounted, ref} from "vue";
+import Buttons from "@/pages/Post_SignIn/Utils/buttons.vue";
 
 const myInternships = ref([]);
 function receiveMy() {
@@ -251,14 +252,8 @@ function isBeforeDeadline(dateString) {
   const today = new Date();
   return today <= deadline;
 }
-function isBetweenDates(endSelectionAcceptanceDate, startDate) {
-  if (!endSelectionAcceptanceDate || !startDate) return false;
-  const endSelectionDate = new Date(endSelectionAcceptanceDate);
-  const start = new Date(startDate);
-  const today = new Date();
 
-  return today > endSelectionDate && today < start;
-}
+
 
 const showForm = ref(false);
 const selectedForm = ref(null);
