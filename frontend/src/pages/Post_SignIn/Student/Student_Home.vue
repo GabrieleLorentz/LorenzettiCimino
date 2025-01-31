@@ -40,13 +40,13 @@
                 <p><strong>Description:</strong></p>
                 <textarea readonly style="width: 90%;"> {{ internship.description }}</textarea>
               </div>
-              <div v-if="internship.formToCompile && isBeforeDeadline(internship.endFormCompilingDate)" style="display: flex; gap: 5px">
+              <div v-if="internship.isSccepted===true && internship.formToCompile && isBeforeDeadline(internship.endFormCompilingDate)" style="display: flex; gap: 5px">
                 <button @click="openForm(internship)" class="popup-button">Form</button>
               </div>
               <div v-if="internship.isSelected===true && isBeforeDeadline(internship.startDate)" style="display: flex; gap: 5px">
                 <button @click="renounce(internship)" class="popup-button">Renounce!</button>
               </div>
-              <div>
+              <div v-if="!isBeforeDeadline(internship.startDate)">
                 <buttons :internship="internship" :student="null" />
               </div>
             </div>
@@ -252,8 +252,6 @@ function isBeforeDeadline(dateString) {
   const today = new Date();
   return today <= deadline;
 }
-
-
 
 const showForm = ref(false);
 const selectedForm = ref(null);
