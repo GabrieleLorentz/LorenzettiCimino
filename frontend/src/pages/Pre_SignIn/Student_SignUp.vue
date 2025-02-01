@@ -8,8 +8,8 @@
       <input v-model="formData.surname" type="text" placeholder="surname" class="text-input-signin" />
       <input v-model="formData.email" type="email" placeholder="e-mail" class="text-input-signin" />
       <input v-model="formData.password" type="password" placeholder="password" class="text-input-signin" />
-      <textarea v-model="formData.description" placeholder="description" class="input-signin"></textarea>
-      <textarea v-model="formData.cv" @blur="insertCV" type="text" placeholder="CV, separate with one / " class="input-signin" />
+      <textarea v-model="formData.description" placeholder="description" class="input-signup"></textarea>
+      <textarea v-model="formData.cv" @blur="insertCV" type="text" placeholder="CV, separate with one / " class="input-signup" />
 
       <button @click="submitForm" class="button">SIGN UP</button>
     </div>
@@ -17,28 +17,26 @@
 </template>
 
 <style>
-.input-signin {
-  background-color: white; /* Colore di sfondo iniziale */
-  color: #f2a73b; /* Colore del testo */
+.input-signup {
+  background-color: white;
+  color: #f2a73b;
   border: 4px solid #232526;
   width: 85%;
   font-size: 25px;
   padding: 15px;
-  border-radius: 30px; /* Angoli arrotondati */
-  transition: background-color 0.4s ease, color 0.4s ease; /* Transizione morbida per il cambiamento del colore */
+  border-radius: 30px;
+  transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
   font-weight: bold;
   margin-bottom: 10px;
 }
-.input-signin:hover {
-  background-color: #f2a73b; /* Colore di sfondo al passaggio del mouse */
+.input-signup:hover {
+  background-color: #f2a73b;
   color: #232526;
-  cursor: pointer; /* Cambia il cursore quando ci passi sopra */
+  cursor: pointer;
 }
 </style>
 
 <script>
-import {ref} from "vue";
-
 export default {
   data() {
     return {
@@ -55,10 +53,9 @@ export default {
   },
   methods: {
     submitForm() {
-      // Convert formData to JSON
       const jsonData = JSON.stringify(this.formData);
       console.log(jsonData);
-      // Esempio di invio al backend usando fetch
+
       fetch('http://localhost:8080/api/auth/registerStudent', {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
@@ -75,7 +72,6 @@ export default {
                 this.$router.push('/student_home');
               });
             } else if (response.status === 401) {
-              console.log(response.status);
               alert('User already exists');
             }else {
               alert('Error. Try again later');

@@ -116,7 +116,7 @@ function receiveData() {
         if (response.ok) {
           return response.json();
         }
-        throw new Error("Errore nella richiesta al backend");
+        throw new Error("Error in request to backend");
       })
       .then(data => {
         originalData.value = {
@@ -129,7 +129,7 @@ function receiveData() {
         editedData.value = { ...originalData.value };
       })
       .catch(error => {
-        console.error("Errore durante il recupero dei dati:", error);
+        console.error("Error while retrieving data:", error);
       });
 }
 
@@ -156,7 +156,6 @@ function saveAllChanges() {
         if (response.ok) {
           originalData.value = {...editedData.value};
           return response.json().then(data => {
-            console.log("Dati ricevuti:", data);
             if (editedData.value.email !== originalData.value.email ||
                 editedData.value.password !== originalData.value.password) {
               localStorage.setItem("token", data.newToken);
@@ -170,7 +169,7 @@ function saveAllChanges() {
           console.log(response.status);
         }
       })
-      .catch(error => {console.error('Errore errore', error);});
+      .catch(error => {console.error('Error', error);});
 }
 
 const myReview = ref([]);
@@ -188,7 +187,7 @@ function receiveMyReview() {
         if (response.ok) {
           return response.json();
         }
-        throw new Error("Errore nella richiesta al backend");
+        throw new Error("Error in request to backend");
       })
       .then(data => {
         console.log("Dati ricevuti dal server:", data);
@@ -196,7 +195,7 @@ function receiveMyReview() {
         complaint.value = data.filter(item => item.formType === "S_COMPLAINT");
       })
       .catch(error => {
-        console.error("Errore durante il recupero dei dati:", error);
+        console.error("Error while retrieving data:", error);
       });
 }
 

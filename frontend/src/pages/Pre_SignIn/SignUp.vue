@@ -15,12 +15,12 @@
 export default {
   data() {
     return {
-      selectedOption: null, // Memorizza quale bottone è stato selezionato
+      selectedOption: null,
     };
   },
   methods: {
     selectOption(option) {
-      this.selectedOption = option; // Aggiorna l'opzione selezionata
+      this.selectedOption = option;
     },
     goToPage() {
       if (this.selectedOption === 'student') {

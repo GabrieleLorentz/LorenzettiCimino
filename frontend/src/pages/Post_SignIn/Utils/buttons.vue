@@ -62,6 +62,7 @@
   border: 2px solid black;
   border-radius: 15px;
   padding: 4px;
+  z-index: 10;
 }
 </style>
 <script setup lang="ts">

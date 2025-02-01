@@ -80,7 +80,7 @@ function receiveData() {
         if (response.ok) {
           return response.json();
         }
-        throw new Error("Errore nella richiesta al backend");
+        throw new Error("Error in request to backend");
       })
       .then(data => {
         originalData.value = {
@@ -91,7 +91,7 @@ function receiveData() {
         };
       })
       .catch(error => {
-        console.error("Errore durante il recupero dei dati:", error);
+        console.error("Error while retrieving data:", error);
       });
 }
 
@@ -109,14 +109,13 @@ function receiveMyReview() {
         if (response.ok) {
           return response.json();
         }
-        throw new Error("Errore nella richiesta al backend");
+        throw new Error("Error in request to backend");
       })
       .then(data => {
-        console.log("Dati ricevuti dal server:", data);
         Review.value = data.filter(item => item.formType === "S_REVIEW");
       })
       .catch(error => {
-        console.error("Errore durante il recupero dei dati:", error);
+        console.error("Error while retrieving data:", error);
       });
 }
 

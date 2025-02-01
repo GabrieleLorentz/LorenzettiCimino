@@ -57,8 +57,6 @@
   width: 45px;
   height: 45px;
   cursor: pointer;
-  /*margin-top: 5px;
-  margin-right: -5px;*/
 }
 .det-content1 {
   background: white;
@@ -84,7 +82,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /*z-index: 1000;*/
 }
 .form {
   display: flex;
@@ -93,7 +90,6 @@
 }
 .form-row {
   display: flex;
-  /*justify-content: space-between;*/
   align-items: center;
 }
 .form-row label {
@@ -178,13 +174,12 @@ function addInternship() {
         if (response.ok) {
           return response.json().then(data => {
             closePopup()
-            console.log("Dati ricevuti:", data);
           });
         } else {
           console.log(response.status);
         }
       })
-      .catch(error => {console.error('Errore errore', error);});
+      .catch(error => {console.error('Error', error);});
 }
 
 const qualificationInput = ref('');
