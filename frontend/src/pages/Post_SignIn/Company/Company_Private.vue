@@ -177,7 +177,7 @@ const complaint = ref([]);
 function receiveMyReview() {
   const token = localStorage.getItem('token');
 
-  fetch('http://localhost:8080/api/company/', {
+  fetch('http://localhost:8080/api/company/myForms', {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`
@@ -191,8 +191,8 @@ function receiveMyReview() {
       })
       .then(data => {
         console.log("Dati ricevuti dal server:", data);
-        myReview.value = data.filter(item => item.formType === "REVIEW");
-        complaint.value = data.filter(item => item.formType === "COMPLAINT");
+        myReview.value = data.filter(item => item.formType === "C_REVIEW");
+        complaint.value = data.filter(item => item.formType === "S_COMPLAINT");
       })
       .catch(error => {
         console.error("Errore durante il recupero dei dati:", error);
@@ -208,7 +208,7 @@ const groupedReviews = computed(() => {
   const grouped: Record<string, any> = {};
 
   myReview.value.forEach(review => {
-    const internshipKey = `${review.internship.internshipName} - ${review.internship.companyName}`;
+    const internshipKey = `${review.internship.internshipName} - ${review.student.name}`;
 
     if (!grouped[internshipKey]) {
       grouped[internshipKey] = [];

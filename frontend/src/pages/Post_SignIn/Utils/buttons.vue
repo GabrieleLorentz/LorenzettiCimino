@@ -70,7 +70,6 @@ import {ref, watch} from "vue";
 const role = localStorage.getItem('role');
 const cleanedRole = role ? role.replace(/[\[\]]/g, '').toLowerCase() : '';
 const email = localStorage.getItem('email');
-console.log(cleanedRole);
 
 const { internship, student } = defineProps<{
   internship: { internshipId: number };
@@ -83,10 +82,9 @@ function RecComplaint(intId, email) {
 
   const formComp = {
     internshipId: intId,
-    studEmailForCompanyOnly: email,
+    studentEmailForCompanyOnly: email,
     complaint: complaint_.value
   }
-
   fetch(`http://localhost:8080/api/${cleanedRole}/sendComplaints`, {
     method: 'POST',
     headers: {
@@ -99,17 +97,13 @@ function RecComplaint(intId, email) {
         if (response.ok) {
           return;
         } else if (response.status === 409) {
-          alert('Student not selected for this internship');
+          alert('Complaint already inserted');
         } else {
           alert('Error. Try again later');
         }
       })
-      .then(data => {
-        console.log(data)
-        console.log("ciao")
-      })
       .catch(error => {
-        console.error('Errore:', error);
+        console.error(error);
         alert('A connection error occurred');
       });
 }
@@ -129,7 +123,7 @@ function RecFeedback(intId, email) {
 
   const formFeed = {
     internshipId: intId,
-    studEmailForCompanyOnly: email,
+    studentEmailForCompanyOnly: email,
     feedbacks: feedback_.value
   }
 
@@ -145,17 +139,13 @@ function RecFeedback(intId, email) {
         if (response.ok) {
           return;
         } else if (response.status === 409) {
-          alert('Student not selected for this internship');
+          alert('Feedback already inserted');
         } else {
           alert('Error. Try again later');
         }
       })
-      .then(data => {
-        console.log(data)
-        console.log("ciao")
-      })
       .catch(error => {
-        console.error('Errore:', error);
+        console.error(error);
         alert('A connection error occurred');
       });
 }
@@ -169,7 +159,7 @@ function RecReview(intId, email) {
 
   const formRev = {
     internshipId: intId,
-    studEmailForCompanyOnly: email,
+    studentEmailForCompanyOnly: email,
     review: review_.value
   }
 
@@ -185,17 +175,13 @@ function RecReview(intId, email) {
         if (response.ok) {
           return;
         } else if (response.status === 409) {
-          alert('Student not selected for this internship');
+          alert('Review already inserted');
         } else {
           alert('Error. Try again later');
         }
       })
-      .then(data => {
-        console.log(data)
-        console.log("ciao")
-      })
       .catch(error => {
-        console.error('Errore:', error);
+        console.error(error);
         alert('A connection error occurred');
       });
 }

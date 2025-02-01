@@ -17,7 +17,7 @@
           <span class="editable-input">{{ originalData.email  }}</span>
         </div>
         <div class="data">
-          <textarea class="editable-textarea">{{originalData.description}}</textarea>
+          <textarea readonly class="editable-textarea">{{originalData.description}}</textarea>
         </div>
         <div class="data">
           <span class="editable-input">{{ originalData.vat_number  }}</span>
@@ -34,13 +34,27 @@
           <span class="orange">Reviews</span>
           <span style="margin-left: 7px;" class="black">received</span>
         </div>
+        <div>
+          <div v-if="Object.keys(groupedReviews).length > 0" style="overflow-y: auto; max-height: 260px;">
+            <div v-for="(reviews, internshipKey) in groupedReviews" :key="internshipKey" style="padding: 10px; border-bottom: 2px solid #ccc;">
+              <h3 style="margin-bottom: 5px;">{{ internshipKey }}</h3>
+              <div v-for="(review, index) in reviews" :key="index" style="padding-left: 10px; margin-bottom: 10px;">
+                <p> {{ review.request }}</p>
+                <textarea readonly>{{ review.response }}</textarea>
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            <p style="font-size: 20px; text-align: center;">No reviews received</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted} from 'vue';
+import {ref, onMounted, computed} from 'vue';
 import UpperPart from "@/pages/Post_SignIn/Utils/upper_part.vue";
 
 interface UserData {
@@ -85,7 +99,48 @@ function receiveData() {
       });
 }
 
+const Review = ref([]);
+function receiveMyReview() {
+  const token = localStorage.getItem('token');
+
+  fetch('http://localhost:8080/api/company/myForms', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Errore nella richiesta al backend");
+      })
+      .then(data => {
+        console.log("Dati ricevuti dal server:", data);
+        Review.value = data.filter(item => item.formType === "S_REVIEW");
+      })
+      .catch(error => {
+        console.error("Errore durante il recupero dei dati:", error);
+      });
+}
+
 onMounted(() => {
   receiveData();
+  receiveMyReview();
+});
+
+const groupedReviews = computed(() => {
+  const grouped: Record<string, any> = {};
+
+  Review.value.forEach(review => {
+    const internshipKey = `${review.internship.internshipName} - ${review.student.name}`;
+
+    if (!grouped[internshipKey]) {
+      grouped[internshipKey] = [];
+    }
+    grouped[internshipKey].push(review);
+  });
+
+  return grouped;
 });
 </script>

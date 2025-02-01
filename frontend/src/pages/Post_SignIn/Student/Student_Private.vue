@@ -255,8 +255,8 @@ function receiveMyReview() {
       })
       .then(data => {
         console.log("Dati ricevuti dal server:", data);
-        myReview.value = data.filter(item => item.formType === "REVIEW");
-        complaint.value = data.filter(item => item.formType === "COMPLAINT");
+        myReview.value = data.filter(item => item.formType === "S_REVIEW");
+        complaint.value = data.filter(item => item.formType === "C_COMPLAINT");
       })
       .catch(error => {
         console.error("Errore durante il recupero dei dati:", error);
