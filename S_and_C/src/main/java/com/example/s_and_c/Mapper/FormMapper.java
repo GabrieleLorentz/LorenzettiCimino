@@ -33,7 +33,7 @@ public class FormMapper {
                     form.getResponse(),
                     new ShortInternshipDTO(form.getInternship().getName(),form.getInternship().getCompany().getName(),form.getInternship().getCompany().getEmail()),
                     new ShortStudentDTO(form.getStudent().getEmail(), form.getStudent().getName(), form.getStudent().getSurname(), form.getStudent().getDescription()),
-                    new ShortCompanyDTO(form.getCompany().getEmail(), form.getCompany().getName(), form.getCompany().getDescription(), form.getCompany().getVat_number()),
+                    new ShortCompanyDTO( form.getCompany().getName(), form.getCompany().getEmail(), form.getCompany().getDescription(), form.getCompany().getVat_number()),
                     form.getFormType());
         }
         if (form.getStudent() != null) {
