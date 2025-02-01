@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FeedBackDTO {
-    private String studEmailForCompanyOnly;
+    private String studentEmailForCompanyOnly;
     private int internshipId;
     private List<String> feedbacks = new ArrayList<>();
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -45,4 +46,8 @@ public interface InternshipRepository extends JpaRepository<Internship, Integer>
     void deleteByAppliedStudentsContainingIgnoreCase(Student appliedStudent);
 
     void deleteByAcceptedStudentsContainingIgnoreCase(Student selectedStudent);
+    
+    @Query("SELECT i FROM Internship i LEFT JOIN FETCH i.selectedStudents WHERE i.internshipId = :id")
+    Optional<Internship> findInternshipByInternshipIdWithStudents(@Param("id") Long id);
+
 }

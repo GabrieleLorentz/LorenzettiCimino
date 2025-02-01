@@ -68,7 +68,6 @@ public class OngoingInternshipTest {
     @Autowired
     private QualificationRepository qualificationRepository;
 
-    @Transactional
     @BeforeAll
     public void cleanDatabase() throws Exception {
         formRepository.deleteAll();
@@ -115,7 +114,6 @@ public class OngoingInternshipTest {
         companyToken = userTokenDTO2.getToken();
     }
 
-    @Transactional
     public void setup() throws Exception {
         Company company = companyRepository.findByEmail("provam@gmail.com")
                 .orElseThrow(() -> new InternshipException("company not found", 404));
@@ -153,6 +151,7 @@ public class OngoingInternshipTest {
             Qualification qualification1 = new Qualification();
             qualification1.setInternship(internship);
             qualification1.setQualificationName(qualification);
+            qualificationList.add(qualification1);
         }
         qualificationRepository.saveAll(qualificationList);
 
@@ -178,10 +177,11 @@ public class OngoingInternshipTest {
                 student.getEmail()
         );
 
-        objectMapper.writeValueAsString(complaintDTO);
+        String context = objectMapper.writeValueAsString(complaintDTO);
         mockMvcC.perform(post("/api/company/sendComplaints")
                         .header("Authorization", "Bearer " + companyToken)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(context))
                 .andExpect(status().isOk());
 
 

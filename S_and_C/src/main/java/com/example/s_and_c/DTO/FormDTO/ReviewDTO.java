@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReviewDTO {
-    private String studEmailForCompanyOnly;
+    private String studentEmailForCompanyOnly;
     private int internshipId;
     private List<String> review;
 }
