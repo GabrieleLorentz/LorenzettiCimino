@@ -4,7 +4,8 @@
       <button class="popup-button" style="font-size: 15px;">Complaint</button>
       <div class="popupCom">
         <textarea v-model="complaint_" placeholder="Write a complaint"></textarea>
-        <button @click="RecComplaint(internship.id, student.email)" class="popup-button">Send</button>
+        <button v-if="role === '[COMPANY]'" @click="RecComplaint(internship.id, student.email)" class="popup-button">Send</button>
+        <button v-if="role === '[STUDENT]'" @click="RecComplaint(internship.id, email)" class="popup-button">Send</button>
       </div>
     </div>
     <div class="profile-container">
@@ -22,7 +23,8 @@
             <option value="5">5</option>
           </select>
         </div>
-        <button @click="RecFeedback(internship.id, student.email)" class="popup-button">Send</button>
+        <button v-if="role === '[COMPANY]'" @click="RecFeedback(internship.id, student.email)" class="popup-button">Send</button>
+        <button v-if="role === '[STUDENT]'" @click="RecFeedback(internship.id, email)" class="popup-button">Send</button>
       </div>
     </div>
     <div class="profile-container">
@@ -40,7 +42,8 @@
         </select>
         <p>{{questionsRev[1]}}</p>
         <textarea v-model="review_[1]"></textarea>
-        <button @click="RecReview(internship.id, student.email)" class="popup-button">Send</button>
+        <button v-if="role === '[COMPANY]'" @click="RecReview(internship.id, student.email)" class="popup-button">Send</button>
+        <button v-if="role === '[STUDENT]'" @click="RecReview(internship.id, email)" class="popup-button">Send</button>
       </div>
     </div>
   </div>
@@ -64,6 +67,11 @@
 <script setup lang="ts">
 import {ref, watch} from "vue";
 
+const role = localStorage.getItem('role');
+const cleanedRole = role ? role.replace(/[\[\]]/g, '').toLowerCase() : '';
+const email = localStorage.getItem('email');
+console.log(cleanedRole);
+
 const { internship, student } = defineProps<{
   internship: { id: number };
   student: { email: string };
@@ -79,7 +87,7 @@ function RecComplaint(intId, email) {
     complaint: complaint_.value
   }
 
-  fetch(`http://localhost:8080/api/company/sendComplaints`, {
+  fetch(`http://localhost:8080/api/${cleanedRole}/sendComplaints`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -125,7 +133,7 @@ function RecFeedback(intId, email) {
     feedbacks: feedback_.value
   }
 
-  fetch(`http://localhost:8080/api/company/sendFeedback`, {
+  fetch(`http://localhost:8080/api/${cleanedRole}/sendFeedback`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -165,7 +173,7 @@ function RecReview(intId, email) {
     review: review_.value
   }
 
-  fetch(`http://localhost:8080/api/company/sendReview`, {
+  fetch(`http://localhost:8080/api/${cleanedRole}/sendReview`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
