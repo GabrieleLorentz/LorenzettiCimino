@@ -115,8 +115,8 @@
                 <p><strong>End Date:</strong> {{ internship.endDate }}</p>
               </div>
               <div style="display: flex; gap: 10px">
-                <p><strong>End Selection AcceptanceDate:</strong> {{ internship.endSelectionAcceptanceDate }}</p>
                 <p><strong>End Form CompilingDate:</strong> {{ internship.endFormCompilingDate }}</p>
+                <p><strong>End Selection AcceptanceDate:</strong> {{ internship.endSelectionAcceptanceDate }}</p>
                 <p><strong>Salary: $</strong> {{ internship.salary }}</p>
               </div>
               <div style="display: flex; gap: 5px">
