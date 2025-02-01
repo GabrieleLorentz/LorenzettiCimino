@@ -12,4 +12,5 @@ import lombok.Setter;
 public class ShortInternshipDTO {
     private String internshipName;
     private String companyName;
+    private String companyEmail;
 }

@@ -206,24 +206,6 @@ public class CompanyServiceImpl implements CompanyService {
         }
     }
 
-    /*
-     * @param authEmail
-     * @param internshipId
-     * @return
-     *
-    @Override
-    public List<FeedBackDTO> handleFeedBackToSend(String authEmail, int internshipId) {
-        Internship internship = internshipRepository.findById(internshipId).orElseThrow(()->new RuntimeException("Internship not found"));
-
-
-        List<Form> formList = formRepository.findByInternshipAndCompanyAndFormType(internship, internship.getCompany(),FormType.FEEDBACK);
-        List<FeedBackDTO> feedBackDTOList = new ArrayList<>();
-        for(Form formIter : formList){
-            feedBackDTOList.add(FormMapper.mapToFeedBackDTO(authEmail,formIter));
-        }
-        return feedBackDTOList;
-    }*/
-
     /**
      * @param authEmail
      * @return
@@ -276,8 +258,5 @@ public class CompanyServiceImpl implements CompanyService {
         }
 
     }
-
-
-
 
 }

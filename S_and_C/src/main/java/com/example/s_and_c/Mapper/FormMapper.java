@@ -31,7 +31,7 @@ public class FormMapper {
             return new FormCompleteDTO(form.getFormId(),
                     form.getRequest(),
                     form.getResponse(),
-                    new ShortInternshipDTO(form.getInternship().getName(),form.getInternship().getCompany().getName()),
+                    new ShortInternshipDTO(form.getInternship().getName(),form.getInternship().getCompany().getName(),form.getInternship().getCompany().getEmail()),
                     new ShortStudentDTO(form.getStudent().getEmail(), form.getStudent().getName(), form.getStudent().getSurname(), form.getStudent().getDescription()),
                     new ShortCompanyDTO(form.getCompany().getEmail(), form.getCompany().getName(), form.getCompany().getDescription(), form.getCompany().getVat_number()),
                     form.getFormType());
@@ -41,7 +41,7 @@ public class FormMapper {
                     form.getFormId(),
                     form.getRequest(),
                     form.getResponse(),
-                    new ShortInternshipDTO(form.getInternship().getName(),form.getInternship().getCompany().getName()),
+                    new ShortInternshipDTO(form.getInternship().getName(),form.getInternship().getCompany().getName(),form.getInternship().getCompany().getEmail()),
                     new ShortStudentDTO(form.getStudent().getEmail(), form.getStudent().getName(), form.getStudent().getSurname(), form.getStudent().getDescription()),
                     form.getFormType()
             );
@@ -51,7 +51,7 @@ public class FormMapper {
                     form.getFormId(),
                     form.getRequest(),
                     form.getResponse(),
-                    new ShortInternshipDTO(form.getInternship().getName(),form.getInternship().getCompany().getName()),
+                    new ShortInternshipDTO(form.getInternship().getName(),form.getInternship().getCompany().getName(),form.getInternship().getCompany().getEmail()),
                     new ShortCompanyDTO(form.getCompany().getEmail(), form.getCompany().getName(), form.getCompany().getDescription(), form.getCompany().getVat_number()),
                     form.getFormType()
             );

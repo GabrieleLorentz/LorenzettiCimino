@@ -339,6 +339,27 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
 
     @Test
     @Order(10)
+    void whenStudentSearchInternship_thenSuccess() throws Exception {
+        SearchDTO searchDTO = new SearchDTO();
+        searchDTO.setKeyword("prova");
+        String content = objectMapper.writeValueAsString(searchDTO);
+        MvcResult result = mockMvcC.perform(post("/api/student/search")
+                        .header("Authorization", "Bearer " + studentToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON)).andReturn();
+        content = result.getResponse().getContentAsString();
+        List<InternshipForStudentsDTO> internshipForStudentsDTOList = objectMapper.readValue(content, new TypeReference<List<InternshipForStudentsDTO>>() {
+        });
+        Assertions.assertFalse(internshipForStudentsDTOList.isEmpty());
+        for (InternshipForStudentsDTO internshipForStudentsDTO : internshipForStudentsDTOList) {
+            Assertions.assertEquals("prova", internshipForStudentsDTO.getName());
+        }
+    }
+
+    @Test
+    @Order(11)
     void whenStudentRequestAnInternship_thenSuccess() throws Exception {
         InternshipIdDTO internshipIdDTO = new InternshipIdDTO();
         Internship internship = internshipRepository
@@ -359,7 +380,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
     }
 
     @Test
-    @Order(11)
+    @Order(12)
     void whenRequestAfterRetrievedInternship_thenSuccess() throws Exception {
         MvcResult result = mockMvcS.perform(get("/api/student/myInternships")
                         .header("Authorization", "Bearer " + studentToken)
@@ -376,7 +397,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
     }
 
     @Test
-    @Order(12)
+    @Order(13)
     void whenCompanyRetrievedInternship_thenSuccess() throws Exception {
         MvcResult result = mockMvcS.perform(get("/api/company/myInternship")
                         .header("Authorization", "Bearer " + companyToken)
@@ -393,7 +414,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
     }
 
     @Test
-    @Order(12)
+    @Order(14)
     void whenStudentRequestInternship_thenUnauthorized() throws Exception {
         InternshipIdDTO internshipIdDTO = new InternshipIdDTO();
         Internship internship = internshipRepository
@@ -412,7 +433,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
     }
 
     @Test
-    @Order(13)
+    @Order(15)
     void whenCompanyAcceptAppliedStudent_thenSuccess() throws Exception {
 
         mockMvcS.perform(post("/api/company/studentAccepted/{email}_{internshipId}", "prova0@gmail.com", internshipId)
@@ -421,7 +442,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
     }
 
     @Test
-    @Order(14)
+    @Order(16)
     void whenCompanyAcceptAppliedStudent_thenConflict() throws Exception {
 
         mockMvcS.perform(post("/api/company/studentAccepted/{email}_{internshipId}", "prova0@gmail.com", internshipId)
@@ -432,7 +453,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
 
     @Test
     @Transactional
-    @Order(15)
+    @Order(17)
     void whenCompanyRetrievedAfterAcceptInternship_thenSuccess() throws Exception {
         MvcResult result = mockMvcS.perform(get("/api/company/myInternship")
                         .header("Authorization", "Bearer " + companyToken)
@@ -453,7 +474,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
     }
 
     @Test
-    @Order(15)
+    @Order(18)
     void whenStudentRetrieveInternshipsInfoAndSendFormResponses_thenSuccess() throws Exception {
         Student student = studentRepository.findByEmail("prova0@gmail.com").orElseThrow(() -> new InternshipException("Student not found", 404));
         Internship internship = internshipRepository.findInternshipByInternshipId(internshipId).orElseThrow(() -> new InternshipException("Internship not found", 404));
@@ -481,7 +502,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
     }
 
     @Test
-    @Order(16)
+    @Order(19)
     void whenCompanyAcceptFormResponses_thenSuccess() throws Exception {
 
         mockMvcS.perform(post("/api/company/studentSelected/{email}_{internshipId}", "prova0@gmail.com", internshipId)
@@ -492,7 +513,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
 
     @Test
     @Transactional
-    @Order(17)
+    @Order(20)
     void whenCompanyRetrievedAfterSelectionInternship_thenSuccess() throws Exception {
         MvcResult result = mockMvcS.perform(get("/api/company/myInternship")
                         .header("Authorization", "Bearer " + companyToken)
