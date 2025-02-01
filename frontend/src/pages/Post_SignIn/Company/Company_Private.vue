@@ -174,6 +174,7 @@ function saveAllChanges() {
 
 const myReview = ref([]);
 const complaint = ref([]);
+const comp = localStorage.getItem('email');
 function receiveMyReview() {
   const token = localStorage.getItem('token');
 
@@ -191,8 +192,8 @@ function receiveMyReview() {
       })
       .then(data => {
         console.log("Dati ricevuti dal server:", data);
-        myReview.value = data.filter(item => item.formType === "C_REVIEW");
-        complaint.value = data.filter(item => item.formType === "S_COMPLAINT");
+        myReview.value = data.filter(item => item.formType === "C_REVIEW" && comp === item.internship.companyEmail);
+        complaint.value = data.filter(item => item.formType === "S_COMPLAINT" && comp === item.internship.companyEmail);
       })
       .catch(error => {
         console.error("Errore durante il recupero dei dati:", error);
