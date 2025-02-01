@@ -211,17 +211,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void handleComplaintReceived(String authEmail, ComplaintDTO complaintDTO) {
-        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
-        Internship internship = internshipRepository.findInternshipByInternshipId(complaintDTO.getInternshipId()).orElseThrow(()->new RuntimeException("Internship not found"));
-        if (LocalDate.now().isBefore(internship.getStartDate())) {
-            throw new InternshipException("Internship has not started yet",400);
-        }
-        if (LocalDate.now().isAfter(internship.getEndDate())) {
-            throw new InternshipException("Internship has already ended",400);
-        }
-        if(!internship.getSelectedStudents().contains(student) || complaintDTO.getComplaint().isBlank()){
-            throw new InternshipException("THE STUDENT AND THE COMPANY ARE NOT CORRELATED",409);
-        }
+        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new InternshipException("Student not found",404));
+        Internship internship = internshipRepository.findInternshipByInternshipId(complaintDTO.getInternshipId()).orElseThrow(()->new InternshipException("Internship not found",404));
+        CompanyServiceImpl.checkComplaint(complaintDTO, internship, student);
         setComplaint(complaintDTO, student, internship, formRepository);
 
 

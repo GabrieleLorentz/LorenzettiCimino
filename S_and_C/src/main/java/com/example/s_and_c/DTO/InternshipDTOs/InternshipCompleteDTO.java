@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InternshipCompleteDTO {
-    private long id;
+    private long internshipId;
     private String name;
     private LocalDate startDate;
     private LocalDate endDate;

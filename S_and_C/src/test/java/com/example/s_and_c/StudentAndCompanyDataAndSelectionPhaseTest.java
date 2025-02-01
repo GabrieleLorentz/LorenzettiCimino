@@ -387,7 +387,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
         });
         Assertions.assertFalse(internshipCompleteDTOS.isEmpty());
         for (InternshipCompleteDTO internshipCompleteDTO : internshipCompleteDTOS) {
-            Assertions.assertEquals(internshipId, internshipCompleteDTO.getId());
+            Assertions.assertEquals(internshipId, internshipCompleteDTO.getInternshipId());
         }
     }
 
@@ -443,7 +443,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
         });
         Assertions.assertFalse(internshipCompleteDTOS.isEmpty());
         for (InternshipCompleteDTO internshipCompleteDTO : internshipCompleteDTOS) {
-            Assertions.assertEquals(internshipId, internshipCompleteDTO.getId());
+            Assertions.assertEquals(internshipId, internshipCompleteDTO.getInternshipId());
             Assertions.assertEquals("prova0@gmail.com", internshipCompleteDTO.getFormWithStudents().getFirst().getStudent().getEmail());
             Internship internship = internshipRepository.findInternshipByInternshipId(internshipId).orElseThrow(() -> new RuntimeException("error"));
             Student student = studentRepository.findByEmail(internshipCompleteDTO.getFormWithStudents().getFirst().getStudent().getEmail()).orElseThrow(() -> new RuntimeException("error"));
@@ -503,7 +503,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
         });
         Assertions.assertFalse(internshipCompleteDTOS.isEmpty());
         for (InternshipCompleteDTO internshipCompleteDTO : internshipCompleteDTOS) {
-            Assertions.assertEquals(internshipId, internshipCompleteDTO.getId());
+            Assertions.assertEquals(internshipId, internshipCompleteDTO.getInternshipId());
             Assertions.assertEquals("prova0@gmail.com", internshipCompleteDTO.getSelected().getFirst().getEmail());
             Internship internship = internshipRepository.findInternshipByInternshipId(internshipId).orElseThrow(() -> new RuntimeException("error"));
             Student student = studentRepository.findByEmail(internshipCompleteDTO.getSelected().getFirst().getEmail()).orElseThrow(() -> new RuntimeException("error"));

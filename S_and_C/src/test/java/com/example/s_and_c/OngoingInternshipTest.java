@@ -99,7 +99,9 @@ public class OngoingInternshipTest {
         );
         ResponseEntity<?> registerResponseStudent = authController.registerStudent(registerRequestDTOs);
         UserTokenDTO userTokenDTO1 = (UserTokenDTO) registerResponseStudent.getBody();
-        studentToken = userTokenDTO1.getToken();
+        if (userTokenDTO1 != null) {
+            studentToken = userTokenDTO1.getToken();
+        }
 
         RegisterRequestDTO registerRequestDTOc = new RegisterRequestDTO(
                 "provam@gmail.com",
@@ -109,6 +111,7 @@ public class OngoingInternshipTest {
         );
         ResponseEntity<?> registerResponseCompany = authController.registerCompany(registerRequestDTOc);
         UserTokenDTO userTokenDTO2 = (UserTokenDTO) registerResponseCompany.getBody();
+        assert userTokenDTO2 != null;
         companyToken = userTokenDTO2.getToken();
     }
 
@@ -120,8 +123,8 @@ public class OngoingInternshipTest {
         Internship internship = new Internship();
         internship.setName("prova");
         internship.setDescription("prova");
-        internship.setStartDate(LocalDate.of(2025, 1, 2));
-        internship.setEndDate(LocalDate.of(2025, 1, 30));
+        internship.setStartDate(LocalDate.of(2025, 1, 30));
+        internship.setEndDate(LocalDate.of(2025, 2, 1));
         internship.setEndFormCompilingDate(LocalDate.of(2025, 1, 20));
         internship.setEndSelectionAcceptanceDate(LocalDate.of(2025, 1, 25));
         internship.setSalary(560);
@@ -167,7 +170,6 @@ public class OngoingInternshipTest {
     @Order(1)
     void testSendComplaint() throws Exception {
 
-        Company company = companyRepository.findByEmail("provam@gmail.com").orElseThrow(() -> new InternshipException("Company not found",404));
         Internship internship = internshipRepository.findInternshipByInternshipId(internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
         Student student = studentRepository.findByEmail("provah@gmail.com").orElseThrow(()->new InternshipException("student not found",404));
         ComplaintDTO complaintDTO = new ComplaintDTO(
@@ -176,7 +178,7 @@ public class OngoingInternshipTest {
                 student.getEmail()
         );
 
-        String content = objectMapper.writeValueAsString(complaintDTO);
+        objectMapper.writeValueAsString(complaintDTO);
         mockMvcC.perform(post("/api/company/sendComplaints")
                         .header("Authorization", "Bearer " + companyToken)
                         .contentType(MediaType.APPLICATION_JSON))

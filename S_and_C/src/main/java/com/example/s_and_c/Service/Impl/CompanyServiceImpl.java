@@ -142,13 +142,25 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public void handleComplaintReceived(String authEmail, ComplaintDTO complaintDTO) {
         Internship internship = internshipRepository.findInternshipByInternshipId(complaintDTO.getInternshipId()).orElseThrow(()->new InternshipException("Internship not found",404));
-        System.out.println(complaintDTO.getStudentEmailForCompanyOnly());
         Student student = studentRepository.findByEmail(complaintDTO.getStudentEmailForCompanyOnly()).orElseThrow(()->new InternshipException("Student not found",404));
         if(!internship.getCompany().getEmail().equals(authEmail)){
             throw new InternshipException("Internship does not belong to this company",404);
         }
+        checkComplaint(complaintDTO, internship, student);
         StudentServiceImpl.setComplaint(complaintDTO, student, internship, formRepository);
 
+    }
+
+    static void checkComplaint(ComplaintDTO complaintDTO, Internship internship, Student student) {
+        if (LocalDate.now().isBefore(internship.getStartDate())) {
+            throw new InternshipException("Internship has not started yet",400);
+        }
+        if (LocalDate.now().isAfter(internship.getEndDate())) {
+            throw new InternshipException("Internship has already ended",400);
+        }
+        if(!internship.getSelectedStudents().contains(student) || complaintDTO.getComplaint().isBlank()){
+            throw new InternshipException("THE STUDENT AND THE COMPANY ARE NOT CORRELATED",409);
+        }
     }
 
     /*@Override
