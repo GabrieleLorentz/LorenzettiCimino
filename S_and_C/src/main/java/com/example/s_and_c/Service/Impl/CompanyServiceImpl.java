@@ -231,11 +231,15 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<FormCompleteDTO> getMyForms(String authEmail) {
         Company company = companyRepository.findByEmail(authEmail).orElseThrow(()->new InternshipException("Student not found",404));
-        List<Form> forms = formRepository.findByCompany(company);
+        List<Internship> internships = internshipRepository.findByCompany(company);
         List<FormCompleteDTO> formDTOs = new ArrayList<>();
-        for(Form form : forms){
-            formDTOs.add(FormMapper.mapToCompleteFormDTO(form));
+        for (Internship internship : internships) {
+            List<Form> forms = formRepository.findByInternship(internship);
+            for(Form form : forms){
+                formDTOs.add(FormMapper.mapToCompleteFormDTO(form));
+            }
         }
+
         return formDTOs;
     }
 
