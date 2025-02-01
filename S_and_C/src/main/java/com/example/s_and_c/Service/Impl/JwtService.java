@@ -7,7 +7,6 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.io.Decoders;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
 import javax.crypto.SecretKey;
@@ -29,10 +28,6 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
-    /*public String generateToken(Authentication authentication) {
-        return generateToken(new HashMap<>(), authentication.getName());
-    }*/
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();

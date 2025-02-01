@@ -23,5 +23,5 @@ public interface InternshipService {
 
     void addSelectedStudent(String email, long internshipId, String authEmail);
 
-    void renounce(int internshipId, String authEmail);
+    void renounce(long internshipId, String authEmail);
 }

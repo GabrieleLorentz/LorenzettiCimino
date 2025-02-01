@@ -1,11 +1,11 @@
 package com.example.s_and_c.Mapper;
 
+import com.example.s_and_c.DTO.FormDTO.FormDTO;
 import com.example.s_and_c.DTO.FormDTO.FormWithStudentsDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.*;
 import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
 import com.example.s_and_c.Entities.*;
 import com.example.s_and_c.Entities.Status.FormType;
-import com.example.s_and_c.Repositories.FormRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -17,8 +17,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public class InternshipMapper {
-
-    private final FormRepository formRepository;
 
     public static @NotNull Internship maptoInternship(InsertInternshipDTO dto, Company company) {
         Internship internship = new Internship();

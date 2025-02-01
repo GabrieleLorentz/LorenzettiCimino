@@ -20,14 +20,6 @@ public class UpdatedStudentDTO {
     private List<String> forms;
     private String newToken;
 
-    public UpdatedStudentDTO(String name, String surname, String email, String password, String description) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.password = password;
-        this.description = description;
-    }
-
     public UpdatedStudentDTO(String name, String surname, String email, String password, String description, List<String> cv) {
         this.name = name;
         this.surname = surname;

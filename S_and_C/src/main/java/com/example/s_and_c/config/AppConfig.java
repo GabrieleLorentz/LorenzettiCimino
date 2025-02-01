@@ -27,13 +27,13 @@ public class AppConfig {
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService());
-        provider.setPasswordEncoder(passwordEncoder()); // Assicura che le password siano crittografate
+        provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Utilizza BCrypt per crittografare le password
+        return new BCryptPasswordEncoder();
     }
 
 

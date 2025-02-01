@@ -1,5 +1,6 @@
 package com.example.s_and_c.DTO.InternshipDTOs;
 
+import com.example.s_and_c.DTO.FormDTO.FormDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

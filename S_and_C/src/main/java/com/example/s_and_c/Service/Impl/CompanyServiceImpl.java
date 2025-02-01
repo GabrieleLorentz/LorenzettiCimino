@@ -7,7 +7,7 @@ import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
 import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
 import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
-import com.example.s_and_c.DTO.InternshipDTOs.FormCompleteDTO;
+import com.example.s_and_c.DTO.FormDTO.FormCompleteDTO;
 import com.example.s_and_c.Entities.*;
 import com.example.s_and_c.Entities.Status.FormType;
 import com.example.s_and_c.Entities.Status.Role;
@@ -86,14 +86,12 @@ public class CompanyServiceImpl implements CompanyService {
                 entityManager.persist(newCompany);
                 entityManager.flush();
 
-                // 3. Aggiorna i riferimenti nelle internship
                 Query query = entityManager.createQuery(
                         "UPDATE Internship i SET i.company = :newCompany WHERE i.company = :oldCompany");
                 query.setParameter("newCompany", newCompany);
                 query.setParameter("oldCompany", company);
                 query.executeUpdate();
 
-                // 4. Rimuovi la vecchia company
                 entityManager.remove(company);
                 entityManager.flush();
                 newCompany.setVat_number(companyDTO.getVat_number());
@@ -164,22 +162,6 @@ public class CompanyServiceImpl implements CompanyService {
         }
     }
 
-    /*@Override
-    public void handleComplaint(String authEmail, ComplaintDTO complaintDTO) {
-        Company company = companyRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
-        Internship internship = internshipRepository.findById(complaintDTO.getInternshipId()).orElseThrow(()->new RuntimeException("Internship not found"));
-        List<Form> formList = formRepository.findByInternshipAndCompanyAndFormType(internship, company, FormType.COMPLAINT);
-        for (Form form : formList) {
-            for( String formDTO : complaintDTO.getComplaint()){
-                if(formDTO.getFormId() == form.getFormId()){
-                    form.setResponse(formDTO.getResponse());
-                    formRepository.save(form);
-                }
-            }
-        }
-
-    }*/
-
     /**
      * @param authEmail
      * @param feedBackDTO
@@ -208,14 +190,6 @@ public class CompanyServiceImpl implements CompanyService {
             formRepository.save(form);
         }
 
-        /*for (Form form : formList) {
-            for( FormDTO formDTO : feedBackDTO.getFeedbacks()){
-                if(formDTO.getFormId() == form.getFormId()){
-                    form.setResponse(formDTO.getResponse());
-                    formRepository.save(form);
-                }
-            }
-        }*/
     }
 
     static void checkDate(Internship internship, DateUtils dateUtils) {

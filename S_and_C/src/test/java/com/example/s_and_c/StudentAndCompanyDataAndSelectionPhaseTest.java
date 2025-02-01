@@ -8,6 +8,7 @@ import com.example.s_and_c.DTO.AuthDTOs.RegisterRequestDTO;
 import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
 import com.example.s_and_c.DTO.CompanyDTOs.CompanyDTO;
 import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
+import com.example.s_and_c.DTO.FormDTO.FormDTO;
 import com.example.s_and_c.DTO.FormDTO.FormResponseDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.*;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;

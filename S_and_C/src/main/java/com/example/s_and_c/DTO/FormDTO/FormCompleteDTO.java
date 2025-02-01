@@ -1,6 +1,7 @@
-package com.example.s_and_c.DTO.InternshipDTOs;
+package com.example.s_and_c.DTO.FormDTO;
 
 import com.example.s_and_c.DTO.CompanyDTOs.ShortCompanyDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.ShortInternshipDTO;
 import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
 import com.example.s_and_c.Entities.Status.FormType;
 import lombok.AllArgsConstructor;

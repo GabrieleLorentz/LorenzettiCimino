@@ -5,7 +5,7 @@ import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
 import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
 import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
-import com.example.s_and_c.DTO.InternshipDTOs.FormCompleteDTO;
+import com.example.s_and_c.DTO.FormDTO.FormCompleteDTO;
 
 import java.util.List;
 

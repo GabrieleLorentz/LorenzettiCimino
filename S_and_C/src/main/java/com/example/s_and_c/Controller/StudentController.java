@@ -1,10 +1,7 @@
 package com.example.s_and_c.Controller;
 
 import com.example.s_and_c.DTO.CompanyDTOs.CompanyDTO;
-import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
-import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
-import com.example.s_and_c.DTO.FormDTO.FormResponseDTO;
-import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
+import com.example.s_and_c.DTO.FormDTO.*;
 import com.example.s_and_c.DTO.InternshipDTOs.*;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
@@ -49,20 +46,11 @@ public class StudentController {
         }
     }
 
-    /*@GetMapping
-    //Build get all student REST API
-    public ResponseEntity<List<StudentDTO>> getAllStudents() {
-        List<StudentDTO> allStudents = studentService.getAllStudents();
-        return ResponseEntity.ok(allStudents);
-    }*/
-
     @PostMapping("/updateData")
-    //Build update student
     public ResponseEntity<UpdatedStudentDTO> updateStudent(
             @RequestBody UpdatedStudentDTO updatedStudentDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UpdatedStudentDTO studentDTO = studentService.updateStudent(auth.getName(), updatedStudentDTO);
-        //aggiungere il controllo in caso di cambio dati, che sia sistemato anche nelle internship
         if (studentDTO == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -73,8 +61,6 @@ public class StudentController {
     @PostMapping("/search")
     public ResponseEntity<List<InternshipForStudentsDTO>> searchInternships(
             @RequestBody SearchDTO searchDTO){
-        /*Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String authEmail = auth.getName();*/
         List<InternshipForStudentsDTO> internshipDTOList = internshipService.findMatch(searchDTO);
         if(internshipDTOList.isEmpty()){
             return ResponseEntity.noContent().build();
@@ -114,18 +100,11 @@ public class StudentController {
     }
 
     @DeleteMapping("/renounce/{internshipId}")
-    public ResponseEntity<StudentDTO> internshipRenounce(@RequestParam int internshipId) {
+    public ResponseEntity<StudentDTO> internshipRenounce(@RequestParam long internshipId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
         internshipService.renounce(internshipId, authEmail);
         return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/{email}")
-    public ResponseEntity<String> deleteStudent(
-            @PathVariable("email") String email) {
-        studentService.deleteStudent(email);
-        return ResponseEntity.ok("Student deleted succesfully");
     }
 
 

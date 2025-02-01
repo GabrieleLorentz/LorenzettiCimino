@@ -46,8 +46,6 @@ public interface InternshipRepository extends JpaRepository<Internship, Integer>
     void deleteByAppliedStudentsContainingIgnoreCase(Student appliedStudent);
 
     void deleteByAcceptedStudentsContainingIgnoreCase(Student selectedStudent);
-    
-    @Query("SELECT i FROM Internship i LEFT JOIN FETCH i.selectedStudents WHERE i.internshipId = :id")
-    Optional<Internship> findInternshipByInternshipIdWithStudents(@Param("id") Long id);
+
 
 }

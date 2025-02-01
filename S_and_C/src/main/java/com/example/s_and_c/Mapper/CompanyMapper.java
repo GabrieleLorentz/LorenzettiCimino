@@ -15,15 +15,6 @@ public class CompanyMapper {
                 company.getVat_number()
         );
     }
-    public static Company mapToCompany(CompanyDTO companyDTO) {
-        return new Company(
-                companyDTO.getName(),
-                companyDTO.getEmail(),
-                companyDTO.getPassword(),
-                companyDTO.getDescription(),
-                companyDTO.getVat_number()
-        );
-    }
 
     public static UpdatedCompanyDTO mapToUpdatedCompanyDTO(Company company) {
         return new UpdatedCompanyDTO(

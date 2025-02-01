@@ -3,7 +3,7 @@ package com.example.s_and_c.Service.Impl;
 import com.example.s_and_c.DTO.AuthDTOs.AuthRequestDTO;
 import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
 import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
-import com.example.s_and_c.DTO.InternshipDTOs.FormCompleteDTO;
+import com.example.s_and_c.DTO.FormDTO.FormCompleteDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
@@ -150,12 +150,6 @@ public class StudentServiceImpl implements StudentService {
         } catch (InternshipException e) {
             throw new InternshipException("Inserted Data violate constraint",409);
         }
-    }
-
-    @Override
-    public void deleteStudent(String email) {
-
-        studentRepository.deleteStudentByEmail(email);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.example.s_and_c.Mapper;
 
 import com.example.s_and_c.DTO.CompanyDTOs.ShortCompanyDTO;
-import com.example.s_and_c.DTO.InternshipDTOs.FormCompleteDTO;
-import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
+import com.example.s_and_c.DTO.FormDTO.FormCompleteDTO;
+import com.example.s_and_c.DTO.FormDTO.FormDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.ShortInternshipDTO;
 import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
 import com.example.s_and_c.Entities.Form;

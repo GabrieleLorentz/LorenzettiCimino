@@ -1,6 +1,7 @@
 package com.example.s_and_c.Service.Impl;
 
 
+import com.example.s_and_c.DTO.FormDTO.FormDTO;
 import com.example.s_and_c.DTO.FormDTO.FormResponseDTO;
 import com.example.s_and_c.DTO.FormDTO.FormWithStudentsDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.*;
@@ -236,7 +237,7 @@ public class InternshipServiceImpl implements InternshipService {
      * @param authEmail
      */
     @Override
-    public void renounce(int internshipId, String authEmail) {
+    public void renounce(long internshipId, String authEmail) {
         Internship internship = internshipRepository.findInternshipByInternshipId(internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
         if(LocalDate.now().isAfter(internship.getStartDate()))
             throw new InternshipException("Internship already started", 400);

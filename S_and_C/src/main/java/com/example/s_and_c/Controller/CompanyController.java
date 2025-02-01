@@ -5,7 +5,7 @@ import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
 import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
 import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
-import com.example.s_and_c.DTO.InternshipDTOs.FormCompleteDTO;
+import com.example.s_and_c.DTO.FormDTO.FormCompleteDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InsertInternshipDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipCompleteDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipDTO;
@@ -81,20 +81,6 @@ public class CompanyController {
         internshipService.addSelectedStudent(email,internshipId,authEmail);
         return ResponseEntity.ok().build();
     }
-
-    /*@GetMapping({"{email}"})
-    public ResponseEntity<CompanyDTO> getCompanyById(@PathVariable ("email") String email) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String authEmail = auth.getName();
-        if(!authEmail.equals(email)) {
-            return ResponseEntity.badRequest().build();
-        }
-        CompanyDTO savedCompany = companyService.getCompany(email);
-        if (savedCompany == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(savedCompany);
-    }*/
 
     @GetMapping
     public ResponseEntity<List<CompanyDTO>> getAllCompanies() {

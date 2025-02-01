@@ -1,6 +1,5 @@
 package com.example.s_and_c.Mapper;
 
-import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
 import com.example.s_and_c.Entities.Form;
@@ -37,17 +36,6 @@ public class StudentMapper {
                 token
         );
     }
-/*
-    public static Student mapToStudent(StudentDTO studentDTO){
-        return new Student(
-                studentDTO.getName(),
-                studentDTO.getSurname(),
-                studentDTO.getEmail(),
-                studentDTO.getPassword(),
-                studentDTO.getDescription()
-        );
-    }
-*/
 
     public static UpdatedStudentDTO mapToUpdatedStudentDTO(Student student, List<Form> forms) {
         List<String> cv = new ArrayList<>();
