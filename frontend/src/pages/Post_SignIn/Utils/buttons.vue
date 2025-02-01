@@ -4,8 +4,8 @@
       <button class="popup-button" style="font-size: 15px;">Complaint</button>
       <div class="popupCom">
         <textarea v-model="complaint_" placeholder="Write a complaint"></textarea>
-        <button v-if="role === '[COMPANY]'" @click="RecComplaint(internship.id, student.email)" class="popup-button">Send</button>
-        <button v-if="role === '[STUDENT]'" @click="RecComplaint(internship.id, email)" class="popup-button">Send</button>
+        <button v-if="role === '[COMPANY]'" @click="RecComplaint(internship.internshipId, student.email)" class="popup-button">Send</button>
+        <button v-if="role === '[STUDENT]'" @click="RecComplaint(internship.internshipId, email)" class="popup-button">Send</button>
       </div>
     </div>
     <div class="profile-container">
@@ -23,8 +23,8 @@
             <option value="5">5</option>
           </select>
         </div>
-        <button v-if="role === '[COMPANY]'" @click="RecFeedback(internship.id, student.email)" class="popup-button">Send</button>
-        <button v-if="role === '[STUDENT]'" @click="RecFeedback(internship.id, email)" class="popup-button">Send</button>
+        <button v-if="role === '[COMPANY]'" @click="RecFeedback(internship.internshipId, student.email)" class="popup-button">Send</button>
+        <button v-if="role === '[STUDENT]'" @click="RecFeedback(internship.internshipId, email)" class="popup-button">Send</button>
       </div>
     </div>
     <div class="profile-container">
@@ -42,8 +42,8 @@
         </select>
         <p>{{questionsRev[1]}}</p>
         <textarea v-model="review_[1]"></textarea>
-        <button v-if="role === '[COMPANY]'" @click="RecReview(internship.id, student.email)" class="popup-button">Send</button>
-        <button v-if="role === '[STUDENT]'" @click="RecReview(internship.id, email)" class="popup-button">Send</button>
+        <button v-if="role === '[COMPANY]'" @click="RecReview(internship.internshipId, student.email)" class="popup-button">Send</button>
+        <button v-if="role === '[STUDENT]'" @click="RecReview(internship.internshipId, email)" class="popup-button">Send</button>
       </div>
     </div>
   </div>
@@ -73,7 +73,7 @@ const email = localStorage.getItem('email');
 console.log(cleanedRole);
 
 const { internship, student } = defineProps<{
-  internship: { id: number };
+  internship: { internshipId: number };
   student: { email: string };
 }>();
 
