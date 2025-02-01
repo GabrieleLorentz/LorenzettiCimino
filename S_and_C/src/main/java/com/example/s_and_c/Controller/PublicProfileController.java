@@ -26,4 +26,5 @@ public class PublicProfileController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return new ResponseEntity<>(studentService.getPublicStudentData(studentEmail), HttpStatus.OK);
     }
+
 }

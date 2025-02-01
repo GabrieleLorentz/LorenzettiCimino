@@ -35,7 +35,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/student/**").hasAuthority("STUDENT")
                         .requestMatchers("/api/company/**").hasAuthority("COMPANY")
-                        .requestMatchers("/api/publicProfile/**").hasAnyAuthority()
+                        .requestMatchers("/api/publicProfile/**").hasAnyAuthority("STUDENT", "COMPANY")
                         .anyRequest().authenticated()
                 ).httpBasic(Customizer.withDefaults());
 
