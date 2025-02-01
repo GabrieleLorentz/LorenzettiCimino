@@ -13,6 +13,7 @@ import com.example.s_and_c.Service.CompanyService;
 import com.example.s_and_c.Service.InternshipService;
 import com.example.s_and_c.Utils.InternshipException;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -139,14 +140,8 @@ public class CompanyController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{email}")
-    public ResponseEntity<String> deleteCompany(
-            @PathVariable("email") String email) {
-        companyService.deleteCompany(email);
-        return ResponseEntity.ok("Company deleted succesfully");
-    }
     @ExceptionHandler(InternshipException.class)
-    public ResponseEntity<Map<String, String>> handleInternshipException(InternshipException e) {
+    public ResponseEntity<Map<String, String>> handleInternshipException(@NotNull InternshipException e) {
         Map<String, String> response = new HashMap<>();
         response.put("error", e.getMessage());
 

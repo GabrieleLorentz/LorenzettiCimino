@@ -147,7 +147,14 @@ public class CompanyServiceImpl implements CompanyService {
             throw new InternshipException("Internship does not belong to this company",404);
         }
         checkComplaint(complaintDTO, internship, student);
-        StudentServiceImpl.setComplaint(complaintDTO, student, internship, formRepository);
+        Form form = new Form();
+        form.setFormType(FormType.C_COMPLAINT);
+        form.setRequest("Tell us your complaint:");
+        form.setResponse(complaintDTO.getComplaint());
+        form.setStudent(student);
+        form.setCompany(internship.getCompany());
+        form.setInternship(internship);
+        formRepository.save(form);
 
     }
 
