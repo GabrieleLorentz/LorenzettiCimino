@@ -15,6 +15,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Company entity
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -38,6 +41,14 @@ public class Company implements UserDetails {
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<Internship> internships = new ArrayList<>();
 
+    /**
+     * Short constructor, with registration data
+     * @param name name
+     * @param email email
+     * @param password password
+     * @param description description
+     * @param vat_number vat number
+     */
     public Company(String name, String email, String password, String description, Long vat_number) {
         this.name = name;
         this.email = email;
@@ -46,31 +57,55 @@ public class Company implements UserDetails {
         this.vat_number = vat_number;
     }
 
+    /**
+     * UserDetails getUsername override
+     * @return email
+     */
     @Override
     public String getUsername() {
         return email;
     }
 
+    /**
+     * UserDetails isAccountNonExpired override
+     * @return true
+     */
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    /**
+     * UserDetails isAccountNonLocked override
+     * @return true
+     */
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    /**
+     * UserDetails isCredentialsNonExpired override
+     * @return true
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    /**
+     * UserDetails isEnabled override
+     * @return true
+     */
     @Override
     public boolean isEnabled() {
         return true;
     }
 
+    /**
+     * UserDetails isEnabled override
+     * @return authorities
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(Role.COMPANY.toString()));

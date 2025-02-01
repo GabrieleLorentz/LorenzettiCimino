@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller that handles function that are accessible to all users
+ */
 @AllArgsConstructor
 @RestController
 @RequestMapping("api/publicProfile")

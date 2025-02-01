@@ -173,7 +173,7 @@ public class InternshipServiceImpl implements InternshipService {
         }
 
         if (!authEmail.equals(internship.getCompany().getEmail())) {
-            throw new InternshipException("Student does not belong to this company", 401);
+            throw new InternshipException("Student does not belong to this internship", 401);
         }
 
         if (!internship.getAppliedStudents().contains(student)) {

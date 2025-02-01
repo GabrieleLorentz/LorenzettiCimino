@@ -9,7 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+/**
+ * Form Entity
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -38,13 +40,25 @@ public class Form {
 
     private FormType formType;
 
+    /**
+     * Short constructor with only request response and internship, for template insertion purpose
+     * @param request request
+     * @param response response
+     * @param internship internship
+     */
     public Form(String request, String response, Internship internship) {
         this.request = request;
         this.response = response;
         this.internship = internship;
     }
 
-
+    /**
+     * Short constructor without responses
+     * @param request request
+     * @param internship internship
+     * @param company company
+     * @param formType type of form
+     */
     public Form(String request,Internship internship, Company company, FormType formType) {
         this.request = request;
         this.response = null;
@@ -53,6 +67,11 @@ public class Form {
         this.formType = formType;
     }
 
+    /**
+     * Form constructor to change a template
+     * @param template form template to not start from scratch
+     * @param student student interested
+     */
     public Form(Form template, Student student) {
         this.formType = template.getFormType();
         this.internship = template.getInternship();

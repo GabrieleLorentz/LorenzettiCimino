@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * DTO for users registration requests
+ */
 @Data
 @Builder
 @AllArgsConstructor

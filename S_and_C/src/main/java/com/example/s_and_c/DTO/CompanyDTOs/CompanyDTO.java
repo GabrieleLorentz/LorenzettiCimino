@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * DTO with all the company information, to update data
+ */
 @Getter
 @Setter
 @NoArgsConstructor

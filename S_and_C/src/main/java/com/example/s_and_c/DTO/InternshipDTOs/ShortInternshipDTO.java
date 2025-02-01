@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * DTO to show short internship info
+ */
 @Getter
 @Setter
 @AllArgsConstructor

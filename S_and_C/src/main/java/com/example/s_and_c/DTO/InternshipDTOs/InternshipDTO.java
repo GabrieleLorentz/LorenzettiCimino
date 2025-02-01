@@ -9,6 +9,9 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * DTO to display most of an internship info
+ */
 @Getter
 @Setter
 @NoArgsConstructor

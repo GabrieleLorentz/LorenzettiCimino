@@ -14,7 +14,7 @@ public interface CompanyService {
 
     CompanyDTO getCompany(String email);
 
-    List<CompanyDTO> getAllCompanies();
+    //List<CompanyDTO> getAllCompanies();
 
     UpdatedCompanyDTO updateCompany(String email, CompanyDTO companyDTO);
 

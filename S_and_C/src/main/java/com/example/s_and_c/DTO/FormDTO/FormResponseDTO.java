@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * DTO for form response
+ */
 @Getter
 @Setter
 @NoArgsConstructor

@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * DTO to handle review info
+ */
 @Getter
 @Setter
 @AllArgsConstructor

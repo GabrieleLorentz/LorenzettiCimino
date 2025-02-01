@@ -10,6 +10,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Internship entity
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -75,7 +78,16 @@ public class Internship {
     @OneToMany(mappedBy = "internship")
     private List<Form> form = new ArrayList<>();
 
-
+    /**
+     * Short constructor with internship insert data
+     * @param name name
+     * @param startDate start date
+     * @param endDate end date
+     * @param salary salary
+     * @param qualification_required qualification required
+     * @param description description
+     * @param company company
+     */
     public Internship(String name, LocalDate startDate, LocalDate endDate, int salary, List<Qualification> qualification_required, String description, Company company) {
         this.name = name;
         this.startDate = startDate;
@@ -86,26 +98,45 @@ public class Internship {
         this.company = company;
     }
 
+    /**
+     * Add an apply Student
+     * @param student student
+     */
     public void addAppliedStudent(Student student) {
         appliedStudents.add(student);
     }
-
+    /**
+     * Delete an apply Student
+     * @param student student
+     */
     public void deleteAppliedStudent(Student student) {
         appliedStudents.remove(student);
     }
-
+    /**
+     * Add an accepted Student
+     * @param student student
+     */
     public void addAcceptedStudent(Student student) {
         acceptedStudents.add(student);
     }
-
+    /**
+     * Delete an accepted Student
+     * @param student student
+     */
     public void deleteAcceptedStudent(Student student) {
         acceptedStudents.remove(student);
     }
-
+    /**
+     * Add a selected Student
+     * @param student student
+     */
     public void addSelectedStudent(Student student) {
         selectedStudents.add(student);
     }
-
+    /**
+     * Delete a selected Student
+     * @param student student
+     */
     public void deleteSelectedStudent(Student student) {
         selectedStudents.remove(student);
     }

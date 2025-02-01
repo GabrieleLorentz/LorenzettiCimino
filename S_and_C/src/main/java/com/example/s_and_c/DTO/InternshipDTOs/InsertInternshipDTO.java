@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * DTO to get all info needed for a new internship
+ */
 @Getter
 @Setter
 @NoArgsConstructor

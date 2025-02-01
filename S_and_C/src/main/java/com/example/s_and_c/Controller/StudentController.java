@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * REST Controller that handles the request made to api/student/
+ */
 @AllArgsConstructor
 @RestController
 @RequestMapping("api/student")
@@ -28,6 +30,10 @@ public class StudentController {
     private final StudentService studentService;
     private final InternshipService internshipService;
 
+    /**
+     * Function that get the personal data for the user, gets email from the token, and use it to get the correct elements
+     * @return StudentDTO with all user personal data
+     */
     @GetMapping({"/personalData"})
     public ResponseEntity<StudentDTO> getStudentById() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -46,6 +52,11 @@ public class StudentController {
         }
     }
 
+    /**
+     * Function to handle the updates of the data by the user
+     * @param updatedStudentDTO DTO with all the modified data
+     * @return 200 ok if no exception are internally thrown, 400 bad request if data are empty
+     */
     @PostMapping("/updateData")
     public ResponseEntity<UpdatedStudentDTO> updateStudent(
             @RequestBody UpdatedStudentDTO updatedStudentDTO) {
@@ -58,6 +69,11 @@ public class StudentController {
         return ResponseEntity.ok(studentDTO);
     }
 
+    /**
+     * Function to search through all the internship in the platform
+     * @param searchDTO DTO with a predefined filters to execute the research
+     * @return 200 ok we have a response, 204 if no results are available
+     */
     @PostMapping("/search")
     public ResponseEntity<List<InternshipForStudentsDTO>> searchInternships(
             @RequestBody SearchDTO searchDTO){
@@ -69,6 +85,11 @@ public class StudentController {
 
     }
 
+    /**
+     * Function that permits to a student to apply for an internship
+     * @param internshipId the id of the referred Internship
+     * @return 200 ok if no exception are internally thrown,
+     */
     @PostMapping("/requestInternship")
     public ResponseEntity<InternshipDTO> requestInternship(@RequestBody InternshipIdDTO internshipId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -77,6 +98,10 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Function that get all the internship where the user is involved
+     * @return List of InternshipForStudentDTO
+     */
     @GetMapping("/myInternships")
     public ResponseEntity<List<InternshipForStudentsDTO>> getMyInternships() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -85,12 +110,21 @@ public class StudentController {
         return internshipDTOList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(internshipDTOList);
     }
 
+    /**
+     * Function that get all internship available to display
+     * @return List of InternshipForStudentDTO
+     */
     @GetMapping("/allInternships")
     public ResponseEntity<List<InternshipForStudentsDTO>> getAllInternships() {
         List<InternshipForStudentsDTO> internshipForStudentsDTOS = internshipService.getAllForStudents();
         return new ResponseEntity<>(internshipForStudentsDTOS, HttpStatus.OK);
     }
 
+    /**
+     * Function that permit to the student to respond to the company question form
+     * @param formResponseDTO DTO with all the needed response to the questions form
+     * @return 200 ok if no exceptions are internally thrown
+     */
     @PostMapping("/formResponses")
     public ResponseEntity<StudentDTO> formResponses(@RequestBody FormResponseDTO formResponseDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -99,6 +133,11 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Function that permit to the student to respond to the company question form
+     * @param internshipId the id of the referred Internship
+     * @return 200 ok if no exception are internally thrown
+     */
     @DeleteMapping("/renounce/{internshipId}")
     public ResponseEntity<StudentDTO> internshipRenounce(@RequestParam long internshipId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -108,7 +147,11 @@ public class StudentController {
     }
 
 
-
+    /**
+     * Function to send a complaint to the respective user
+     * @param complaintDTO DTO with all object needed to represent a complaint
+     * @return 200 ok if no exception are thrown internally
+     */
     @PostMapping("/sendComplaints")
     public ResponseEntity<CompanyDTO> complaints(@RequestBody ComplaintDTO complaintDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -118,7 +161,11 @@ public class StudentController {
     }
 
 
-
+    /**
+     * Function to send a feedback about the respective user
+     * @param feedBackDTO DTO with all object needed to represent a complaint
+     * @return 200 ok if no exception are thrown internally
+     */
     @PostMapping("/sendFeedback")
     public ResponseEntity<CompanyDTO> feedback(@RequestBody FeedBackDTO feedBackDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -127,6 +174,11 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Function to send a review about the respective user
+     * @param reviewDTO DTO with all object needed to represent a review
+     * @return 200 ok if no exception are thrown internally
+     */
     @PostMapping("/sendReview")
     public ResponseEntity<CompanyDTO> review(@RequestBody ReviewDTO reviewDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -135,6 +187,10 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Function used to retrieve all the user's compiled forms
+     * @return List of all the forms compiled
+     */
     @GetMapping("/myForms")
     public ResponseEntity<List<FormCompleteDTO>> getMyForms() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -142,6 +198,11 @@ public class StudentController {
         return new ResponseEntity<>(studentService.getMyForms(authEmail),HttpStatus.OK);
     }
 
+    /**
+     * Method to handle all internal exception messages
+     * @param e message
+     * @return status and message
+     */
     @ExceptionHandler(InternshipException.class)
     public ResponseEntity<Map<String, String>> handleInternshipException(InternshipException e) {
         Map<String, String> response = new HashMap<>();

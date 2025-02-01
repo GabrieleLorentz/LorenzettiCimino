@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * DTO for new complaint creation
+ */
 @Getter
 @Setter
 @NoArgsConstructor

@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Company DTO without private info, to show in public profile controller
+ */
 @AllArgsConstructor
 @Getter
 @Setter
@@ -19,6 +22,13 @@ public class ShortCompanyDTO {
     private Long vat_number;
     private List<FormCompleteDTO> forms;
 
+    /**
+     * Constructor without forms
+     * @param name company name
+     * @param email company email
+     * @param description company description
+     * @param vat_number company vat number
+     */
     public ShortCompanyDTO(String name, String email, String description, Long vat_number) {
         this.name = name;
         this.email = email;

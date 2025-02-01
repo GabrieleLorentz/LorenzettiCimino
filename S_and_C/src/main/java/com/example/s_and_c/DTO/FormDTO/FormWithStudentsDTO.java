@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * DTO for form associated with student
+ */
 @Getter
 @Setter
 @NoArgsConstructor

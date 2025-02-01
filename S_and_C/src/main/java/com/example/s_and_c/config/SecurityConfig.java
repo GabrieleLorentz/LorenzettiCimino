@@ -17,6 +17,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Config class to handle the security, to give access to everyone who is authorized to.
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -25,6 +28,12 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter authenticationFilter;
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
 
+    /**
+     * Handle the security of the platform, granting authority to the users that have it.
+     * @param http http object
+     * @return http.build with the correct accesses
+     * @throws Exception if no access is granted
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -47,6 +56,10 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Cors config to join the frontend module with the backend.
+     * @return the correct source
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

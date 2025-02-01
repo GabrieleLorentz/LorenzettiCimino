@@ -55,11 +55,11 @@ public class CompanyServiceImpl implements CompanyService {
         return CompanyMapper.mapToCompanyDTO(company);
     }
 
-    @Override
+    /*@Override
     public List<CompanyDTO> getAllCompanies() {
         List<Company> companies = companyRepository.findAll();
         return companies.stream().map(CompanyMapper::mapToCompanyDTO).collect(Collectors.toList());
-    }
+    }*/
 
     @Transactional
     @Override

@@ -14,12 +14,21 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
+/**
+ * Service class to handle the load of the different users of the platform
+ */
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     private final StudentRepository studentRepository;
     private final CompanyRepository companyRepository;
 
+    /**
+     * Handle the load of the searching, searching through repositories in the DB, and handle UsernameNotFoundException
+     * @param email the email inserted by user to authenticate, that is a PK for both student and company in the DB
+     * @return new User() with authority
+     * @throws UsernameNotFoundException if the user is not found
+     */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // First try to find a student

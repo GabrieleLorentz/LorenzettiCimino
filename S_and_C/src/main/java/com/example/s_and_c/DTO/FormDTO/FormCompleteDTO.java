@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * DTO with all form info, with short info about users involved
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -22,6 +25,15 @@ public class FormCompleteDTO {
     private ShortCompanyDTO company;
     private FormType formType;
 
+    /**
+     * Constructor without company
+     * @param formId formId
+     * @param request request
+     * @param response response inserted
+     * @param internship referred internship
+     * @param student interested student
+     * @param formType type of form
+     */
     public FormCompleteDTO(long formId, String request, String response, ShortInternshipDTO internship, ShortStudentDTO student, FormType formType) {
         this.formId = formId;
         this.request = request;
@@ -31,6 +43,15 @@ public class FormCompleteDTO {
         this.formType = formType;
     }
 
+    /**
+     * Constructor without student
+     * @param formId formId
+     * @param request request
+     * @param response response inserted
+     * @param internship referred internship
+     * @param company interested company
+     * @param formType type of form
+     */
     public FormCompleteDTO(long formId, String request, String response, ShortInternshipDTO internship, ShortCompanyDTO company, FormType formType) {
         this.formId = formId;
         this.request = request;
@@ -39,7 +60,13 @@ public class FormCompleteDTO {
         this.company = company;
         this.formType = formType;
     }
-
+    /**
+     * Constructor without student, company and internship
+     * @param formId formId
+     * @param request request
+     * @param response response inserted
+     * @param formType type of form
+     */
     public FormCompleteDTO(long formId, String request, String response, ShortStudentDTO shortStudentDTO, FormType formType) {
         this.formId = formId;
         this.request = request;
@@ -48,6 +75,14 @@ public class FormCompleteDTO {
         this.formType = formType;
     }
 
+    /**
+     * Constructor without student and company
+     * @param formId formId
+     * @param request request
+     * @param response response inserted
+     * @param shortInternshipDTO internship
+     * @param formType type of form
+     */
     public FormCompleteDTO(long formId, String request, String response, ShortInternshipDTO shortInternshipDTO, FormType formType) {
         this.formId = formId;
         this.request = request;

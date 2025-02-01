@@ -9,6 +9,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * DTO to show the public info of a student
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,6 +25,13 @@ public class ShortStudentDTO {
     private List<String> cv;
     private List<FormCompleteDTO> forms;
 
+    /**
+     * Constructor without cv and forms
+     * @param email student email
+     * @param name student name
+     * @param surname student surname
+     * @param description student description
+     */
     public ShortStudentDTO(String email, String name, String surname, String description) {
         this.email = email;
         this.name = name;
@@ -29,6 +39,14 @@ public class ShortStudentDTO {
         this.description = description;
     }
 
+    /**
+     * Constructor without forms
+     * @param email student email
+     * @param name student name
+     * @param surname student surname
+     * @param description student description
+     * @param cv student cv
+     */
     public ShortStudentDTO(String email, String name, String surname, String description, List<String> cv) {
         this.email = email;
         this.name = name;

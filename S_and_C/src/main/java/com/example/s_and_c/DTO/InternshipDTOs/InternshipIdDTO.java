@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * DTO to send the referred id
+ */
 @Getter
 @Setter
 @AllArgsConstructor

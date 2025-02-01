@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * DTO for form display
+ */
 @Getter
 @Setter
 @NoArgsConstructor
