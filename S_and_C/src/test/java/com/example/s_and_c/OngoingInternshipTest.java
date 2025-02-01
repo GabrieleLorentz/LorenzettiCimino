@@ -156,7 +156,7 @@ public class OngoingInternshipTest {
         }
         qualificationRepository.saveAll(qualificationList);
 
-        Student student = studentRepository.findByEmail("provah@gmail.com").orElseThrow(()->new InternshipException("student not found",404));
+        Student student = studentRepository.findByEmail("provah@gmail.com").orElseThrow(()->new RuntimeException("student not found"));
 
         internship.addSelectedStudent(student);
         internshipRepository.save(internship);
