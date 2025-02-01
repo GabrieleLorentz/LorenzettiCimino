@@ -46,6 +46,15 @@ public class FormMapper {
                     form.getFormType()
             );
         }
+        if(form.getFormType().equals(FormType.INTERVIEW)){
+            return new FormCompleteDTO(
+                    form.getFormId(),
+                    form.getRequest(),
+                    form.getResponse(),
+                    new ShortInternshipDTO(form.getInternship().getName(),form.getInternship().getCompany().getName(),form.getInternship().getCompany().getEmail()),
+                    form.getFormType()
+            );
+        }
         else
             return new FormCompleteDTO(
                     form.getFormId(),

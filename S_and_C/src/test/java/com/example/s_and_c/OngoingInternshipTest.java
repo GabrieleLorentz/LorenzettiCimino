@@ -11,6 +11,7 @@ import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
 import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
 import com.example.s_and_c.DTO.FormDTO.FormCompleteDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
+import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
 import com.example.s_and_c.Entities.*;
 import com.example.s_and_c.Entities.Status.FormType;
 import com.example.s_and_c.Repositories.*;
@@ -419,4 +420,43 @@ public class OngoingInternshipTest {
         }
     }
 
+    @Transactional
+    @Test
+    @Order(8)
+    void testCompanyMyForms() throws Exception {
+        Company company = companyRepository.findByEmail("provam@gmail.com").orElseThrow(()->new InternshipException("company not found",404));
+        MvcResult result = mockMvcS.perform(get("/api/company/myForms")
+                        .header("Authorization", "Bearer " + companyToken)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON)).andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        List<FormCompleteDTO> formCompleteDTOList = objectMapper.readValue(content, new TypeReference<List<FormCompleteDTO>>() {
+        });
+        Assertions.assertNotNull(formCompleteDTOList);
+        for(FormCompleteDTO form : formCompleteDTOList) {
+            Assertions.assertEquals(company.getEmail(), form.getInternship().getCompanyEmail());
+        }
+    }
+
+    @Transactional
+    @Test
+    @Order(8)
+    void testStudentPublicData() throws Exception {
+        Company company = companyRepository.findByEmail("provam@gmail.com").orElseThrow(()->new InternshipException("company not found",404));
+        Student student = studentRepository.findByEmail("provah@gmail.com").orElseThrow(()->new InternshipException("student not found",404));
+        MvcResult result = mockMvcS.perform(get("/api/publicProfile/getDataFromStudent/provah@gmail.com")
+                        .header("Authorization", "Bearer " + companyToken)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON)).andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        ShortStudentDTO shortStudentDTO = objectMapper.readValue(content, ShortStudentDTO.class );
+        Assertions.assertNotNull(shortStudentDTO);
+        for(FormCompleteDTO form : shortStudentDTO.getForms()) {
+            Assertions.assertEquals(company.getEmail(), form.getCompany().getEmail());
+        }
+    }
 }

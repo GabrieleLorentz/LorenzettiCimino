@@ -47,4 +47,12 @@ public class FormCompleteDTO {
         this.student = shortStudentDTO;
         this.formType = formType;
     }
+
+    public FormCompleteDTO(long formId, String request, String response, ShortInternshipDTO shortInternshipDTO, FormType formType) {
+        this.formId = formId;
+        this.request = request;
+        this.response = response;
+        this.internship = shortInternshipDTO;
+        this.formType = formType;
+    }
 }
