@@ -1,6 +1,7 @@
 package com.example.s_and_c.Service;
 
 import com.example.s_and_c.DTO.CompanyDTOs.CompanyDTO;
+import com.example.s_and_c.DTO.CompanyDTOs.ShortCompanyDTO;
 import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
 import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
 import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
@@ -27,4 +28,6 @@ public interface CompanyService {
     void handleReviewReceived(String authEmail, ReviewDTO reviewDTO);
 
     List<FormCompleteDTO> getMyForms(String authEmail);
+
+    ShortCompanyDTO getPublicCompanyData(String companyEmail);
 }

@@ -2,6 +2,7 @@ package com.example.s_and_c.Service.Impl;
 
 import com.example.s_and_c.DTO.AuthDTOs.AuthRequestDTO;
 import com.example.s_and_c.DTO.CompanyDTOs.CompanyDTO;
+import com.example.s_and_c.DTO.CompanyDTOs.ShortCompanyDTO;
 import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
 import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
 import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
@@ -259,4 +260,18 @@ public class CompanyServiceImpl implements CompanyService {
 
     }
 
+    /**
+     * @param companyEmail
+     * @return
+     */
+    @Override
+    public ShortCompanyDTO getPublicCompanyData(String companyEmail) {
+        Company company = companyRepository.findByEmail(companyEmail).orElseThrow(()->new InternshipException("Company not found",404));
+        List<Form> forms = formRepository.findByCompanyAndFormType(company,FormType.S_REVIEW);
+        List<FormCompleteDTO> formDTOs = new ArrayList<>();
+        for(Form form : forms){
+            formDTOs.add(FormMapper.mapToCompleteFormDTO(form));
+        }
+        return new ShortCompanyDTO(company.getName(),company.getName(),company.getDescription(),company.getVat_number(),formDTOs);
+    }
 }

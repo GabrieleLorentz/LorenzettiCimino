@@ -1,5 +1,6 @@
 package com.example.s_and_c.Controller;
 
+import com.example.s_and_c.DTO.CompanyDTOs.ShortCompanyDTO;
 import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
 import com.example.s_and_c.Service.CompanyService;
 import com.example.s_and_c.Service.StudentService;
@@ -21,10 +22,15 @@ public class PublicProfileController {
     private final CompanyService companyService;
     private final StudentService studentService;
 
-    @GetMapping("/getDataFrom{studentEmail}")
+    @GetMapping("/getDataFrom/{studentEmail}")
     public ResponseEntity<ShortStudentDTO> getDataFromStudent(@PathVariable String studentEmail){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return new ResponseEntity<>(studentService.getPublicStudentData(studentEmail), HttpStatus.OK);
     }
 
+    @GetMapping("/getDataFrom/{companyEmail}")
+    public ResponseEntity<ShortCompanyDTO> getDataFromCompany(@PathVariable String companyEmail){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return new ResponseEntity<>(companyService.getPublicCompanyData(companyEmail), HttpStatus.OK);
+    }
 }
