@@ -165,6 +165,7 @@ public class OngoingInternshipTest {
 
 
 
+    @Transactional
     @Test
     @Order(1)
     void testSendComplaint() throws Exception {

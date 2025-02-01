@@ -288,7 +288,7 @@ public class StudentServiceImpl implements StudentService {
         Internship internship = internshipRepository.findById(reviewDTO.getInternshipId()).orElseThrow(()->new RuntimeException("Internship not found"));
         Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
 
-        if(formRepository.findByInternshipAndCompanyAndStudentAndFormType(internship,null,student, FormType.S_REVIEW) != null){
+        if(formRepository.findByInternshipAndStudentAndFormType(internship,student, FormType.S_REVIEW) != null){
             throw new InternshipException("Student has already inserted a review",409);
         }
 
