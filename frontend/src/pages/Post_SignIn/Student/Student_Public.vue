@@ -20,7 +20,7 @@
           <span class="editable-input">{{ originalData.email }}</span>
         </div>
         <div class="data">
-          <textarea class="editable-textarea">{{originalData.description}}</textarea>
+          <textarea readonly class="editable-textarea">{{originalData.description}}</textarea>
         </div>
         <div class="data">
           <ul style="max-height: 70px; overflow-y: auto;">
@@ -105,8 +105,7 @@ function receiveData() {
       });
 }
 
-const myReview = ref([]);
-const complaint = ref([]);
+const Review = ref([]);
 function receiveMyReview() {
   const token = localStorage.getItem('token');
 
@@ -124,8 +123,7 @@ function receiveMyReview() {
       })
       .then(data => {
         console.log("Dati ricevuti dal server:", data);
-        myReview.value = data.filter(item => item.formType === "REVIEW");
-        complaint.value = data.filter(item => item.formType === "COMPLAINT");
+        Review.value = data.filter(item => item.formType === "C_REVIEW");
       })
       .catch(error => {
         console.error("Errore durante il recupero dei dati:", error);
@@ -140,7 +138,7 @@ onMounted(() => {
 const groupedReviews = computed(() => {
   const grouped: Record<string, any> = {};
 
-  myReview.value.forEach(review => {
+  Review.value.forEach(review => {
     const internshipKey = `${review.internship.internshipName} - ${review.internship.companyName}`;
 
     if (!grouped[internshipKey]) {
