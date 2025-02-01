@@ -9,6 +9,7 @@
     </div>
 
     <div style="width: 100%; display: flex;">
+
       <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center;">
         <div class="data">
           <span class="editable-input">{{ originalData.name }}</span>
@@ -49,9 +50,9 @@
           <div v-else>
             <p style="font-size: 20px; text-align: center;">No reviews received</p>
           </div>
-
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -59,6 +60,10 @@
 <script setup lang="ts">
 import {ref, onMounted, computed} from 'vue';
 import UpperPart from "@/pages/Post_SignIn/Utils/upper_part.vue";
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const studentEmail = route.params.email;
 
 interface UserData {
   name: string;
@@ -79,7 +84,7 @@ const originalData = ref<UserData>({
 function receiveData() {
   const token = localStorage.getItem('token');
 
-  fetch('http://localhost:8080/api/student/personalData', {
+  fetch(`http://localhost:8080/api/publicProfile/getDataFromStudent/${studentEmail}`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`
@@ -99,6 +104,7 @@ function receiveData() {
           description: data.description,
           cv: data.cv
         };
+        console.log(data);
       })
       .catch(error => {
         console.error("Errore durante il recupero dei dati:", error);

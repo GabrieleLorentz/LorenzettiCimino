@@ -47,20 +47,7 @@
             <div class="det-content">
               <h2>Students</h2>
               <div v-for="student in selectedInternship.applicants" style="padding: 5px; display: flex; gap: 10px">
-                <div class="profile_cont">
-                  <p> {{student.name}} </p>
-                  <div class="profile">
-                    <p> {{student.name}} </p>
-                    <p> {{student.surname}} </p>
-                    <p> {{student.email}} </p>
-                    <textarea> {{student.description}} </textarea>
-                    <ul style="width: 90%; padding-left: 1em;">
-                      <li v-for="(row, index) in student.cv" :key="index">
-                        {{ row }}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                <router-link :to="`/student_public/${student.email}`" style="font-size: 20px"> {{student.name}} </router-link>
                 <p> {{student.surname}}</p>
                 <button class="yes" @click="accepted(student.email, selectedInternship.id)" >Yes</button>
               </div>
@@ -89,10 +76,8 @@
             <div class="det-content">
               <h2>Students</h2>
               <div v-for="student in selectedInternship.selected" style="padding: 5px; display: flex; gap: 10px">
-                <div class="profile_cont" style="display: flex; gap: 5px">
-                  <p> {{student.name}} </p>
-                  <p> {{student.surname}} </p>
-                </div>
+                <router-link :to="`/student_public/${student.email}`" style="font-size: 20px"> {{student.name}} </router-link>
+                <p> {{student.surname}} </p>
               </div>
               <button @click="closeSelected" class="popup-button" style="font-size: 20px;">Close</button>
             </div>
@@ -138,7 +123,7 @@
                   <div v-for="student in selectedInternship.selected" style="padding: 5px; display: flex; gap: 10px">
                     <div class="profile_cont" style="display: flex; gap: 50px">
                       <div style="display: flex; gap: 5px">
-                        <p style="font-size: 20px"> {{student.name}} </p>
+                        <router-link :to="`/student_public/${student.email}`" style="font-size: 20px"> {{student.name}} </router-link>
                         <p style="font-size: 20px"> {{student.surname}} </p>
                       </div>
                       <buttons :internship="internship" :student="student"/>

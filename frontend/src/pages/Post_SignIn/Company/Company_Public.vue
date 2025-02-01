@@ -23,13 +23,8 @@
           <span class="editable-input">{{ originalData.vat_number  }}</span>
         </div>
       </div>
-      <div class="vertical_line2"></div>
-      <div style="flex: 1;">
-        <div style="width: 100%; display: flex; justify-content: center;">
-          <span class="orange">Internships</span>
-          <span style="margin-left: 7px;" class="black">available</span>
-        </div>
 
+      <div style="flex: 1;">
         <div style="width: 100%; display: flex; justify-content: center;">
           <span class="orange">Reviews</span>
           <span style="margin-left: 7px;" class="black">received</span>
@@ -49,6 +44,7 @@
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -74,7 +70,7 @@ const originalData = ref<UserData>({
 function receiveData() {
   const token = localStorage.getItem('token');
 
-  fetch('http://localhost:8080/api/company/personalData', {
+  fetch('http://localhost:8080/api/publicProfile/getDataFrom/', {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`

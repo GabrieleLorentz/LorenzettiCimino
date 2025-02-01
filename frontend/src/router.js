@@ -26,7 +26,7 @@ const router = createRouter({
         {path: '/company_home', component: Company_Home},
         {path: '/company_public', component: Company_Public},
         {path: '/company_private', component: Company_Private},
-        {path: '/student_public', component: Student_Public},
+        {path: '/student_public/:email', component: Student_Public},
         {path: '/student_private', component: Student_Private},
         {path: '/rank_list', component: Rank_List}
     ]

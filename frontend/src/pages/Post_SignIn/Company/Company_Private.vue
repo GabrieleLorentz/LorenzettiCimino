@@ -27,7 +27,7 @@
         </div>
         <button @click="saveAllChanges" class="save" :disabled="!hasChanges">SAVE</button>
       </div>
-      <div class="vertical_line2"></div>
+
       <div style="flex: 1;">
 
         <div style="width: 100%; display: flex; justify-content: center;">
@@ -63,6 +63,7 @@
 
       </div>
     </div>
+
   </div>
 </template>
 
@@ -174,7 +175,6 @@ function saveAllChanges() {
 
 const myReview = ref([]);
 const complaint = ref([]);
-const comp = localStorage.getItem('email');
 function receiveMyReview() {
   const token = localStorage.getItem('token');
 
@@ -192,8 +192,8 @@ function receiveMyReview() {
       })
       .then(data => {
         console.log("Dati ricevuti dal server:", data);
-        myReview.value = data.filter(item => item.formType === "C_REVIEW" && comp === item.internship.companyEmail);
-        complaint.value = data.filter(item => item.formType === "S_COMPLAINT" && comp === item.internship.companyEmail);
+        myReview.value = data.filter(item => item.formType === "C_REVIEW");
+        complaint.value = data.filter(item => item.formType === "S_COMPLAINT");
       })
       .catch(error => {
         console.error("Errore durante il recupero dei dati:", error);

@@ -14,12 +14,7 @@
             <div style="border: 3px solid black; border-radius: 40px; padding: 10px; display: flex; flex-direction: column; gap: 5px">
               <div style="display: flex; gap: 10px">
                 <p><strong>Name:</strong> {{ internship.name }}</p>
-                <div class="profile_cont">
-                  <p><strong>Company:</strong> {{ internship.company_name }}</p>
-                  <div class="profile">
-
-                  </div>
-                </div>
+                <p><strong>Company:</strong> {{ internship.company_name }}</p>
                 <p><strong>Start Date:</strong> {{ internship.startDate }}</p>
                 <p><strong>End Date:</strong> {{ internship.endDate }}</p>
               </div>
@@ -85,7 +80,7 @@
                   <input id="start" v-model="key.start" type="date" class="form-input" />
                 </div>
                 <div class="form-row">
-                  <label for="end">Max end Date:</label>
+                  <label for="end">Max End Date:</label>
                   <input id="end" v-model="key.end" type="date" class="form-input" />
                 </div>
                 <div class="form-row">
@@ -103,9 +98,6 @@
               <p><strong>Name:</strong>{{ internship.name }}</p>
               <div class="profile_cont">
                 <p><strong>Company:</strong>{{ internship.company_name }}</p>
-                <div class="profile">
-
-                </div>
               </div>
               <p><strong>Start Date:</strong> {{ internship.startDate }}</p>
               <p><strong>End Date:</strong> {{ internship.endDate }}</p>

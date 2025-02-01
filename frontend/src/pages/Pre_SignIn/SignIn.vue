@@ -80,7 +80,6 @@ export default {
   font-weight: bold;
   margin-bottom: 10px;
 }
-
 .text-input-signin:hover {
   background-color: #f2a73b;
   color: #232526;
