@@ -243,7 +243,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void handleFeedBack(String authEmail, FeedBackDTO feedBackDTO) {
         Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
-        Internship internship = internshipRepository.findById(feedBackDTO.getInternshipId()).orElseThrow(()->new RuntimeException("Internship not found"));
+        Internship internship = internshipRepository.findInternshipByInternshipId(feedBackDTO.getInternshipId()).orElseThrow(()->new RuntimeException("Internship not found"));
         if(!internship.getSelectedStudents().contains(student) || feedBackDTO.getFeedbacks().isEmpty()){
             throw new InternshipException("THE STUDENT AND THE COMPANY ARE NOT CORRELATED",409);
         }
@@ -330,10 +330,9 @@ public class StudentServiceImpl implements StudentService {
         for(Form form : forms){
             cvResponses.add(form.getResponse());
         }
-        forms.clear();
-        forms.addAll(formRepository.findByStudentAndFormType(student,FormType.C_REVIEW));
+        List<Form> publicForms = formRepository.findByStudentAndFormType(student,FormType.C_REVIEW);
         List<FormCompleteDTO> formDTOs = new ArrayList<>();
-        for(Form form : forms){
+        for(Form form : publicForms){
             formDTOs.add(FormMapper.mapToCompleteFormDTO(form));
         }
         return new ShortStudentDTO(student.getEmail(),student.getName(),student.getSurname(),student.getDescription(),cvResponses,formDTOs);
