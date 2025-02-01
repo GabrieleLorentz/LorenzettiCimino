@@ -49,7 +49,7 @@ public class Internship {
     @JoinColumn(name = "company_email",nullable = false)
     private Company company;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "internship_applied_Student",
             joinColumns = @JoinColumn(name = "internship_id"),
@@ -57,14 +57,14 @@ public class Internship {
     )
     private List<Student> appliedStudents = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "internship_accepted_Students",
             joinColumns = @JoinColumn(name = "internship_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private List<Student> acceptedStudents = new ArrayList<>();
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "internship_selected_Students",
             joinColumns = @JoinColumn(name = "internship_id"),

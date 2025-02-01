@@ -73,14 +73,14 @@ public class CompanyController {
     }
 
     @PostMapping("/studentSelected/{email}_{internshipId}")
-    public ResponseEntity<StudentDTO> studentSelected(@PathVariable ("email") String email, @PathVariable ("internshipId") int internshipId) {
+    public ResponseEntity<StudentDTO> studentSelected(@PathVariable ("email") String email, @PathVariable ("internshipId") long internshipId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
         internshipService.addSelectedStudent(email,internshipId,authEmail);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping({"{email}"})
+    /*@GetMapping({"{email}"})
     public ResponseEntity<CompanyDTO> getCompanyById(@PathVariable ("email") String email) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
@@ -92,7 +92,7 @@ public class CompanyController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(savedCompany);
-    }
+    }*/
 
     @GetMapping
     public ResponseEntity<List<CompanyDTO>> getAllCompanies() {

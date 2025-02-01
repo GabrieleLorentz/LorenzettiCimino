@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ComplaintDTO {
-    private int internshipId;
+    private long internshipId;
     private String complaint;
     private String studentEmailForCompanyOnly;
 

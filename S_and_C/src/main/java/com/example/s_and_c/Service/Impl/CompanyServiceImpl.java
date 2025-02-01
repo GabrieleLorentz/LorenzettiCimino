@@ -66,7 +66,7 @@ public class CompanyServiceImpl implements CompanyService {
 
         try {
             if (!companyDTO.getEmail().equals(company.getEmail())) {
-                if(studentRepository.getStudentByEmail(companyDTO.getEmail()).isPresent()) {
+                if(studentRepository.findByEmail(companyDTO.getEmail()).isPresent()) {
                     throw new ResponseStatusException(HttpStatus.CONFLICT,"Student with email " + companyDTO.getEmail() + " already exists");
                 }
                 Company newCompany = new Company();
@@ -141,19 +141,13 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public void handleComplaintReceived(String authEmail, ComplaintDTO complaintDTO) {
-        Internship internship = internshipRepository.findById(complaintDTO.getInternshipId()).orElseThrow(()->new InternshipException("Internship not found",404));
-        Student student = studentRepository.getStudentByEmail(complaintDTO.getStudentEmailForCompanyOnly()).orElseThrow(()->new InternshipException("Student not found",404));
+        Internship internship = internshipRepository.findInternshipByInternshipId(complaintDTO.getInternshipId()).orElseThrow(()->new InternshipException("Internship not found",404));
+        System.out.println(complaintDTO.getStudentEmailForCompanyOnly());
+        Student student = studentRepository.findByEmail(complaintDTO.getStudentEmailForCompanyOnly()).orElseThrow(()->new InternshipException("Student not found",404));
         if(!internship.getCompany().getEmail().equals(authEmail)){
             throw new InternshipException("Internship does not belong to this company",404);
         }
-        Form form = new Form();
-        form.setFormType(FormType.COMPLAINT);
-        form.setRequest("Tell us your complaint:");
-        form.setResponse(complaintDTO.getComplaint());
-        form.setStudent(student);
-        form.setCompany(internship.getCompany());
-        form.setInternship(internship);
-        formRepository.save(form);
+        StudentServiceImpl.setComplaint(complaintDTO, student, internship, formRepository);
 
     }
 
@@ -193,7 +187,7 @@ public class CompanyServiceImpl implements CompanyService {
         requests.add("I am satisfied with the overall quality.");
         for (int i = 0; i < 5; i++) {
             Form form = new Form();
-            form.setFormType(FormType.FEEDBACK);
+            form.setFormType(FormType.C_FEEDBACK);
             form.setRequest(requests.get(i));
             form.setResponse(feedBackDTO.getFeedbacks().get(i));
             form.setCompany(internship.getCompany());
@@ -251,14 +245,14 @@ public class CompanyServiceImpl implements CompanyService {
     public void handleReviewReceived(String authEmail, ReviewDTO reviewDTO) {
         Internship internship = internshipRepository.findById(reviewDTO.getInternshipId()).orElseThrow(()->new InternshipException("Internship not found",404));
 
-        Student student = studentRepository.getStudentByEmail(reviewDTO.getStudEmailForCompanyOnly()).orElseThrow(()->new InternshipException("Student not found",404));
+        Student student = studentRepository.findByEmail(reviewDTO.getStudEmailForCompanyOnly()).orElseThrow(()->new InternshipException("Student not found",404));
         if(!internship.getCompany().getEmail().equals(authEmail)){
             throw new InternshipException("Internship does not belong to this company",409);
         }
         if(LocalDate.now().isBefore(internship.getEndDate())){
             throw new InternshipException("is not time to review",400);
         }
-        if(!formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.REVIEW).isEmpty()){
+        if(!formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.C_REVIEW).isEmpty()){
             throw new InternshipException("Review already inserted",409);
         }
         List<String> requests = new ArrayList<>();
@@ -266,7 +260,7 @@ public class CompanyServiceImpl implements CompanyService {
         requests.add("What are your suggestions?");
         for (int i = 0; i < 2; i++) {
             Form form = new Form();
-            form.setFormType(FormType.REVIEW);
+            form.setFormType(FormType.C_REVIEW);
             form.setRequest(requests.get(i));
             form.setResponse(reviewDTO.getReview().get(i));
             form.setCompany(internship.getCompany());

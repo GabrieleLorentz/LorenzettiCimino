@@ -160,7 +160,7 @@ public class InternshipServiceImpl implements InternshipService {
 
     @Override
     public void addAcceptedStudent(String email, int internshipId, String authEmail) {
-        Student student = studentRepository.getStudentByEmail(email)
+        Student student = studentRepository.findByEmail(email)
                 .orElseThrow(() -> new InternshipException("Student not found", 404));
 
         Internship internship = internshipRepository.findById(internshipId)
@@ -213,7 +213,7 @@ public class InternshipServiceImpl implements InternshipService {
         Internship internship = internshipRepository.findInternshipByInternshipId(formResponseDTO.getInternshipId())
                 .orElseThrow(()-> new InternshipException("Internship not found",404));
 
-        Student student = studentRepository.getStudentByEmail(authEmail)
+        Student student = studentRepository.findByEmail(authEmail)
                 .orElseThrow(()->new InternshipException("Student not found",404));
 
         List<Form> forms = formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.INTERVIEW);
@@ -240,7 +240,7 @@ public class InternshipServiceImpl implements InternshipService {
         Internship internship = internshipRepository.findInternshipByInternshipId(internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
         if(LocalDate.now().isAfter(internship.getStartDate()))
             throw new InternshipException("Internship already started", 400);
-        Student student = studentRepository.getStudentByEmail(authEmail)
+        Student student = studentRepository.findByEmail(authEmail)
                 .orElseThrow(() -> new InternshipException("Student not found", 404));
         if(!internship.getSelectedStudents().contains(student)){
             throw new InternshipException("Student has not been selected to this internship", 404);
@@ -249,15 +249,20 @@ public class InternshipServiceImpl implements InternshipService {
         internshipRepository.save(internship);
     }
 
+    @Transactional
     @Override
     public void addSelectedStudent(String email, long internshipId, String authEmail) {
-        Company company = companyRepository.findByEmail(authEmail).orElseThrow(()->new InternshipException("Company not found",404));
+        Company company = companyRepository.findByEmail(authEmail).orElseThrow(
+                ()->new InternshipException("Company not found",404));
+
         List<Internship> internships = internshipRepository.findByCompany(company);
-        Internship internship = internshipRepository.findInternshipByInternshipId(internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
+        Internship internship = internshipRepository.findInternshipByInternshipId(internshipId).orElseThrow(
+                ()->new InternshipException("Internship not found",404));
         if(!internships.contains(internship)){
             throw new InternshipException("Internship not found",404);
         }
-        Student student = studentRepository.getStudentByEmail(email).orElseThrow(()->new InternshipException("Student not found",404));
+        Student student = studentRepository.findByEmail(email).orElseThrow(
+                ()->new InternshipException("Student not found",404));
         if (internship.getSelectedStudents().contains(student)) {
             throw new InternshipException("Student already accepted", 409);
         }
@@ -269,8 +274,12 @@ public class InternshipServiceImpl implements InternshipService {
         if (internship.getAppliedStudents().contains(student) || !internship.getAcceptedStudents().contains(student)) {
             throw new InternshipException("Student has not been selected for this internship", 400);
         }
+
         internship.addSelectedStudent(student);
         internship.deleteAcceptedStudent(student);
-        internshipRepository.save(internship);
+        Internship savedInternship = internshipRepository.save(internship);
+        if (savedInternship.getSelectedStudents().isEmpty()) {
+            throw new InternshipException("Save failed", 500);
+        }
     }
 }

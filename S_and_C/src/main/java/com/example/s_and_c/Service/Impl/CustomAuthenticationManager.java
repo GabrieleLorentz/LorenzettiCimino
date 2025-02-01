@@ -33,7 +33,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
         String password = authentication.getCredentials().toString();
 
         // Try to find student
-        Student student = studentRepository.getStudentByEmail(email).orElse(null);
+        Student student = studentRepository.findByEmail(email).orElse(null);
         if (student != null && passwordEncoder.matches(password, student.getPassword())) {
             return new UsernamePasswordAuthenticationToken(
                     email,

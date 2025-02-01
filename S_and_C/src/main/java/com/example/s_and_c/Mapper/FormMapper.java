@@ -1,19 +1,12 @@
 package com.example.s_and_c.Mapper;
 
 import com.example.s_and_c.DTO.CompanyDTOs.ShortCompanyDTO;
-import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
-import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
-import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.FormCompleteDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.FormDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.ShortInternshipDTO;
 import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
 import com.example.s_and_c.Entities.Form;
-import com.example.s_and_c.Entities.Internship;
 import com.example.s_and_c.Entities.Status.FormType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FormMapper {
     public static FormDTO mapToFormDTO(Form form) {
@@ -34,7 +27,7 @@ public class FormMapper {
                     form.getFormType()
             );
         }
-        if(form.getFormType().equals(FormType.COMPLAINT)){
+        if(form.getFormType().equals(FormType.C_COMPLAINT) ||form.getFormType().equals(FormType.S_COMPLAINT) ){
             return new FormCompleteDTO(form.getFormId(),
                     form.getRequest(),
                     form.getResponse(),

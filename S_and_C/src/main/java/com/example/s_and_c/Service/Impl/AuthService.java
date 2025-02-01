@@ -67,7 +67,7 @@ public class AuthService implements AuthorizationService {
 
     public UserTokenDTO registerCompany(RegisterRequestDTO request) {
 
-        if (studentRepository.getStudentByEmail(request.getEmail()).isPresent()) {
+        if (studentRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
         }
 
