@@ -8,6 +8,7 @@ import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
 
 import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
 
+import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
 import com.example.s_and_c.Entities.*;
 import com.example.s_and_c.Entities.Status.FormType;
 import com.example.s_and_c.Repositories.*;
@@ -52,7 +53,8 @@ public class OngoingInternshipTest {
     private CompanyController companyController;
     private String studentToken;
     private String companyToken;
-    private long internshipId;
+    private long internshipId1;
+    private long internshipId2;
     @Autowired
     private AuthController authController;
     @Autowired
@@ -82,6 +84,7 @@ public class OngoingInternshipTest {
         objectMapper.registerModule(new JavaTimeModule());
         regAndLogin();
         setup();
+        setup2();
     }
 
 
@@ -160,7 +163,56 @@ public class OngoingInternshipTest {
         internship.addSelectedStudent(student);
         internshipRepository.save(internship);
 
-        internshipId = internship.getInternshipId();
+        internshipId1 = internship.getInternshipId();
+    }
+
+    public void setup2() throws Exception {
+        Company company = companyRepository.findByEmail("provam@gmail.com")
+                .orElseThrow(() -> new InternshipException("company not found", 404));
+
+        Internship internship = new Internship();
+        internship.setName("prova2");
+        internship.setDescription("prova2");
+        internship.setStartDate(LocalDate.of(2025, 1, 2));
+        internship.setEndDate(LocalDate.of(2025, 1, 31));
+        internship.setEndFormCompilingDate(LocalDate.of(2025, 1, 1));
+        internship.setEndSelectionAcceptanceDate(LocalDate.of(2025, 1, 1));
+        internship.setSalary(560);
+        internship.setCompany(company);
+        internshipRepository.save(internship);
+
+        List<String> questions = new ArrayList<>();
+        questions.add("prova");
+        questions.add("prova");
+        List<Form> forms = new ArrayList<>();
+
+        for(String question : questions) {
+            Form form = new Form();
+            form.setFormType(FormType.INTERVIEW);
+            form.setRequest(question);
+            form.setInternship(internship);
+            forms.add(form);
+        }
+        formRepository.saveAll(forms);
+
+        List<String> qualifications = new ArrayList<>();
+        qualifications.add("prova");
+        qualifications.add("prova");
+        List<Qualification> qualificationList = new ArrayList<>();
+        for(String qualification : qualifications) {
+            Qualification qualification1 = new Qualification();
+            qualification1.setInternship(internship);
+            qualification1.setQualificationName(qualification);
+            qualificationList.add(qualification1);
+        }
+        qualificationRepository.saveAll(qualificationList);
+
+        Student student = studentRepository.findByEmail("provah@gmail.com").orElseThrow(()->new RuntimeException("student not found"));
+
+        internship.addSelectedStudent(student);
+        internshipRepository.save(internship);
+
+        internshipId2 = internship.getInternshipId();
     }
 
 
@@ -170,7 +222,7 @@ public class OngoingInternshipTest {
     @Order(1)
     void testSendComplaint() throws Exception {
 
-        Internship internship = internshipRepository.findInternshipByInternshipId(internshipId).orElseThrow(()->new InternshipException("Internship not found",404));
+        Internship internship = internshipRepository.findInternshipByInternshipId(internshipId1).orElseThrow(()->new InternshipException("Internship not found",404));
         Student student = studentRepository.findByEmail("provah@gmail.com").orElseThrow(()->new InternshipException("student not found",404));
         ComplaintDTO complaintDTO = new ComplaintDTO(
                 internship.getInternshipId(),
@@ -185,7 +237,6 @@ public class OngoingInternshipTest {
                         .content(context))
                 .andExpect(status().isOk());
 
-
         List<Form> complaint = formRepository.findByInternship(internship);
 
         Assertions.assertNotNull(complaint);
@@ -193,6 +244,32 @@ public class OngoingInternshipTest {
             if(form.getFormType().equals(FormType.C_COMPLAINT)) {
                 Assertions.assertEquals("prova", form.getResponse());}
         }
+    }
 
+    @Transactional
+    @Test
+    @Order(2)
+    void testSendReview2() throws Exception {
+
+        Internship internship = internshipRepository.findInternshipByInternshipId(internshipId2).orElseThrow(()->new InternshipException("Internship not found",404));
+        Student student = studentRepository.findByEmail("provah@gmail.com").orElseThrow(()->new InternshipException("student not found",404));
+        List<String> reviews = new ArrayList<>();
+        reviews.add("5");
+        reviews.add("prova");
+        ReviewDTO reviewDTO = new ReviewDTO(null,internshipId2,reviews);
+
+        String context = objectMapper.writeValueAsString(reviewDTO);
+        mockMvcC.perform(post("/api/student/sendReview")
+                        .header("Authorization", "Bearer " + studentToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(context))
+                .andExpect(status().isOk());
+
+        List<Form> reviewsStud = formRepository.findByInternshipAndStudentAndFormType(internship,student,FormType.S_REVIEW);
+
+        Assertions.assertNotNull(reviewsStud);
+        for(Form form : reviewsStud) {
+            Assertions.assertTrue(reviews.contains(form.getResponse()));
+        }
     }
 }

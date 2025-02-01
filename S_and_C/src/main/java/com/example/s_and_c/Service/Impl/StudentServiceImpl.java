@@ -6,6 +6,7 @@ import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
 import com.example.s_and_c.DTO.FormDTO.FormCompleteDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
+import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
 import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
@@ -31,6 +32,9 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -279,7 +283,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void handleReviewReceived(String authEmail, ReviewDTO reviewDTO) {
-        Internship internship = internshipRepository.findById(reviewDTO.getInternshipId()).orElseThrow(()->new RuntimeException("Internship not found"));
+        Internship internship = internshipRepository.findInternshipByInternshipId(reviewDTO.getInternshipId()).orElseThrow(()->new RuntimeException("Internship not found"));
         Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
 
         if(!formRepository.findByInternshipAndStudentAndFormType(internship,student, FormType.S_REVIEW).isEmpty()){
@@ -314,32 +318,24 @@ public class StudentServiceImpl implements StudentService {
         return formDTOs;
     }
 
-    /*
-     * @param authEmail
-     * @param reviewDTO
-     *
+    /**
+     * @param studentEmail
+     * @return
+     */
     @Override
-    public void handleReview(String authEmail, ReviewDTO reviewDTO) {
-        Internship internship = internshipRepository.findById(reviewDTO.getInternship_id()).orElseThrow(()->new RuntimeException("Internship not found"));
-        Student student = studentRepository.findByEmail(authEmail).orElseThrow(()->new RuntimeException("Student not found"));
-        List<Form> formList = formRepository.findByInternshipAndStudentAndFormType(internship, student, FormType.REVIEW);
-        for (Form form : formList) {
-            for( FormDTO formDTO : reviewDTO.getReview()){
-                if(formDTO.getFormId() == form.getFormId()){
-                    form.setResponse(formDTO.getResponse());
-                    formRepository.save(form);
-                }
-            }
+    public ShortStudentDTO getPublicStudentData(String studentEmail) {
+        Student student = studentRepository.findByEmail(studentEmail).orElseThrow(()->new InternshipException("Student not found",404));
+        List<Form> forms = formRepository.findByStudentAndFormType(student,FormType.CV);
+        List<String> cvResponses = new ArrayList<>();
+        for(Form form : forms){
+            cvResponses.add(form.getResponse());
         }
-
+        forms.clear();
+        forms.addAll(formRepository.findByStudentAndFormType(student,FormType.C_REVIEW));
+        List<FormCompleteDTO> formDTOs = new ArrayList<>();
+        for(Form form : forms){
+            formDTOs.add(FormMapper.mapToCompleteFormDTO(form));
+        }
+        return new ShortStudentDTO(student.getEmail(),student.getName(),student.getSurname(),student.getDescription(),cvResponses,formDTOs);
     }
-/*private StudentDTO mapInternshipToDTO(Student student) {
-        StudentDTO studentDTO = new StudentDTO();
-        studentDTO.setEmail(student.getEmail());
-        studentDTO.setName(student.getName());
-        studentDTO.setSurname(student.getSurname());
-        studentDTO.setDescription(student.getDescription());
-        return studentDTO;
-    }*/
-
 }

@@ -231,7 +231,7 @@ public class CompanyServiceImpl implements CompanyService {
      */
     @Override
     public void handleReviewReceived(String authEmail, ReviewDTO reviewDTO) {
-        Internship internship = internshipRepository.findById(reviewDTO.getInternshipId()).orElseThrow(()->new InternshipException("Internship not found",404));
+        Internship internship = internshipRepository.findInternshipByInternshipId(reviewDTO.getInternshipId()).orElseThrow(()->new InternshipException("Internship not found",404));
 
         Student student = studentRepository.findByEmail(reviewDTO.getStudentEmailForCompanyOnly()).orElseThrow(()->new InternshipException("Student not found",404));
         if(!internship.getCompany().getEmail().equals(authEmail)){

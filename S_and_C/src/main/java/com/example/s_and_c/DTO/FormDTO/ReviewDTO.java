@@ -13,6 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 public class ReviewDTO {
     private String studentEmailForCompanyOnly;
-    private int internshipId;
+    private long internshipId;
     private List<String> review;
 }

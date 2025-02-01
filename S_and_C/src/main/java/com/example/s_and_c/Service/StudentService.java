@@ -5,6 +5,7 @@ import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
 import com.example.s_and_c.DTO.FormDTO.FormCompleteDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipForStudentsDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
+import com.example.s_and_c.DTO.StudentDTOS.ShortStudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.StudentDTO;
 import com.example.s_and_c.DTO.StudentDTOS.UpdatedStudentDTO;
 
@@ -28,4 +29,6 @@ public interface StudentService {
     void handleReviewReceived(String authEmail, ReviewDTO reviewDTO);
 
     List<FormCompleteDTO> getMyForms(String authEmail);
+
+    ShortStudentDTO getPublicStudentData(String studentEmail);
 }
