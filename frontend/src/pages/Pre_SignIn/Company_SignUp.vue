@@ -7,7 +7,7 @@
       <input v-model="formData.name" type="text" placeholder="name" class="text-input-signin" />
       <input v-model="formData.email" type="email" placeholder="e-mail" class="text-input-signin" />
       <input v-model="formData.password" type="password" placeholder="password" class="text-input-signin" />
-      <textarea v-model="formData.description" placeholder="description" class="input-signin"></textarea>
+      <textarea v-model="formData.description" placeholder="description" class="input-signup"></textarea>
       <input v-model="formData.vat_number" type="number" placeholder="VAT" class="text-input-signin" />
 
       <button @click="submitForm" class="button">SIGN UP</button>
@@ -33,7 +33,6 @@ export default {
     submitForm() {
 
       const jsonData = JSON.stringify(this.formData);
-      console.log(jsonData);
 
       fetch('http://localhost:8080/api/auth/registerCompany', {
         method: 'POST',
@@ -50,15 +49,13 @@ export default {
                 this.$router.push('/company_home');
               });
             } else if (response.status === 401) {
-              console.log(response.status);
               alert('User already exists');
             }else {
               alert('Error. Try again later')
             }
           })
-          .then(data => {console.log('Risposta dal server:',data);})
           .catch(error => {
-            console.error('Errore:', error);
+            console.error('Error:', error);
             alert('A connection error occurred');
           });
     }

@@ -12,29 +12,21 @@
 </template>
 
 <style>
-body {
-  background-color: white; /* Imposta lo sfondo bianco */
-  margin: 0; /* Rimuove i margini predefiniti */
-  padding: 0; /* Rimuove i padding predefiniti */
-}
-
 .button {
-  background-color: #232526; /* Colore di sfondo iniziale */
-  color: #f2a73b; /* Colore del testo */
-  border: 4px solid #f2a73b; /* Rimuove il bordo */
+  background-color: #232526;
+  color: #f2a73b;
+  border: 4px solid #f2a73b;
   width: 90%;
   font-size: 50px;
   padding: 15px;
-  border-radius: 30px; /* Angoli arrotondati */
-  transition: background-color 0.4s ease, color 0.4s ease; /* Transizione morbida per il cambiamento del colore */
+  border-radius: 30px;
+  transition: background-color 0.4s ease, color 0.4s ease;
   font-weight: bold;
 }
-
-/* Effetto hover */
 .button:hover {
-  background-color: #f2a73b; /* Colore di sfondo al passaggio del mouse */
+  background-color: #f2a73b;
   color: #232526;
-  cursor: pointer; /* Cambia il cursore quando ci passi sopra */
+  cursor: pointer;
 }
 </style>
 <script setup lang="ts">

@@ -120,11 +120,11 @@
               <div v-if="showStudent" class="det">
                 <div class="det-content">
                   <h2>Students</h2>
-                  <div v-for="student in selectedInternship.selected" style="padding: 5px; display: flex; gap: 10px">
-                    <div class="profile_cont" style="display: flex; gap: 50px">
-                      <div style="display: flex; gap: 5px">
-                        <router-link :to="`/student_public/${student.email}`" style="font-size: 20px"> {{student.name}} </router-link>
-                        <p style="font-size: 20px"> {{student.surname}} </p>
+                  <div v-for="student in selectedInternship.selected" >
+                    <div style="display: flex; align-items: center; gap: 50px">
+                      <div style="display: flex; align-items: center; gap: 10px">
+                        <router-link :to="`/student_public/${student.email}`" style="font-size: 30px"> {{student.name}} </router-link>
+                        <p style="font-size: 30px"> {{student.surname}} </p>
                       </div>
                       <buttons :internship="internship" :student="student"/>
                     </div>
@@ -146,21 +146,6 @@
   max-height: 540px;
   min-height: 540px;
   overflow-y: auto;
-}
-.profile_cont {
-  position: relative;
-}
-.profile_cont:hover .profile{
-  display: block;
-}
-.profile {
-  display: none;
-  position: absolute;
-  left: 0;
-  background-color: #f2a73b;
-  border: 2px solid black;
-  border-radius: 15px;
-  padding: 4px;
 }
 .yes:hover {
   color: green;
@@ -194,14 +179,13 @@ function receiveData() {
         if (response.ok) {
           return response.json();
         }
-        throw new Error("Errore nella richiesta al backend");
+        throw new Error("Error in request to backend");
       })
       .then(data => {
-        console.log(data)
         internships.value = data;
       })
       .catch(error => {
-        console.error("Errore durante il recupero dei dati:", error);
+        console.error("Error while retrieving data:", error);
       });
 }
 
@@ -239,10 +223,6 @@ function accepted(email, internshipId) {
           alert('Error. Try again later');
         }
       })
-      .then(data => {
-        console.log(data)
-        console.log("ciao")
-      })
       .catch(error => {
         console.error('Errore:', error);
         alert('A connection error occurred');
@@ -272,7 +252,6 @@ const groupedForms = computed(() => {
 });
 function selected(email, intId) {
   const token = localStorage.getItem('token');
-  console.log(selectedInternship)
 
   fetch(`http://localhost:8080/api/company/studentSelected/${email}_${intId}`, {
     method: 'POST',

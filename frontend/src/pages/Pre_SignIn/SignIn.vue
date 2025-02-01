@@ -37,29 +37,26 @@ export default {
           .then(response => {
             if (response.ok) {
               return response.json().then(data => {
-                console.log("Dati ricevuti:", data);
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("email", data.email);
                 localStorage.setItem("role", data.role);
                 localStorage.setItem("password", this.formData.password);
 
                 if (data.role === '[STUDENT]') {
-                  window.location.href = '/student_home';  //funziona
+                  window.location.href = '/student_home';
                 }
                 else if (data.role === '[COMPANY]') {
                   window.location.href = '/company_home';
                 }
               });
             } else if (response.status === 401) {
-              console.log(response.status);
               alert('Incorrect email or password');
             }else {
               alert('Error. Try again later')
             }
           })
-          .then(data => {console.log('Risposta dal server:', data);})
           .catch(error => {
-            console.error('Errore:', error);
+            console.error('Error:', error);
             alert('A connection error occurred')
           });
     }
@@ -76,7 +73,7 @@ export default {
   font-size: 40px;
   padding: 15px;
   border-radius: 30px;
-  transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease; /* Transizione morbida per il cambiamento del colore */
+  transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
   font-weight: bold;
   margin-bottom: 10px;
 }

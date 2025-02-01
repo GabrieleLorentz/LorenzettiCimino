@@ -227,14 +227,13 @@ function receiveMy() {
         if (response.ok) {
           return response.json();
         }
-        throw new Error("Errore nella richiesta al backend");
+        throw new Error("Error in request to backend");
       })
       .then(data => {
-        console.log(data)
         myInternships.value = data;
       })
       .catch(error => {
-        console.error("Errore durante il recupero dei dati:", error);
+        console.error("Error while retrieving data:", error);
       });
 }
 
@@ -327,7 +326,7 @@ function receiveAll() {
         if (response.ok) {
           return response.json();
         }
-        throw new Error("Errore nella richiesta al backend");
+        throw new Error("Error in request to backend");
       })
       .then(data => {
         allInternships.value = data;
@@ -336,7 +335,7 @@ function receiveAll() {
         });
       })
       .catch(error => {
-        console.error("Errore durante il recupero dei dati:", error);
+        console.error("Error while retrieving data:", error);
       });
 }
 
@@ -380,7 +379,7 @@ function search() {
       .then(data => {
         allInternships.value = data;
       })
-      .catch(error => {console.error('Errore errore', error);
+      .catch(error => {console.error('Error', error);
       });
 }
 onMounted(() => {

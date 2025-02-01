@@ -102,6 +102,7 @@ export default {
   border: 2px solid black;
   border-radius: 15px;
   padding: 4px;
+  z-index: 10;
 }
 .popup-link {
   display: block;
