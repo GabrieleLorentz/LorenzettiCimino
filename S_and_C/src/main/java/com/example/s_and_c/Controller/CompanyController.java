@@ -5,6 +5,7 @@ import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
 import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
 import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.FormCompleteDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InsertInternshipDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipCompleteDTO;
 import com.example.s_and_c.DTO.InternshipDTOs.InternshipDTO;
@@ -138,6 +139,13 @@ public class CompanyController {
         String authEmail = auth.getName();
         companyService.handleReviewReceived(authEmail, reviewDTO);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/myForms")
+    public ResponseEntity<List<FormCompleteDTO>> getMyForms() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authEmail = auth.getName();
+        return new ResponseEntity<>(companyService.getMyForms(authEmail),HttpStatus.OK);
     }
 
     @ExceptionHandler(InternshipException.class)

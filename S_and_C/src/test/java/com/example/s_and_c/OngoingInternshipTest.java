@@ -186,9 +186,13 @@ public class OngoingInternshipTest {
                 .andExpect(status().isOk());
 
 
-        Form complaint = formRepository.findByInternship(internship);
+        List<Form> complaint = formRepository.findByInternship(internship);
 
         Assertions.assertNotNull(complaint);
-        Assertions.assertEquals("prova", complaint.getResponse());
+        for(Form form : complaint) {
+            if(form.getFormType().equals(FormType.C_COMPLAINT)) {
+                Assertions.assertEquals("prova", form.getResponse());}
+        }
+
     }
 }

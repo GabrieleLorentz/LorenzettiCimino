@@ -5,6 +5,7 @@ import com.example.s_and_c.DTO.CompanyDTOs.UpdatedCompanyDTO;
 import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
 import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.FormCompleteDTO;
 
 import java.util.List;
 
@@ -16,8 +17,6 @@ public interface CompanyService {
 
     UpdatedCompanyDTO updateCompany(String email, CompanyDTO companyDTO);
 
-    void deleteCompany(String email);
-
 
     void handleFeedBackReceived(String authEmail, FeedBackDTO feedBackDTO);
 
@@ -26,4 +25,6 @@ public interface CompanyService {
 
 
     void handleReviewReceived(String authEmail, ReviewDTO reviewDTO);
+
+    List<FormCompleteDTO> getMyForms(String authEmail);
 }

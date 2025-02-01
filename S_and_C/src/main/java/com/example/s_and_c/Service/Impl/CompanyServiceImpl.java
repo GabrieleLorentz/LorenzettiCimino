@@ -7,11 +7,13 @@ import com.example.s_and_c.DTO.AuthDTOs.UserTokenDTO;
 import com.example.s_and_c.DTO.FormDTO.ComplaintDTO;
 import com.example.s_and_c.DTO.FormDTO.FeedBackDTO;
 import com.example.s_and_c.DTO.FormDTO.ReviewDTO;
+import com.example.s_and_c.DTO.InternshipDTOs.FormCompleteDTO;
 import com.example.s_and_c.Entities.*;
 import com.example.s_and_c.Entities.Status.FormType;
 import com.example.s_and_c.Entities.Status.Role;
 import com.example.s_and_c.Exception.ResourceNotFoundException;
 import com.example.s_and_c.Mapper.CompanyMapper;
+import com.example.s_and_c.Mapper.FormMapper;
 import com.example.s_and_c.Repositories.*;
 import com.example.s_and_c.Service.CompanyService;
 import com.example.s_and_c.Utils.DateUtils;
@@ -131,14 +133,6 @@ public class CompanyServiceImpl implements CompanyService {
         }
     }
 
-
-
-
-    @Override
-    public void deleteCompany(String email){
-        companyRepository.deleteCompanyByEmail(email);
-    }
-
     @Override
     public void handleComplaintReceived(String authEmail, ComplaintDTO complaintDTO) {
         Internship internship = internshipRepository.findInternshipByInternshipId(complaintDTO.getInternshipId()).orElseThrow(()->new InternshipException("Internship not found",404));
@@ -255,6 +249,21 @@ public class CompanyServiceImpl implements CompanyService {
         }
         return feedBackDTOList;
     }*/
+
+    /**
+     * @param authEmail
+     * @return
+     */
+    @Override
+    public List<FormCompleteDTO> getMyForms(String authEmail) {
+        Company company = companyRepository.findByEmail(authEmail).orElseThrow(()->new InternshipException("Student not found",404));
+        List<Form> forms = formRepository.findByCompany(company);
+        List<FormCompleteDTO> formDTOs = new ArrayList<>();
+        for(Form form : forms){
+            formDTOs.add(FormMapper.mapToCompleteFormDTO(form));
+        }
+        return formDTOs;
+    }
 
     /**
      * @param authEmail
