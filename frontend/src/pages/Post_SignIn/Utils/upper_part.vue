@@ -67,6 +67,7 @@ export default {
   color: #f2a73b;
   font-size: 40px;
   font-weight: bold;
+  /*ciao*/
 }
 .black {
   color: black;
