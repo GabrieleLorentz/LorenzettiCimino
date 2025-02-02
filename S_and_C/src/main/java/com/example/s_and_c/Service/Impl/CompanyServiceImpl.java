@@ -267,7 +267,11 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public ShortCompanyDTO getPublicCompanyData(String companyEmail) {
         Company company = companyRepository.findByEmail(companyEmail).orElseThrow(()->new InternshipException("Company not found",404));
-        List<Form> forms = formRepository.findByCompanyAndFormType(company,FormType.S_REVIEW);
+        List<Internship> internships = internshipRepository.findByCompany(company);
+        List<Form> forms = new ArrayList<>();
+        for (Internship internship : internships) {
+            forms.addAll(formRepository.findByInternshipAndFormType(internship,FormType.S_REVIEW));
+        }
         List<FormCompleteDTO> formDTOs = new ArrayList<>();
         for(Form form : forms){
             formDTOs.add(FormMapper.mapToCompleteFormDTO(form));
