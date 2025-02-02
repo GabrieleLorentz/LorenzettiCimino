@@ -35,34 +35,38 @@ public class AuthService implements AuthorizationService {
     private final CustomAuthenticationManager authenticationManager;
     private final FormRepository formRepository;
 
-    public UserTokenDTO registerStudent(RegisterRequestDTO registerRequestDTO) {
+    public UserTokenDTO registerStudent(RegisterRequestDTO request) {
 
-        if (companyRepository.findByEmail(registerRequestDTO.getEmail()).isPresent()) {
+        if (companyRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
         }
 
         var student = new Student();
-        student.setName(registerRequestDTO.getName());
-        student.setSurname(registerRequestDTO.getSurname());
-        student.setEmail(registerRequestDTO.getEmail());
-        student.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword()));
-        student.setDescription(registerRequestDTO.getDescription());
+        student.setName(request.getName());
+        student.setSurname(request.getSurname());
+        student.setEmail(request.getEmail());
+        student.setPassword(passwordEncoder.encode(request.getPassword()));
+        student.setDescription(request.getDescription());
         student.setRole(Role.STUDENT);
-        if(registerRequestDTO.getCv().isEmpty())
+        if(request.getCv().isEmpty())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "CV cannot be empty");
         studentRepository.save(student);
 
-        for(String cv_string : registerRequestDTO.getCv()){
+        for(String cv_string : request.getCv()){
             Form form = new Form();
             form.setStudent(student);
             form.setFormType(FormType.CV);
             form.setResponse(cv_string);
             formRepository.save(form);
         }
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+        var jwtToken = jwtService.generateToken(userDetails);
 
-        var jwtToken = jwtService.generateToken(student);
-
-        return new UserTokenDTO(student.getEmail(),jwtToken, student.getRole().toString());
+        return new UserTokenDTO(student.getEmail(),jwtToken, userDetails.getAuthorities().toString());
     }
 
     public UserTokenDTO registerCompany(RegisterRequestDTO request) {
@@ -89,8 +93,9 @@ public class AuthService implements AuthorizationService {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        var jwtToken = jwtService.generateToken(company);
-        return new UserTokenDTO(company.getEmail(),jwtToken, company.getRole().toString());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+        var jwtToken = jwtService.generateToken(userDetails);
+        return new UserTokenDTO(company.getEmail(),jwtToken, userDetails.getAuthorities().toString());
     }
 
     public UserTokenDTO authenticate(AuthRequestDTO authRequestDTO) {
