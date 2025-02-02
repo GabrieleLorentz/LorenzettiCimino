@@ -52,6 +52,10 @@
 <script setup lang="ts">
 import {ref, onMounted, computed} from 'vue';
 import UpperPart from "@/pages/Post_SignIn/Utils/upper_part.vue";
+import {useRoute} from "vue-router";
+
+const route = useRoute();
+const companyEmail = route.params.email;
 
 interface UserData {
   name: string;
@@ -67,10 +71,12 @@ const originalData = ref<UserData>({
   vat_number: 0
 });
 
+const Review = ref([]);
+
 function receiveData() {
   const token = localStorage.getItem('token');
 
-  fetch('http://localhost:8080/api/publicProfile/getDataFrom/', {
+  fetch(`http://localhost:8080/api/publicProfile/getDataFromCompany/${companyEmail}`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`
@@ -89,30 +95,7 @@ function receiveData() {
           description: data.description,
           vat_number: data.vat_number
         };
-      })
-      .catch(error => {
-        console.error("Error while retrieving data:", error);
-      });
-}
-
-const Review = ref([]);
-function receiveMyReview() {
-  const token = localStorage.getItem('token');
-
-  fetch('http://localhost:8080/api/company/myForms', {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    },
-  })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("Error in request to backend");
-      })
-      .then(data => {
-        Review.value = data.filter(item => item.formType === "S_REVIEW");
+        Review.value = data.forms.filter(item => item.formType === "S_REVIEW");
       })
       .catch(error => {
         console.error("Error while retrieving data:", error);
@@ -121,7 +104,6 @@ function receiveMyReview() {
 
 onMounted(() => {
   receiveData();
-  receiveMyReview();
 });
 
 const groupedReviews = computed(() => {

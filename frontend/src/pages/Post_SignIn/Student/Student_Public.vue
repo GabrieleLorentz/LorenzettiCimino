@@ -81,6 +81,8 @@ const originalData = ref<UserData>({
   cv: []
 });
 
+const Review = ref([]);
+
 function receiveData() {
   const token = localStorage.getItem('token');
 
@@ -104,30 +106,7 @@ function receiveData() {
           description: data.description,
           cv: data.cv
         };
-      })
-      .catch(error => {
-        console.error("Error while retrieving data:", error);
-      });
-}
-
-const Review = ref([]);
-function receiveMyReview() {
-  const token = localStorage.getItem('token');
-
-  fetch('http://localhost:8080/api/student/myForms', {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    },
-  })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("Error in request to backend");
-      })
-      .then(data => {
-        Review.value = data.filter(item => item.formType === "C_REVIEW");
+        Review.value = data.forms.filter(item => item.formType === "C_REVIEW");
       })
       .catch(error => {
         console.error("Error while retrieving data:", error);
@@ -136,7 +115,6 @@ function receiveMyReview() {
 
 onMounted(() => {
   receiveData();
-  receiveMyReview();
 });
 
 const groupedReviews = computed(() => {
