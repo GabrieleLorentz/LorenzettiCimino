@@ -112,7 +112,7 @@ function receiveData() {
         Review.value = data.forms.filter(item => item.formType === "C_REVIEW");
       })
       .catch(error => {
-        console.error("Error while retrieving data:", error);
+        console.error(error);
       });
 }
 

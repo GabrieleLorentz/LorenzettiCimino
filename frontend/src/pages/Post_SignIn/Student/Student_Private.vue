@@ -26,11 +26,12 @@
           <textarea v-model="editedData.description" class="editable-textarea"></textarea>
         </div>
         <div class="data">
-          <ul style="max-height: 70px; overflow-y: auto;">
+          <textarea v-model="editedData.cv" class="editable-textarea"></textarea>
+          <!--<ul style="max-height: 70px; overflow-y: auto;">
             <li v-for="(qualification, index) in editedData.cv" :key="index">
               {{ qualification }}
             </li>
-          </ul>
+          </ul> -->
         </div>
         <button @click="saveAllChanges" class="save" :disabled="!hasChanges">SAVE</button>
       </div>
@@ -165,7 +166,7 @@ const hasChanges = computed(() => {
       originalData.value.email !== editedData.value.email ||
       originalData.value.password !== editedData.value.password ||
       originalData.value.description !== editedData.value.description ||
-      originalData.value.cv !== editedData.value.description
+      originalData.value.cv !== editedData.value.cv
 });
 /**
  * receives all information about the student
@@ -226,19 +227,21 @@ function saveAllChanges() {
   })
       .then(response => {
         if (response.ok) {
-          originalData.value = {...editedData.value};
-          return response.json().then(data => {
-            console.log("Dati ricevuti:", data);
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("email", data.email);
-            localStorage.setItem("password", editedData.value.password);
-
-          });
+          return response.json()
         } else {
           console.log(response.status);
         }
       })
-      .catch(error => {console.error('Error', error);});
+      .then(data => {
+        if (editedData.value.email !== originalData.value.email ||
+            editedData.value.password !== originalData.value.password) {
+          localStorage.setItem("token", data.newToken);
+          localStorage.setItem("email", data.email);
+          localStorage.setItem("password", editedData.value.password);
+        }
+        originalData.value = {...editedData.value};
+      })
+      .catch(error => {console.error(error);});
 }
 
 const myReview = ref([]);
@@ -262,12 +265,11 @@ function receiveMyReviewComplaint() {
         throw new Error("Error in request to backend");
       })
       .then(data => {
-        console.log("Dati ricevuti dal server:", data);
         myReview.value = data.filter(item => item.formType === "S_REVIEW");
         complaint.value = data.filter(item => item.formType === "C_COMPLAINT");
       })
       .catch(error => {
-        console.error("Error while retrieving data:", error);
+        console.error(error);
       });
 }
 
