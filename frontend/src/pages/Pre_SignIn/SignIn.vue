@@ -27,7 +27,6 @@ export default {
     submitForm() {
 
       const jsonData = JSON.stringify(this.formData);
-      console.log(jsonData);
 
       fetch('http://localhost:8080/api/auth/authenticate', {
         method: 'POST',

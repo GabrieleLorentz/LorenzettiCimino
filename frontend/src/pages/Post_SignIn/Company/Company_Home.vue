@@ -85,6 +85,9 @@
           </div>
 
         </div>
+        <div v-else style="font-size: 30px; text-align: center">
+          <p>You haven't added any internships yet</p>
+        </div>
       </div>
 
       <div style="flex: 1; padding: 20px;">
@@ -137,6 +140,9 @@
               </div>
             </div>
           </div>
+        </div>
+        <div v-else style="font-size: 30px; text-align: center">
+          <p>You haven't added any internships yet or started</p>
         </div>
       </div>
 

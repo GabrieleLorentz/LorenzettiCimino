@@ -135,20 +135,26 @@ public class StudentServiceImpl implements StudentService {
             formRepository.deleteAll(forms);
             formRepository.flush();
             List<Form> form = new ArrayList<>();
-            for(String response : studentDTO.getForms()){
-                Form newForm = new Form();
-                newForm.setFormType(FormType.CV);
-                newForm.setStudent(student);
-                newForm.setResponse(response);
-                formRepository.save(newForm);
+            if(!studentDTO.getForms().isEmpty()){
+                for(String response : studentDTO.getForms()){
+                    Form newForm = new Form();
+                    newForm.setFormType(FormType.CV);
+                    newForm.setStudent(student);
+                    newForm.setResponse(response);
+                    form.add(newForm);
+                    formRepository.save(newForm);
+                }
             }
-            formRepository.saveAll(form);
+
             String password = passwordEncoder.encode(studentDTO.getPassword());
             if (!student.getPassword().equals(password)) {
                 student.setPassword(password);
                 UserTokenDTO user = authService.authenticate(new AuthRequestDTO(student.getEmail(), password));
                 String token = user.getToken();
-                return StudentMapper.mapToUpdatedStudentDTO(studentRepository.save(student),form, token);
+                if(form.isEmpty())
+                    return StudentMapper.mapToUpdatedStudentDTO(studentRepository.save(student),forms, token);
+                else
+                    return StudentMapper.mapToUpdatedStudentDTO(studentRepository.save(student),form, token);
             }
             return StudentMapper.mapToUpdatedStudentDTO(studentRepository.save(student), forms);
         } catch (InternshipException e) {
