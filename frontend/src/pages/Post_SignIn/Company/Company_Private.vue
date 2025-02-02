@@ -131,7 +131,7 @@ function receiveData() {
         editedData.value = { ...originalData.value };
       })
       .catch(error => {
-        console.error("Error while retrieving data:", error);
+        console.error(error);
       });
 }
 
@@ -196,12 +196,11 @@ function receiveMyReviewComplaint() {
         throw new Error("Error in request to backend");
       })
       .then(data => {
-        console.log("Dati ricevuti dal server:", data);
         myReview.value = data.filter(item => item.formType === "C_REVIEW");
         complaint.value = data.filter(item => item.formType === "S_COMPLAINT");
       })
       .catch(error => {
-        console.error("Error while retrieving data:", error);
+        console.error(error);
       });
 }
 

@@ -198,7 +198,7 @@ function receiveData() {
         editedData.value = { ...originalData.value };
       })
       .catch(error => {
-        console.error("Error while retrieving data:", error);
+        console.error(error);
       });
 }
 
@@ -233,6 +233,7 @@ function saveAllChanges() {
         }
       })
       .then(data => {
+        console.log(data)
         if (editedData.value.email !== originalData.value.email ||
             editedData.value.password !== originalData.value.password) {
           localStorage.setItem("token", data.newToken);

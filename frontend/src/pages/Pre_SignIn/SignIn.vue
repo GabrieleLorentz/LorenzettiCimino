@@ -69,7 +69,7 @@ export default {
   color: #f2a73b;
   border: 4px solid #232526;
   width: 85%;
-  font-size: 40px;
+  font-size: 30px;
   padding: 15px;
   border-radius: 30px;
   transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;

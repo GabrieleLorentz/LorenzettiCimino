@@ -40,7 +40,7 @@
             </div>
             <div class="form-row">
               <label for="Question">Questions:</label>
-              <textarea id="Question" v-model="updateQuestion" @change="addQuestion" placeholder="Separate with commas" type="text" class="form-input" />
+              <textarea id="Question" v-model="updateQuestion" @change="addQuestion" placeholder="Separate with /" type="text" class="form-input" />
             </div>
           </div>
           <div style="display: flex; gap: 5px; margin-top: 5px">
@@ -109,7 +109,6 @@
 
 <script setup lang="ts">
 import {ref, computed} from 'vue';
-import Company_Home from "@/pages/Post_SignIn/Company/Company_Home.vue";
 
 interface data {
   name: string;

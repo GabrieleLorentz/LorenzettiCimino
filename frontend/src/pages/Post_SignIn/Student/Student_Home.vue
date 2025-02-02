@@ -318,11 +318,11 @@ function renounce(intId) {
         if (response.ok) {
           receiveMy();
         } else {
-          console.error('Form submission failed:', response.status);
+          console.error(response.status);
         }
       })
       .catch(error => {
-        console.error('Error submitting form:', error);
+        console.error(error);
       });
 }
 

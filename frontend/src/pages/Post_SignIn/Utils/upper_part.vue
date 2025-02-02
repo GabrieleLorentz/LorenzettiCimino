@@ -64,7 +64,6 @@ export default {
 };
 </script>
 
-
 <style>
 .orange {
   color: #f2a73b;

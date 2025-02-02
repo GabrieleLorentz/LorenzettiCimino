@@ -45,12 +45,12 @@
           </div>
           <!--list of students that have applied to participate-->
           <div v-if="showRequest" class="det">
-            <div class="det-content">
+            <div class="det-content internships-container">
               <h2>Students</h2>
-              <div v-for="student in selectedInternship.applicants" style="padding: 5px; display: flex; gap: 10px">
+              <div v-for="student in selectedInternship.applicants" style="padding: 5px; display: flex; align-items: center; gap: 10px">
                 <router-link :to="`/student_public/${student.email}`" style="font-size: 20px"> {{student.name}} </router-link>
-                <p> {{student.surname}}</p>
-                <button class="yes" @click="accepted(student.email, selectedInternship.id)" >Yes</button>
+                <p style="font-size: 20px"> {{student.surname}}</p>
+                <button class="yes" @click="accepted(student.email, selectedInternship.internshipId)">Yes</button>
               </div>
               <button @click="closeRequest" class="popup-button" style="font-size: 20px;">Close</button>
             </div>
@@ -67,20 +67,22 @@
                     <strong>Response:</strong> {{ form.response }}
                   </li>
                 </ul>
-                <button class="yes" @click="selected(responses[0].student.email, selectedInternship.id)" >Yes</button>
+                <button class="yes" @click="selected(responses[0].student.email, selectedInternship.internshipId)" >Yes</button>
               </div>
               <button @click="closeResponse" class="popup-button" style="font-size: 20px;">Close</button>
             </div>
           </div>
           <!--list of students who have been selected for the internship-->
           <div v-if="showSelected" class="det">
-            <div class="det-content">
+            <div class="det-content internships-container">
               <h2>Students</h2>
-              <div v-for="student in selectedInternship.selected" style="padding: 5px; display: flex; gap: 10px">
+              <div v-for="student in selectedInternship.selected" style="padding: 5px; display: flex; align-items: center; gap: 10px">
                 <router-link :to="`/student_public/${student.email}`" style="font-size: 20px"> {{student.name}} </router-link>
-                <p> {{student.surname}} </p>
+                <p style="font-size: 20px"> {{student.surname}} </p>
               </div>
-              <button @click="closeSelected" class="popup-button" style="font-size: 20px;">Close</button>
+              <div>
+                <button @click="closeSelected" class="popup-button" style="font-size: 20px;">Close</button>
+              </div>
             </div>
           </div>
 
@@ -128,8 +130,8 @@
                   <div v-for="student in selectedInternship.selected" >
                     <div style="display: flex; align-items: center; gap: 50px">
                       <div style="display: flex; align-items: center; gap: 10px">
-                        <router-link :to="`/student_public/${student.email}`" style="font-size: 30px"> {{student.name}} </router-link>
-                        <p style="font-size: 30px"> {{student.surname}} </p>
+                        <router-link :to="`/student_public/${student.email}`" style="font-size: 20px"> {{student.name}} </router-link>
+                        <p style="font-size: 20px"> {{student.surname}} </p>
                       </div>
                       <!--buttons to send complant, feedbacks and review-->
                       <buttons :internship="internship" :student="student"/>
@@ -224,7 +226,6 @@ function closeRequest() {
  */
 function accepted(email, internshipId) {
   const token = localStorage.getItem('token');
-  console.log(selectedInternship)
 
   fetch(`http://localhost:8080/api/company/studentAccepted/${email}_${internshipId}`, {
     method: 'POST',
@@ -234,6 +235,7 @@ function accepted(email, internshipId) {
   })
       .then(response => {
         if (response.ok) {
+          receiveData();
           return;
         } else if (response.status === 409) {
           alert('Student already accepted');
@@ -242,7 +244,7 @@ function accepted(email, internshipId) {
         }
       })
       .catch(error => {
-        console.error('Errore:', error);
+        console.error(error);
         alert('A connection error occurred');
       });
 }

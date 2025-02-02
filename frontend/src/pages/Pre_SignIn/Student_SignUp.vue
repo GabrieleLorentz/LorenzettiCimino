@@ -6,7 +6,7 @@
     <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
       <input v-model="formData.name" type="text" placeholder="name" class="text-input-signin" />
       <input v-model="formData.surname" type="text" placeholder="surname" class="text-input-signin" />
-      <input v-model="formData.email" type="email" placeholder="e-mail" class="text-input-signin" />
+      <input v-model="formData.email" type="email" placeholder="e-mail  insert @ + a dominion" class="text-input-signin" />
       <input v-model="formData.password" type="password" placeholder="password" class="text-input-signin" />
       <textarea v-model="formData.description" placeholder="description" class="input-signup"></textarea>
       <textarea v-model="formData.cv" @blur="insertCV" type="text" placeholder="CV, separate with one / " class="input-signup" />

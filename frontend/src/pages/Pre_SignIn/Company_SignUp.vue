@@ -5,7 +5,7 @@
     </div>
     <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
       <input v-model="formData.name" type="text" placeholder="name" class="text-input-signin" />
-      <input v-model="formData.email" type="email" placeholder="e-mail" class="text-input-signin" />
+      <input v-model="formData.email" type="email" placeholder="e-mail  insert @ + a dominion" class="text-input-signin" />
       <input v-model="formData.password" type="password" placeholder="password" class="text-input-signin" />
       <textarea v-model="formData.description" placeholder="description" class="input-signup"></textarea>
       <input v-model="formData.vat_number" type="number" placeholder="VAT" class="text-input-signin" />
@@ -49,8 +49,10 @@ export default {
                 this.$router.push('/company_home');
               });
             } else if (response.status === 401) {
-              alert('User already exists or credential not valid');
-            }else {
+              alert('User already exists or credential not valid')
+            } else if (response.status === 409) {
+              alert('Vat already exists');
+            } else {
               alert('Error. Try again later')
             }
           })

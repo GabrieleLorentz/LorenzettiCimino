@@ -98,7 +98,6 @@ function receiveData() {
           description: data.description,
           vat_number: data.vat_number
         };
-        console.log(data);
         Review.value = data.forms.filter(item => item.formType === "S_REVIEW");
       })
       .catch(error => {
