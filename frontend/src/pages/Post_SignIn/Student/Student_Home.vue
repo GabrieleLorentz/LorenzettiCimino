@@ -9,6 +9,7 @@
         <div class="my_collaboration">
           MY COLLABORATIONS IN PROGRESS
         </div>
+        <!--shows the internship to which the student is subscribed-->
         <div v-if="myInternships.length > 0" class="internships-container">
           <div v-for="internship in myInternships" style="padding: 5px">
             <div style="border: 3px solid black; border-radius: 40px; padding: 10px; display: flex; flex-direction: column; gap: 5px">
@@ -35,9 +36,11 @@
                 <p><strong>Description:</strong></p>
                 <textarea readonly style="width: 90%;"> {{ internship.description }}</textarea>
               </div>
+              <!--button to see and to send the form with the ansewers-->
               <div v-if="internship.isAccepted===true && internship.formToCompile && isBeforeDeadline(internship.endFormCompilingDate)" style="display: flex; gap: 5px">
                 <button @click="openForm(internship)" class="popup-button">Form</button>
               </div>
+              <!--button to renunce to the internship-->
               <div v-if="internship.isSelected===true && isBeforeDeadline(internship.startDate)" style="display: flex; gap: 5px">
                 <button @click="renounce(internship)" class="popup-button">Renounce!</button>
               </div>
@@ -66,7 +69,7 @@
           <p>No internships available.</p>
         </div>
       </div>
-
+      <!--search system-->
       <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center;">
         <div style="display: flex; gap: 10px;">
           <img @click="search" src="/src/assets/lente.svg" alt="lente" class="icon2 icon_hover"/>
@@ -91,7 +94,7 @@
             </div>
           </div>
         </div>
-
+        <!--show all the internship in the system not yet started which the student can apply to participate in-->
         <div v-if="allInternships.length > 0" class="internships-container">
           <div v-for="internship in allInternships" style="padding: 5px">
             <div class="int" style="display: flex; align-items: center;">
@@ -103,12 +106,12 @@
               <button @click="openDetails(internship)" class="popup-button">Details</button>
             </div>
           </div>
-
+          <!--to see the details of a internship-->
           <div v-if="showDetails" class="det">
             <div class="det-content">
               <h2>Internship Details</h2>
               <p><strong>Name:</strong> {{ selectedInternship.name }}</p>
-              <p><strong>Company:</strong> {{ selectedInternship.company_name }}</p>
+              <router-link :to="`/company_public/${selectedInternship.companyEmail}`"> <strong>Company: </strong>{{selectedInternship.company_name}} </router-link>
               <p><strong>Start Date:</strong> {{ selectedInternship.startDate }}</p>
               <p><strong>End Date:</strong> {{ selectedInternship.endDate }}</p>
               <p><strong>End Selection AcceptanceDate:</strong> {{ selectedInternship.endSelectionAcceptanceDate }}</p>
@@ -128,6 +131,7 @@
               </div>
               <div style="display: flex; gap: 5px; margin-top: 5px">
                 <button @click="closeDetails" class="popup-button" style="font-size: 20px;">Close</button>
+                <!--button to do the request-->
                 <button @click="request" :disabled="!sendStatus[selectedInternship.internshipId]" class="popup-button" style="font-size: 20px;">Request!</button>
               </div>
             </div>
@@ -211,6 +215,10 @@ import {onMounted, ref} from "vue";
 import Buttons from "@/pages/Post_SignIn/Utils/buttons.vue";
 
 const myInternships = ref([]);
+
+/**
+ * returns the internship of the student
+ */
 function receiveMy() {
   const token = localStorage.getItem('token');
 
@@ -254,6 +262,9 @@ function closeForm() {
   selectedForm.value = null;
 }
 
+/**
+ * send the form with the answers
+ */
 function send() {
   const token = localStorage.getItem('token');
 
@@ -287,6 +298,10 @@ function send() {
       });
 }
 
+/**
+ * to give up out of an internship once selected
+ * @param intId
+ */
 function renounce(intId) {
   const token = localStorage.getItem('token');
 
@@ -311,6 +326,10 @@ function renounce(intId) {
 
 const allInternships = ref([]);
 const sendStatus = ref<Record<number, boolean>>({});
+
+/**
+ * returns all the internship in the system not yet started which the student can apply to participate in
+ */
 function receiveAll() {
   const token = localStorage.getItem('token');
 
@@ -350,6 +369,10 @@ const key = ref<filters>({
   end: '',
   salary: 0
 })
+
+/**
+ * send search criteria and filters to the backend
+ */
 function search() {
   const token = localStorage.getItem('token');
 
@@ -396,6 +419,10 @@ function closeDetails() {
   showDetails.value = false;
   selectedInternship.value = null;
 }
+
+/**
+ * to request to participate in an internship
+ */
 function request() {
   const token = localStorage.getItem('token');
 

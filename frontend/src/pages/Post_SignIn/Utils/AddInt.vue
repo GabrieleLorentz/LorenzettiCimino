@@ -146,6 +146,9 @@ const hasChanges = computed(() =>{
       Data.value.questions.length > 0;
 })
 
+/**
+ * it helps the company to add an internship
+ */
 function addInternship() {
   const token = localStorage.getItem('token');
 

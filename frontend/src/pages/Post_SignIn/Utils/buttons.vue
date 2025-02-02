@@ -1,5 +1,6 @@
 <template>
   <div style="display: flex; gap: 10px">
+    <!--button and popup of a complaint-->
     <div class="profile-container">
       <button class="popup-button" style="font-size: 15px;">Complaint</button>
       <div class="popupCom">
@@ -8,6 +9,7 @@
         <button v-if="role === '[STUDENT]'" @click="RecComplaint(internship.internshipId, email)" class="popup-button">Send</button>
       </div>
     </div>
+    <!--button and popup of feedbacks-->
     <div class="profile-container">
       <button class="popup-button" style="font-size: 15px;">Feedback</button>
       <div class="popupCom" style="min-width: 350px; left: -100px;">
@@ -27,6 +29,7 @@
         <button v-if="role === '[STUDENT]'" @click="RecFeedback(internship.internshipId, email)" class="popup-button">Send</button>
       </div>
     </div>
+    <!--button and popup of a review-->
     <div class="profile-container">
       <button class="popup-button" style="font-size: 15px;">Review</button>
       <div class="popupCom" style="min-width: 200px;">
@@ -78,6 +81,10 @@ const { internship, student } = defineProps<{
 }>();
 
 const complaint_ = ref('');
+
+/**
+ * It is used to send a complaint
+ */
 function RecComplaint(intId, email) {
   const token = localStorage.getItem('token');
 
@@ -119,6 +126,10 @@ const feedback_ = ref<string[]>([]);
 watch(questionsFeed, (newQuestions) => {
   feedback_.value = newQuestions.map(() => "");
 }, { immediate: true });
+
+/**
+ * It is used to send feedbacks
+ */
 function RecFeedback(intId, email) {
   const token = localStorage.getItem('token');
 
@@ -155,6 +166,10 @@ const questionsRev = ref<string[]>([
   "What are your suggestions?"
 ]);
 const review_ = ref<string[]>([]);
+
+/**
+ * It is used to send a review
+ */
 function RecReview(intId, email) {
   const token = localStorage.getItem('token');
 

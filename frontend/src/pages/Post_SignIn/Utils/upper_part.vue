@@ -1,4 +1,5 @@
 <template>
+  <!--displays and manages the top of the screen depending on whether it is a student or a company-->
   <div style="width: calc(100% - 20px); display: flex; justify-content: space-between; align-items: center;  margin-left: 10px; margin-right: 10px;">
     <div style="display: flex; align-items: center;">
       <span class="orange">Student</span>
@@ -27,6 +28,9 @@
 <script>
 import AddInt from "@/pages/Post_SignIn/Utils/AddInt.vue";
 
+/**
+ * manages the top of the screen depending on whether it is a student or a company
+ */
 export default {
   components: {AddInt},
   data() {

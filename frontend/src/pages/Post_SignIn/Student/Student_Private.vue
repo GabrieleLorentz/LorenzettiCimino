@@ -7,7 +7,7 @@
       <span class="orange">Private</span>
       <span style="margin-left: 7px;" class="black">page</span>
     </div>
-
+    <!--personal data-->
     <div style="width: 100%; display: flex;">
       <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
         <div class="data">
@@ -36,7 +36,7 @@
       </div>
 
       <div style="flex: 1;">
-
+        <!--shows reviews made by his/her-self-->
         <div style="width: 100%; display: flex; justify-content: center;">
           <span class="black">My</span>
           <span style="margin-left: 7px;" class="orange">review</span>
@@ -53,7 +53,7 @@
         <div v-else>
           <p style="font-size: 20px; text-align: center;">No reviews made</p>
         </div>
-
+        <!--shows complaint made by companies-->
         <div style="width: 100%; display: flex; justify-content: center;">
           <span class="orange">Complaints</span>
           <span style="margin-left: 7px;" class="black">received</span>
@@ -167,7 +167,9 @@ const hasChanges = computed(() => {
       originalData.value.description !== editedData.value.description ||
       originalData.value.cv !== editedData.value.description
 });
-
+/**
+ * receives all information about the student
+ */
 function receiveData() {
   const token = localStorage.getItem('token');
 
@@ -199,6 +201,9 @@ function receiveData() {
       });
 }
 
+/**
+ * modify personal data
+ */
 function saveAllChanges() {
   const token = localStorage.getItem('token');
 
@@ -238,7 +243,10 @@ function saveAllChanges() {
 
 const myReview = ref([]);
 const complaint = ref([]);
-function receiveMyReview() {
+/**
+ * receives reviews made by itself and complaints from companies
+ */
+function receiveMyReviewComplaint() {
   const token = localStorage.getItem('token');
 
   fetch('http://localhost:8080/api/student/myForms', {
@@ -265,7 +273,7 @@ function receiveMyReview() {
 
 onMounted(() => {
   receiveData();
-  receiveMyReview();
+  receiveMyReviewComplaint();
 });
 
 const groupedReviews = computed(() => {

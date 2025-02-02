@@ -9,7 +9,7 @@
     </div>
 
     <div style="width: 100%; display: flex;">
-
+      <!-- shows public information about the student-->
       <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center;">
         <div class="data">
           <span class="editable-input">{{ originalData.name }}</span>
@@ -37,6 +37,7 @@
           <span class="orange">Reviews</span>
           <span style="margin-left: 7px;" class="black">received</span>
         </div>
+        <!-- shows reviews made by companies-->
         <div>
           <div v-if="Object.keys(groupedReviews).length > 0" style="overflow-y: auto; max-height: 260px;">
             <div v-for="(reviews, internshipKey) in groupedReviews" :key="internshipKey" style="padding: 10px; border-bottom: 2px solid #ccc;">
@@ -82,7 +83,9 @@ const originalData = ref<UserData>({
 });
 
 const Review = ref([]);
-
+/**
+ * receives public information about the student and reviews made by companies
+ */
 function receiveData() {
   const token = localStorage.getItem('token');
 
