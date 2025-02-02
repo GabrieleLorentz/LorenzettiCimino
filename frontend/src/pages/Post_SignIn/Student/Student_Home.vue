@@ -12,9 +12,9 @@
         <div v-if="myInternships.length > 0" class="internships-container">
           <div v-for="internship in myInternships" style="padding: 5px">
             <div style="border: 3px solid black; border-radius: 40px; padding: 10px; display: flex; flex-direction: column; gap: 5px">
-              <div style="display: flex; gap: 10px">
+              <div style="display: flex; align-items: center; gap: 10px">
                 <p><strong>Name:</strong> {{ internship.name }}</p>
-                <p><strong>Company:</strong> {{ internship.company_name }}</p>
+                <router-link :to="`/company_public/${internship.company_email}`"> <strong>Company: </strong>{{internship.company_name}} </router-link>
                 <p><strong>Start Date:</strong> {{ internship.startDate }}</p>
                 <p><strong>End Date:</strong> {{ internship.endDate }}</p>
               </div>
@@ -94,11 +94,9 @@
 
         <div v-if="allInternships.length > 0" class="internships-container">
           <div v-for="internship in allInternships" style="padding: 5px">
-            <div class="int">
+            <div class="int" style="display: flex; align-items: center;">
               <p><strong>Name:</strong>{{ internship.name }}</p>
-              <div class="profile_cont">
-                <p><strong>Company:</strong>{{ internship.company_name }}</p>
-              </div>
+              <router-link :to="`/company_public/${internship.company_email}`"> <strong>Company: </strong>{{internship.company_name}} </router-link>
               <p><strong>Start Date:</strong> {{ internship.startDate }}</p>
               <p><strong>End Date:</strong> {{ internship.endDate }}</p>
               <p><strong>Salary:</strong> {{ internship.salary }}</p>
@@ -230,6 +228,7 @@ function receiveMy() {
         throw new Error("Error in request to backend");
       })
       .then(data => {
+        console.log(data)
         myInternships.value = data;
       })
       .catch(error => {

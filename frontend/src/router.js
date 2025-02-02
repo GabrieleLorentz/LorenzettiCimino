@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-// Componenti delle pagine
 import Access from "@/pages/Pre_SignIn/Access.vue";
 import SignIn from "@/pages/Pre_SignIn/SignIn.vue";
 import SignUp from "@/pages/Pre_SignIn/SignUp.vue";
@@ -24,7 +23,7 @@ const router = createRouter({
         {path: '/company_signup', component: Company_SignUp},
         {path: '/student_home', component: Student_Home},
         {path: '/company_home', component: Company_Home},
-        {path: '/company_public', component: Company_Public},
+        {path: '/company_public/:email', component: Company_Public},
         {path: '/company_private', component: Company_Private},
         {path: '/student_public/:email', component: Student_Public},
         {path: '/student_private', component: Student_Private},
