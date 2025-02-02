@@ -158,21 +158,22 @@ function saveAllChanges() {
   })
       .then(response => {
         if (response.ok) {
-          return response.json()
+          originalData.value = {...editedData.value};
+          return response.json().then(data => {
+            if (editedData.value.email !== originalData.value.email ||
+                editedData.value.password !== originalData.value.password) {
+              localStorage.setItem("token", data.newToken);
+              localStorage.setItem("email", data.email);
+              localStorage.setItem("password", editedData.value.password);
+
+              console.log(localStorage.getItem('token'))
+            }
+          });
         } else {
           console.log(response.status);
         }
       })
-      .then(data => {
-          if (editedData.value.email !== originalData.value.email ||
-              editedData.value.password !== originalData.value.password) {
-            localStorage.setItem("token", data.newToken);
-            localStorage.setItem("email", data.email);
-            localStorage.setItem("password", editedData.value.password);
-          }
-          originalData.value = {...editedData.value};
-      })
-      .catch(error => {console.error(error);});
+      .catch(error => {console.error('Error', error);});
 }
 
 const myReview = ref([]);

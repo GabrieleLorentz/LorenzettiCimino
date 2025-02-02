@@ -54,6 +54,7 @@ export default {
   methods: {
     submitForm() {
       const jsonData = JSON.stringify(this.formData);
+      console.log(jsonData);
 
       fetch('http://localhost:8080/api/auth/registerStudent', {
         method: 'POST',
@@ -71,14 +72,14 @@ export default {
                 this.$router.push('/student_home');
               });
             } else if (response.status === 401) {
-              alert('User already exists or credential not valid');
+              alert('User already exists');
             }else {
               alert('Error. Try again later');
             }
           })
           .then(data => {console.log('Risposta dal server:', data);})
           .catch(error => {
-            console.error(error);
+            console.error('Errore:', error);
             alert('A connection error occurred');
           });
       },

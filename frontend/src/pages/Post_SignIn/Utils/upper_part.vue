@@ -10,6 +10,7 @@
     <div style="display: flex; gap: 10px; align-items: center;">
       <AddInt v-if="showAddIcon" ></AddInt>
       <img @click="goToPage('/rank_list')" src="/src/assets/Rank_List.svg" alt="Rank_List" class="icon2 icon_hover"/>
+      <img src="/src/assets/campanella.svg" alt="campanella" class="icon2 icon_hover"/>
       <div class="profile-container">
         <img src="/src/assets/profilo.svg" alt="profilo" class="icon1 icon_hover"/>
         <div class="popup">

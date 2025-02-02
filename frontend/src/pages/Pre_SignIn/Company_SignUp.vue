@@ -49,13 +49,13 @@ export default {
                 this.$router.push('/company_home');
               });
             } else if (response.status === 401) {
-              alert('User already exists or credential not valid');
+              alert('User already exists');
             }else {
               alert('Error. Try again later')
             }
           })
           .catch(error => {
-            console.error(error);
+            console.error('Error:', error);
             alert('A connection error occurred');
           });
     }

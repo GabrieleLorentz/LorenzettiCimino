@@ -65,7 +65,7 @@
           </div>
 
         </div>
-        <div v-else style="font-size: 30px; text-align: center">
+        <div v-else style="font-size: 30px">
           <p>No internships available.</p>
         </div>
       </div>
@@ -137,9 +137,6 @@
             </div>
           </div>
 
-        </div>
-        <div v-else style="font-size: 30px; text-align: center">
-          <p>No internships available.</p>
         </div>
       </div>
 
@@ -353,6 +350,7 @@ function receiveAll() {
         data.forEach((internship: { internshipId: number }) => {
           sendStatus.value[internship.internshipId] = true;
         });
+        console.log(data);
       })
       .catch(error => {
         console.error(error);
