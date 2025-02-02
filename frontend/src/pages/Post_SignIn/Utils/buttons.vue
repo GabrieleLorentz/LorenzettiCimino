@@ -153,7 +153,7 @@ function RecFeedback(intId, email) {
         } else if (response.status === 409) {
           alert('Feedback already inserted');
         } else {
-          alert('Error. Try again later');
+          alert('Is not the right period');
         }
       })
       .catch(error => {
@@ -193,7 +193,7 @@ function RecReview(intId, email) {
         } else if (response.status === 409) {
           alert('Review already inserted');
         } else {
-          alert('Error. Try again later');
+          alert('Is not the right period');
         }
       })
       .catch(error => {

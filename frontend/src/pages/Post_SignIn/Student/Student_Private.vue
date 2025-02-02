@@ -216,7 +216,7 @@ function saveAllChanges() {
     description: editedData.value.description,
     cv: editedData.value.cv
   };
-
+  console.log(updateData)
   fetch('http://localhost:8080/api/student/updateData', {
     method: 'POST',
     headers: {
@@ -233,7 +233,6 @@ function saveAllChanges() {
         }
       })
       .then(data => {
-        console.log(data)
         if (editedData.value.email !== originalData.value.email ||
             editedData.value.password !== originalData.value.password) {
           localStorage.setItem("token", data.newToken);
