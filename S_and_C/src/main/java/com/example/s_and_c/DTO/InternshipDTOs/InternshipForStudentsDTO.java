@@ -27,6 +27,7 @@ public class InternshipForStudentsDTO {
     private List<String> qualificationRequired;
     private String description;
     private String company_name;
+    private String companyEmail;
     private List<FormDTO> formToCompile;
     private Boolean isApplied;
     private Boolean isAccepted;
@@ -50,7 +51,7 @@ public class InternshipForStudentsDTO {
      * @param isSelected flag to signal selection
      */
     public InternshipForStudentsDTO(long internshipId, String name, LocalDate startDate, LocalDate endDate, LocalDate endFormCompilingDate,
-                                    LocalDate endSelectionAcceptanceDate, int salary, List<String> qualificationRequired, String description, String companyName,Boolean isApplied, boolean isAccepted, boolean isSelected) {
+                                    LocalDate endSelectionAcceptanceDate, int salary, List<String> qualificationRequired, String description, String companyName,String companyEmail,Boolean isApplied, boolean isAccepted, boolean isSelected) {
         this.internshipId = internshipId;
         this.name = name;
         this.startDate = startDate;
@@ -61,6 +62,7 @@ public class InternshipForStudentsDTO {
         this.qualificationRequired = qualificationRequired;
         this.description = description;
         this.company_name = companyName;
+        this.companyEmail = companyEmail;
         this.isApplied = isApplied;
         this.isAccepted = isAccepted;
         this.isSelected = isSelected;

@@ -97,6 +97,7 @@ public class InternshipMapper {
                 qualifications,
                 internship.getDescription(),
                 internship.getCompany().getName(),
+                internship.getCompany().getEmail(),
                 isApplied,
                 isAccepted,
                 isSelected
@@ -148,6 +149,7 @@ public class InternshipMapper {
                 qualifications,
                 internship.getDescription(),
                 internship.getCompany().getName(),
+                internship.getCompany().getEmail(),
                 formDTOList,
                 isApplied,
                 isAccepted,
