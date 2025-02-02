@@ -42,7 +42,7 @@
               </div>
               <!--button to renunce to the internship-->
               <div v-if="internship.isSelected===true && isBeforeDeadline(internship.startDate)" style="display: flex; gap: 5px">
-                <button @click="renounce(internship)" class="popup-button">Renounce!</button>
+                <button @click="renounce(internship.internshipId)" class="popup-button">Renounce!</button>
               </div>
               <div v-if="!isBeforeDeadline(internship.startDate)">
                 <buttons :internship="internship" :student="null" />
@@ -307,7 +307,7 @@ function send() {
  */
 function renounce(intId) {
   const token = localStorage.getItem('token');
-
+  console.log(intId)
   fetch(`http://localhost:8080/api/student/renounce/${intId}`, {
     method: 'POST',
     headers: {
@@ -384,7 +384,7 @@ function search() {
     maxEnd: key.value.end,
     minSalary: key.value.salary
   }
-
+  console.log(key1)
   fetch('http://localhost:8080/api/student/search', {
     method: 'POST',
     headers: {

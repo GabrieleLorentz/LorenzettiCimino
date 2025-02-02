@@ -162,7 +162,6 @@ function addInternship() {
     description: Data.value.description,
     questions: Data.value.questions
   };
-  console.log(formData);
 
   fetch('http://localhost:8080/api/company/insertInternship', {
     method: 'POST',
@@ -174,9 +173,10 @@ function addInternship() {
   })
       .then(response => {
         if (response.ok) {
-          return response.json().then(data => {
-            closePopup()
-          });
+          closePopup()
+          return response.json()
+        } else if (response.status === 400){
+          alert('Control the dates')
         } else {
           console.log(response.status);
         }

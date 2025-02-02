@@ -287,6 +287,7 @@ function selected(email, intId) {
   })
       .then(response => {
         if (response.ok) {
+          receiveData();
           return;
         } else if (response.status === 409) {
           alert('Student already selected');
