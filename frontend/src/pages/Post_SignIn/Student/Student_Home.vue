@@ -14,7 +14,7 @@
             <div style="border: 3px solid black; border-radius: 40px; padding: 10px; display: flex; flex-direction: column; gap: 5px">
               <div style="display: flex; align-items: center; gap: 10px">
                 <p><strong>Name:</strong> {{ internship.name }}</p>
-                <router-link :to="`/company_public/${internship.company_email}`"> <strong>Company: </strong>{{internship.company_name}} </router-link>
+                <router-link :to="`/company_public/${internship.companyEmail}`"> <strong>Company: </strong>{{internship.company_name}} </router-link>
                 <p><strong>Start Date:</strong> {{ internship.startDate }}</p>
                 <p><strong>End Date:</strong> {{ internship.endDate }}</p>
               </div>
@@ -96,7 +96,7 @@
           <div v-for="internship in allInternships" style="padding: 5px">
             <div class="int" style="display: flex; align-items: center;">
               <p><strong>Name:</strong>{{ internship.name }}</p>
-              <router-link :to="`/company_public/${internship.company_email}`"> <strong>Company: </strong>{{internship.company_name}} </router-link>
+              <router-link :to="`/company_public/${internship.companyEmail}`"> <strong>Company: </strong>{{internship.company_name}} </router-link>
               <p><strong>Start Date:</strong> {{ internship.startDate }}</p>
               <p><strong>End Date:</strong> {{ internship.endDate }}</p>
               <p><strong>Salary:</strong> {{ internship.salary }}</p>

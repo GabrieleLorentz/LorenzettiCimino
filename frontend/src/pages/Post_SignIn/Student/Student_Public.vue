@@ -5,7 +5,7 @@
 
     <div style="width: 100%; display: flex; justify-content: center;">
       <span class="orange">Public</span>
-      <span style="margin-left: 7px;" class="black">page</span>
+      <span style="margin-left: 7px;" class="black">page student</span>
     </div>
 
     <div style="width: 100%; display: flex;">
