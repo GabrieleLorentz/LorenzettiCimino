@@ -296,6 +296,9 @@ public class StudentServiceImpl implements StudentService {
         if(!internship.getSelectedStudents().contains(student)){
             throw new InternshipException("THE STUDENT AND THE COMPANY ARE NOT CORRELATED",409);
         }
+        if(LocalDate.now().isBefore(internship.getEndDate())){
+            throw new InternshipException("Too soon to compile",418);
+        }
         List<String> requests = new ArrayList<>();
         requests.add("How do you rate this experience?");
         requests.add("What are your suggestions?");
