@@ -139,7 +139,7 @@ public class StudentController {
      * @return 200 ok if no exception are internally thrown
      */
     @PostMapping("/renounce/{internshipId}")
-    public ResponseEntity<StudentDTO> internshipRenounce(@RequestParam long internshipId) {
+    public ResponseEntity<StudentDTO> internshipRenounce(@PathVariable  long internshipId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authEmail = auth.getName();
         internshipService.renounce(internshipId, authEmail);

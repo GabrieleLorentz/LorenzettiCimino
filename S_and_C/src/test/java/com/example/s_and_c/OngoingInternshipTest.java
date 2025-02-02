@@ -131,7 +131,7 @@ public class OngoingInternshipTest {
         internship.setName("prova");
         internship.setDescription("prova");
         internship.setStartDate(LocalDate.of(2025, 1, 30));
-        internship.setEndDate(LocalDate.of(2025, 2, 1));
+        internship.setEndDate(LocalDate.of(2025, 2, 18));
         internship.setEndFormCompilingDate(LocalDate.of(2025, 1, 20));
         internship.setEndSelectionAcceptanceDate(LocalDate.of(2025, 1, 25));
         internship.setSalary(560);

@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -97,7 +98,8 @@ public class InternshipServiceImpl implements InternshipService {
     public List<InternshipForStudentsDTO> findMatch(SearchDTO searchDTO) {
         List<Internship> results = new ArrayList<>();
         if(searchDTO.getKeyword() != null)
-            results = internshipRepository.findInternshipsBySearch(searchDTO.getKeyword(),searchDTO.getMinStart(),searchDTO.getMaxEnd(),searchDTO.getMinSalary());
+            results = internshipRepository.findInternshipsBySearch(searchDTO.getKeyword(),LocalDate.parse(searchDTO.getMinStart(),
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd")),LocalDate.parse(searchDTO.getMaxEnd(),DateTimeFormatter.ofPattern("yyyy-MM-dd")),searchDTO.getMinSalary());
 
         List<InternshipForStudentsDTO> internshipDTOS = new ArrayList<>();
         for (Internship internship : results) {
@@ -204,7 +206,8 @@ public class InternshipServiceImpl implements InternshipService {
         List<Internship> internships = internshipRepository.findAll();
         List<InternshipForStudentsDTO> internshipForStudentsDTOS = new ArrayList<>();
         for(Internship internship : internships){
-            internshipForStudentsDTOS.add(InternshipMapper.maptoInternshipForStudentsDTO(internship, false, false, false));
+            if(LocalDate.now().isBefore(internship.getEndFormCompilingDate()))
+                internshipForStudentsDTOS.add(InternshipMapper.maptoInternshipForStudentsDTO(internship, false, false, false));
         }
         return internshipForStudentsDTOS;
     }

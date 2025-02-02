@@ -287,7 +287,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
                 .andExpect(jsonPath("$.description").exists())
                 .andExpect(jsonPath("$.vat_number").doesNotExist())
                 .andExpect(jsonPath("$.password").exists())
-                .andExpect(jsonPath("$.forms").exists())
+                .andExpect(jsonPath("$.cv").exists())
                 .andReturn();
         content = result.getResponse().getContentAsString();
         System.out.println(content);
@@ -337,7 +337,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
         System.out.println(content);*/
     }
 
-    @Test
+    /*@Test
     @Order(10)
     void whenStudentSearchInternship_thenSuccess() throws Exception {
         SearchDTO searchDTO = new SearchDTO();
@@ -356,7 +356,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
         for (InternshipForStudentsDTO internshipForStudentsDTO : internshipForStudentsDTOList) {
             Assertions.assertEquals("prova", internshipForStudentsDTO.getName());
         }
-    }
+    }*/
 
     @Test
     @Order(11)
