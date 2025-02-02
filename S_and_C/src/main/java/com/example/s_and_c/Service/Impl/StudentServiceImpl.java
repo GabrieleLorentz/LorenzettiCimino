@@ -32,9 +32,6 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -106,7 +103,7 @@ public class StudentServiceImpl implements StudentService {
 
                 formRepository.deleteAll(forms);
                 formRepository.flush();
-                for(String response : studentDTO.getForms()){
+                for(String response : studentDTO.getCv()){
                     Form newForm = new Form();
                     newForm.setFormType(FormType.CV);
                     newForm.setStudent(newStudent);
@@ -135,8 +132,8 @@ public class StudentServiceImpl implements StudentService {
             formRepository.deleteAll(forms);
             formRepository.flush();
             List<Form> form = new ArrayList<>();
-            if(!studentDTO.getForms().isEmpty()){
-                for(String response : studentDTO.getForms()){
+            if(!studentDTO.getCv().isEmpty()){
+                for(String response : studentDTO.getCv()){
                     Form newForm = new Form();
                     newForm.setFormType(FormType.CV);
                     newForm.setStudent(student);

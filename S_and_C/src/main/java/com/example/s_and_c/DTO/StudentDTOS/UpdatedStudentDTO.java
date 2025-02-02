@@ -20,7 +20,7 @@ public class UpdatedStudentDTO {
     private String email;
     private String password;
     private String description;
-    private List<String> forms;
+    private List<String> cv;
     private String newToken;
 
     /**
@@ -38,6 +38,6 @@ public class UpdatedStudentDTO {
         this.email = email;
         this.password = password;
         this.description = description;
-        this.forms = cv;
+        this.cv = cv;
     }
 }
