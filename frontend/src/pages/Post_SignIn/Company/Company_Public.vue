@@ -95,10 +95,11 @@ function receiveData() {
           description: data.description,
           vat_number: data.vat_number
         };
+        console.log(data);
         Review.value = data.forms.filter(item => item.formType === "S_REVIEW");
       })
       .catch(error => {
-        console.error("Error while retrieving data:", error);
+        console.error(error);
       });
 }
 

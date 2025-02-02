@@ -192,7 +192,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /*z-index: 1000;*/
 }
 .det-content {
   background: white;
@@ -228,11 +227,11 @@ function receiveMy() {
         throw new Error("Error in request to backend");
       })
       .then(data => {
-        console.log(data)
+        console.log(data);
         myInternships.value = data;
       })
       .catch(error => {
-        console.error("Error while retrieving data:", error);
+        console.error(error);
       });
 }
 
@@ -330,11 +329,12 @@ function receiveAll() {
       .then(data => {
         allInternships.value = data;
         data.forEach((internship: { internshipId: number }) => {
-          sendStatus.value[internship.internshipId] = true; // Default: pulsante abilitato
+          sendStatus.value[internship.internshipId] = true;
         });
+        console.log(data);
       })
       .catch(error => {
-        console.error("Error while retrieving data:", error);
+        console.error(error);
       });
 }
 
@@ -378,7 +378,7 @@ function search() {
       .then(data => {
         allInternships.value = data;
       })
-      .catch(error => {console.error('Error', error);
+      .catch(error => {console.error(error);
       });
 }
 onMounted(() => {
@@ -418,7 +418,7 @@ function request() {
           console.log(response.status);
         }
       })
-      .catch(error => {console.error('Errore errore', error);
+      .catch(error => {console.error(error);
       });
 }
 </script>

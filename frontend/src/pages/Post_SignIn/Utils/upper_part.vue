@@ -14,7 +14,7 @@
         <img src="/src/assets/profilo.svg" alt="profilo" class="icon1 icon_hover"/>
         <div class="popup">
           <p>PROFILE</p>
-          <span @click="goToPage(publicProfile)" class="popup-link" style="margin-top: -25px;">Public</span>
+          <router-link :to="publicProfile" class="popup-link" style="margin-top: -25px;"> Public </router-link>
           <span @click="goToPage(privateProfile)" class="popup-link">Private</span>
         </div>
       </div>
@@ -31,7 +31,8 @@ export default {
   components: {AddInt},
   data() {
     return {
-      role: localStorage.getItem("role")
+      role: localStorage.getItem("role"),
+      emailP: localStorage.getItem("email")
     };
   },
   computed: {
@@ -46,7 +47,7 @@ export default {
       return this.role === "[STUDENT]" ? "/student_home" : "/company_home";
     },
     publicProfile() {
-      return this.role === "[STUDENT]" ? "/student_public" : "/company_public";
+      return this.role === "[STUDENT]" ? `/student_public/${this.emailP}` : `/company_public/${this.emailP}`;
     },
     privateProfile() {
       return this.role === "[STUDENT]" ? "/student_private" : "/company_private";

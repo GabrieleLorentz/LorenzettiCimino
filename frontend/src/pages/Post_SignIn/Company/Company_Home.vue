@@ -155,7 +155,7 @@
 
 <script setup lang="ts">
 import UpperPart from '@/pages/Post_SignIn/Utils/upper_part.vue';
-import {ref, onMounted, computed, watch} from "vue";
+import {ref, onMounted, computed} from "vue";
 import buttons from '@/pages/Post_SignIn/Utils/buttons.vue';
 
 const internships = ref([]);
