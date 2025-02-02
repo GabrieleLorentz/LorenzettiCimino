@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static java.time.format.DateTimeFormatter.ofPattern;
+
 @Service
 @AllArgsConstructor
 public class InternshipServiceImpl implements InternshipService {
@@ -96,17 +98,29 @@ public class InternshipServiceImpl implements InternshipService {
 
     @Override
     public List<InternshipForStudentsDTO> findMatch(SearchDTO searchDTO) {
-        List<Internship> results = new ArrayList<>();
-        if(searchDTO.getKeyword() != null)
-            results = internshipRepository.findInternshipsBySearch(searchDTO.getKeyword(),LocalDate.parse(searchDTO.getMinStart(),
-                    DateTimeFormatter.ofPattern("yyyy-MM-dd")),LocalDate.parse(searchDTO.getMaxEnd(),DateTimeFormatter.ofPattern("yyyy-MM-dd")),searchDTO.getMinSalary());
+        List<Internship> results;
+        LocalDate minDate = null;
+        LocalDate maxDate = null;
 
-        List<InternshipForStudentsDTO> internshipDTOS = new ArrayList<>();
-        for (Internship internship : results) {
-            InternshipForStudentsDTO internshipDTO = InternshipMapper.maptoInternshipForStudentsDTO(internship, false, false, false);
-            internshipDTOS.add(internshipDTO);
+        if (searchDTO.getMinStart() != null && !searchDTO.getMinStart().isEmpty()) {
+            minDate = LocalDate.parse(searchDTO.getMinStart(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
-        return internshipDTOS;
+
+        if (searchDTO.getMaxEnd() != null && !searchDTO.getMaxEnd().isEmpty()) {
+            maxDate = LocalDate.parse(searchDTO.getMaxEnd(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+
+        String keyword = searchDTO.getKeyword() != null ? searchDTO.getKeyword() : "";
+        results = internshipRepository.findInternshipsBySearch(
+                keyword,
+                minDate,
+                maxDate,
+                searchDTO.getMinSalary()
+        );
+
+        return results.stream()
+                .map(internship -> InternshipMapper.maptoInternshipForStudentsDTO(internship, false, false, false))
+                .collect(Collectors.toList());
     }
 
     @Override

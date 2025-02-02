@@ -324,39 +324,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
                         .content(content))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON)).andReturn();
-        content = result.getResponse().getContentAsString();
-       /* content = result.getResponse().getContentAsString();
-
-
-        mapper.registerModule(new JavaTimeModule());
-        InternshipDTO internshipDTO2 = mapper.readValue(content, InternshipDTO.class);
-        Assertions.assertEquals("prova", internshipDTO2.getName());
-        Assertions.assertEquals(560, internshipDTO2.getSalary());
-        Assertions.assertEquals("prova", internshipDTO2.getQualification_required().getFirst());
-
-        System.out.println(content);*/
     }
-
-    /*@Test
-    @Order(10)
-    void whenStudentSearchInternship_thenSuccess() throws Exception {
-        SearchDTO searchDTO = new SearchDTO();
-        searchDTO.setKeyword("prova");
-        String content = objectMapper.writeValueAsString(searchDTO);
-        MvcResult result = mockMvcC.perform(post("/api/student/search")
-                        .header("Authorization", "Bearer " + studentToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(content))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON)).andReturn();
-        content = result.getResponse().getContentAsString();
-        List<InternshipForStudentsDTO> internshipForStudentsDTOList = objectMapper.readValue(content, new TypeReference<List<InternshipForStudentsDTO>>() {
-        });
-        Assertions.assertFalse(internshipForStudentsDTOList.isEmpty());
-        for (InternshipForStudentsDTO internshipForStudentsDTO : internshipForStudentsDTOList) {
-            Assertions.assertEquals("prova", internshipForStudentsDTO.getName());
-        }
-    }*/
 
     @Test
     @Order(11)
