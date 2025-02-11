@@ -31,10 +31,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -260,7 +258,7 @@ public class StudentServiceImpl implements StudentService {
         if(!internship.getSelectedStudents().contains(student) || feedBackDTO.getFeedbacks().isEmpty()){
             throw new InternshipException("THE STUDENT AND THE COMPANY ARE NOT CORRELATED",409);
         }
-        CompanyServiceImpl.checkDate(internship, dateUtils);
+        checkDate(student,internship, dateUtils);
 
 
         List<String> requests = new ArrayList<>();
@@ -281,7 +279,27 @@ public class StudentServiceImpl implements StudentService {
 
     }
 
-
+    void checkDate(Student student, Internship internship, DateUtils dateUtils) {
+        if (LocalDate.now().isBefore(dateUtils.getMidDate(internship.getStartDate(),internship.getEndDate()))) {
+            throw new InternshipException("Feedback can not be inserted yet",400);
+        }
+        if (LocalDate.now().isAfter(
+                dateUtils.getMidDate(internship.getStartDate(),internship.getEndDate()).plusWeeks(1)) &&
+                LocalDate.now().isBefore(internship.getEndDate())) {
+            throw new InternshipException("Feedback can not be inserted yet",400);
+        }
+        if(LocalDate.now().isAfter(internship.getEndDate().plusWeeks(1))){
+            throw new InternshipException("Feedback can not be inserted anymore",400);
+        }
+        if(LocalDate.now().isBefore(dateUtils.getMidDate(internship.getStartDate(),internship.getEndDate()).plusWeeks(1))){
+            if(formRepository.findByStudentAndInternshipAndFormType(student,internship.getCompany(),FormType.S_FEEDBACK).size() >= 5)
+                throw new InternshipException("Feedback can not be inserted two times",400);
+        }
+        if(LocalDate.now().isBefore(internship.getEndDate().plusWeeks(1))){
+            if(formRepository.findByStudentAndInternshipAndFormType(student,internship.getCompany(),FormType.S_FEEDBACK).size() >= 10)
+                throw new InternshipException("Feedback can not be inserted two times",400);
+        }
+    }
 
 
 

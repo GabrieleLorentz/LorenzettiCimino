@@ -193,7 +193,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     }
 
-    static void checkDate(Internship internship, DateUtils dateUtils) {
+     void checkDate(Internship internship, DateUtils dateUtils) {
         if (LocalDate.now().isBefore(dateUtils.getMidDate(internship.getStartDate(),internship.getEndDate()))) {
             throw new InternshipException("Feedback can not be inserted yet",400);
         }
@@ -205,6 +205,14 @@ public class CompanyServiceImpl implements CompanyService {
         if(LocalDate.now().isAfter(internship.getEndDate().plusWeeks(1))){
             throw new InternshipException("Feedback can not be inserted anymore",400);
         }
+        if(LocalDate.now().isBefore(dateUtils.getMidDate(internship.getStartDate(),internship.getEndDate()).plusWeeks(1))){
+            if(formRepository.findByCompanyAndFormType(internship.getCompany(),FormType.C_FEEDBACK).size() >= 5)
+                throw new InternshipException("Feedback can not be inserted two times",400);
+        }
+         if(LocalDate.now().isBefore(internship.getEndDate().plusWeeks(1))){
+             if(formRepository.findByCompanyAndFormType(internship.getCompany(),FormType.C_FEEDBACK).size() >= 10)
+                 throw new InternshipException("Feedback can not be inserted two times",400);
+         }
     }
 
     /**
