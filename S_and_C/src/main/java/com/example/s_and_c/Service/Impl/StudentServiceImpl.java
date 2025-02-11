@@ -281,23 +281,23 @@ public class StudentServiceImpl implements StudentService {
 
     void checkDate(Student student, Internship internship, DateUtils dateUtils) {
         if (LocalDate.now().isBefore(dateUtils.getMidDate(internship.getStartDate(),internship.getEndDate()))) {
-            throw new InternshipException("Feedback can not be inserted yet",400);
+            throw new InternshipException("Feedback can not be inserted yet",409);
         }
         if (LocalDate.now().isAfter(
                 dateUtils.getMidDate(internship.getStartDate(),internship.getEndDate()).plusWeeks(1)) &&
                 LocalDate.now().isBefore(internship.getEndDate())) {
-            throw new InternshipException("Feedback can not be inserted yet",400);
+            throw new InternshipException("Feedback can not be inserted yet",409);
         }
         if(LocalDate.now().isAfter(internship.getEndDate().plusWeeks(1))){
-            throw new InternshipException("Feedback can not be inserted anymore",400);
+            throw new InternshipException("Feedback can not be inserted anymore",409);
         }
         if(LocalDate.now().isBefore(dateUtils.getMidDate(internship.getStartDate(),internship.getEndDate()).plusWeeks(1))){
             if(formRepository.findByStudentAndInternshipAndFormType(student,internship.getCompany(),FormType.S_FEEDBACK).size() >= 5)
-                throw new InternshipException("Feedback can not be inserted two times",400);
+                throw new InternshipException("Feedback can not be inserted two times",409);
         }
         if(LocalDate.now().isBefore(internship.getEndDate().plusWeeks(1))){
             if(formRepository.findByStudentAndInternshipAndFormType(student,internship.getCompany(),FormType.S_FEEDBACK).size() >= 10)
-                throw new InternshipException("Feedback can not be inserted two times",400);
+                throw new InternshipException("Feedback can not be inserted two times",409);
         }
     }
 
