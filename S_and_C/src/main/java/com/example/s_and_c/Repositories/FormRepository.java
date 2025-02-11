@@ -22,9 +22,9 @@ public interface FormRepository extends JpaRepository<Form, Integer> {
 
     List<Form> findByInternship(Internship internship);
 
-    List<Form> findByCompanyAndFormType(Company company, FormType formType);
-
     List<Form> findByInternshipAndFormType(Internship internship, FormType formType);
 
     List<Form> findByStudentAndInternshipAndFormType(Student student, Company company, FormType formType);
+
+    List<Form> findByCompanyAndFormTypeAndStudent(Company company, FormType formType, Student student);
 }

@@ -174,7 +174,8 @@ public class CompanyServiceImpl implements CompanyService {
         if(!internship.getCompany().getEmail().equals(authEmail)){
             throw new InternshipException("Internship does not belong to this company",409);
         }
-        checkDate(internship, dateUtils);
+        Student student = studentRepository.findByEmail(feedBackDTO.getStudentEmailForCompanyOnly()).orElseThrow(()->new InternshipException("Student not found",404));
+        checkDate(internship, dateUtils, student);
         List<String> requests = new ArrayList<>();
         requests.add("The service/product met my expectations:");
         requests.add("I found the experience user-friendly and intuitive.");
@@ -188,12 +189,13 @@ public class CompanyServiceImpl implements CompanyService {
             form.setResponse(feedBackDTO.getFeedbacks().get(i));
             form.setCompany(internship.getCompany());
             form.setInternship(internship);
+            form.setStudent(student);
             formRepository.save(form);
         }
 
     }
 
-     void checkDate(Internship internship, DateUtils dateUtils) {
+     void checkDate(Internship internship, DateUtils dateUtils,Student student) {
         if (LocalDate.now().isBefore(dateUtils.getMidDate(internship.getStartDate(),internship.getEndDate()))) {
             throw new InternshipException("Feedback can not be inserted yet",400);
         }
@@ -206,11 +208,11 @@ public class CompanyServiceImpl implements CompanyService {
             throw new InternshipException("Feedback can not be inserted anymore",400);
         }
         if(LocalDate.now().isBefore(dateUtils.getMidDate(internship.getStartDate(),internship.getEndDate()).plusWeeks(1))){
-            if(formRepository.findByCompanyAndFormType(internship.getCompany(),FormType.C_FEEDBACK).size() >= 5)
+            if(formRepository.findByCompanyAndFormTypeAndStudent(internship.getCompany(),FormType.C_FEEDBACK,student).size() >= 5)
                 throw new InternshipException("Feedback can not be inserted two times",400);
         }
          if(LocalDate.now().isBefore(internship.getEndDate().plusWeeks(1))){
-             if(formRepository.findByCompanyAndFormType(internship.getCompany(),FormType.C_FEEDBACK).size() >= 10)
+             if(formRepository.findByCompanyAndFormTypeAndStudent(internship.getCompany(),FormType.C_FEEDBACK,student).size() >= 10)
                  throw new InternshipException("Feedback can not be inserted two times",400);
          }
     }
