@@ -276,6 +276,6 @@ public class CompanyServiceImpl implements CompanyService {
         for(Form form : forms){
             formDTOs.add(FormMapper.mapToCompleteFormDTO(form));
         }
-        return new ShortCompanyDTO(company.getName(),company.getName(),company.getDescription(),company.getVat_number(),formDTOs);
+        return new ShortCompanyDTO(company.getName(),company.getEmail(),company.getDescription(),company.getVat_number(),formDTOs);
     }
 }
