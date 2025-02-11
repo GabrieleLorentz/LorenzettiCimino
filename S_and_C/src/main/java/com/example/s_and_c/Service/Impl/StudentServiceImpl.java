@@ -85,9 +85,10 @@ public class StudentServiceImpl implements StudentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Student with id " + email + " not found"));
         List<Form> forms = formRepository.findByStudentAndFormType(student, FormType.CV);
         try {
+            System.out.println(studentDTO.getEmail());
             if (!studentDTO.getEmail().equals(student.getEmail())) {
                 if(companyRepository.findByEmail(studentDTO.getEmail()).isPresent())
-                    throw new ResponseStatusException(HttpStatus.CONFLICT,"company with email " + studentDTO.getEmail() + " already exists");
+                    throw new InternshipException("company with email " + studentDTO.getEmail() + " already exists",409);
                 Student newStudent = new Student();
                 newStudent.setEmail(studentDTO.getEmail());
                 newStudent.setName(studentDTO.getName());
@@ -113,6 +114,7 @@ public class StudentServiceImpl implements StudentService {
 
                 entityManager.remove(student);
                 entityManager.flush();
+                studentRepository.save(newStudent);
 
 
                 UserTokenDTO user = authService.authenticate(new AuthRequestDTO(newStudent.getEmail(), studentDTO.getPassword()));
@@ -120,19 +122,26 @@ public class StudentServiceImpl implements StudentService {
                 return StudentMapper.mapToUpdatedStudentDTO(newStudent,forms, token);
             }
 
+            System.out.println(studentDTO.getName());
             if (!studentDTO.getName().equals(student.getName())) {
                 student.setName(studentDTO.getName());
+                studentRepository.save(student);
             }
+
+            System.out.println(studentDTO.getSurname());
             if (!studentDTO.getSurname().equals(student.getSurname())) {
                 student.setSurname(studentDTO.getSurname());
+                studentRepository.save(student);
             }
+
             if (!studentDTO.getDescription().equals(student.getDescription())) {
                 student.setDescription(studentDTO.getDescription());
+                studentRepository.save(student);
             }
-            formRepository.deleteAll(forms);
-            formRepository.flush();
             List<Form> form = new ArrayList<>();
             if(!studentDTO.getCv().isEmpty()){
+                formRepository.deleteAll(forms);
+                formRepository.flush();
                 for(String response : studentDTO.getCv()){
                     Form newForm = new Form();
                     newForm.setFormType(FormType.CV);
@@ -146,14 +155,15 @@ public class StudentServiceImpl implements StudentService {
             String password = passwordEncoder.encode(studentDTO.getPassword());
             if (!student.getPassword().equals(password)) {
                 student.setPassword(password);
+                studentRepository.save(student);
                 UserTokenDTO user = authService.authenticate(new AuthRequestDTO(student.getEmail(), password));
                 String token = user.getToken();
                 if(form.isEmpty())
-                    return StudentMapper.mapToUpdatedStudentDTO(studentRepository.save(student),forms, token);
+                    return StudentMapper.mapToUpdatedStudentDTO(student,forms, token);
                 else
-                    return StudentMapper.mapToUpdatedStudentDTO(studentRepository.save(student),form, token);
+                    return StudentMapper.mapToUpdatedStudentDTO(student,form, token);
             }
-            return StudentMapper.mapToUpdatedStudentDTO(studentRepository.save(student), forms);
+            return StudentMapper.mapToUpdatedStudentDTO(student, forms);
         } catch (InternshipException e) {
             throw new InternshipException("Inserted Data violate constraint",409);
         }

@@ -25,7 +25,6 @@
 
 <script>
 import AddInt from "@/pages/Post_SignIn/Utils/AddInt.vue";
-
 /**
  * manages the top of the screen depending on whether it is a student or a company
  */

@@ -20,11 +20,11 @@ public interface InternshipRepository extends JpaRepository<Internship, Integer>
     @Query("SELECT DISTINCT i FROM Internship i " +
             "LEFT JOIN i.company c " +
             "LEFT JOIN i.qualification_required q " +
-            "WHERE (LOWER(i.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "WHERE (:keyword = '' OR LOWER(i.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(q.qualificationName) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
-            "AND (:minStart IS NULL OR i.startDate >= :minStart) " +
-            "AND (:maxEnd IS NULL OR i.endDate <= :maxEnd) " +
+            "AND (CAST(:minStart AS date) IS NULL OR i.startDate >= :minStart) " +
+            "AND (CAST(:maxEnd AS date) IS NULL OR i.endDate <= :maxEnd) " +
             "AND (:minSalary IS NULL OR i.salary >= :minSalary)")
     List<Internship> findInternshipsBySearch(
             @Param("keyword") String keyword,

@@ -17,6 +17,6 @@ import java.time.LocalDate;
 public class SearchDTO {
     private String keyword;
     private int minSalary;
-    private LocalDate minStart;
-    private LocalDate maxEnd;
+    private String minStart;
+    private String maxEnd;
 }
