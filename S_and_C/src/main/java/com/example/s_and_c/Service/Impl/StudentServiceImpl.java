@@ -292,11 +292,11 @@ public class StudentServiceImpl implements StudentService {
             throw new InternshipException("Feedback can not be inserted anymore",409);
         }
         if(LocalDate.now().isBefore(dateUtils.getMidDate(internship.getStartDate(),internship.getEndDate()).plusWeeks(1))){
-            if(formRepository.findByStudentAndInternshipAndFormType(student,internship.getCompany(),FormType.S_FEEDBACK).size() >= 5)
+            if(formRepository.findByStudentAndInternshipAndFormType(student,internship,FormType.S_FEEDBACK).size() >= 5)
                 throw new InternshipException("Feedback can not be inserted two times",409);
         }
         if(LocalDate.now().isBefore(internship.getEndDate().plusWeeks(1))){
-            if(formRepository.findByStudentAndInternshipAndFormType(student,internship.getCompany(),FormType.S_FEEDBACK).size() >= 10)
+            if(formRepository.findByStudentAndInternshipAndFormType(student,internship,FormType.S_FEEDBACK).size() >= 10)
                 throw new InternshipException("Feedback can not be inserted two times",409);
         }
     }

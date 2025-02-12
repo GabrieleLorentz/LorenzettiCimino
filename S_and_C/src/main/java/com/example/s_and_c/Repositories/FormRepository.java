@@ -7,7 +7,6 @@ import com.example.s_and_c.Entities.Status.FormType;
 import com.example.s_and_c.Entities.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface FormRepository extends JpaRepository<Form, Integer> {
@@ -24,7 +23,7 @@ public interface FormRepository extends JpaRepository<Form, Integer> {
 
     List<Form> findByInternshipAndFormType(Internship internship, FormType formType);
 
-    List<Form> findByStudentAndInternshipAndFormType(Student student, Company company, FormType formType);
+    List<Form> findByStudentAndInternshipAndFormType(Student student, Internship internship, FormType formType);
 
     List<Form> findByCompanyAndFormTypeAndStudent(Company company, FormType formType, Student student);
 }

@@ -308,7 +308,7 @@ public class StudentAndCompanyDataAndSelectionPhaseTest {
         internshipDTO.setDescription("prova");
         internshipDTO.setStartDate("2025-02-28");
         internshipDTO.setEndDate("2025-04-26");
-        internshipDTO.setEndFormCompilingDate("2025-02-05");
+        internshipDTO.setEndFormCompilingDate("2025-02-14");
         internshipDTO.setEndSelectionAcceptanceDate("2025-02-16");
         List<String> qualifications = new ArrayList<>();
         qualifications.add("prova");
