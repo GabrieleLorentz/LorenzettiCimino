@@ -45,7 +45,7 @@
           </div>
           <!--list of students that have applied to participate-->
           <div v-if="showRequest" class="det">
-            <div class="det-content internships-container">
+            <div class="det-content type-students">
               <h2>Students</h2>
               <div v-for="student in selectedInternship.applicants" style="padding: 5px; display: flex; align-items: center; gap: 10px">
                 <router-link :to="`/student_public/${student.email}`" style="font-size: 20px"> {{student.name}} </router-link>
@@ -57,7 +57,7 @@
           </div>
           <!--list of students who submitted the form with the interview answers-->
           <div v-if="showResponse" class="det">
-            <div class="det-content internships-container">
+            <div class="det-content type-students">
               <h2>Forms</h2>
               <div v-for="(responses, studentEmail) in groupedForms" :key="studentEmail" style="border-bottom: 2px solid black;">
                 <p><strong>Student Name:</strong> {{ responses[0].student.name }} {{ responses[0].student.surname }}</p>
@@ -74,7 +74,7 @@
           </div>
           <!--list of students who have been selected for the internship-->
           <div v-if="showSelected" class="det">
-            <div class="det-content internships-container">
+            <div class="det-content type-students">
               <h2>Students</h2>
               <div v-for="student in selectedInternship.selected" style="padding: 5px; display: flex; align-items: center; gap: 10px">
                 <router-link :to="`/student_public/${student.email}`" style="font-size: 20px"> {{student.name}} </router-link>
@@ -154,6 +154,11 @@
 
 <style>
 .internships-container {
+  max-height: 700px;
+  min-height: 700px;
+  overflow-y: auto;
+}
+.type-students {
   max-height: 540px;
   min-height: 540px;
   overflow-y: auto;

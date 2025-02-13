@@ -107,7 +107,7 @@ function RecComplaint(intId, email) {
         } else if (response.status === 409) {
           alert('Complaint already inserted');
         } else {
-          alert('Error. Try again later');
+          alert('Is not the right period');
         }
       })
       .catch(error => {

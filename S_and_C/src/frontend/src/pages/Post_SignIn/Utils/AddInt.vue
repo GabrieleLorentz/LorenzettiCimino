@@ -32,7 +32,7 @@
             </div>
             <div class="form-row">
               <label for="Qualification">Qualification required:</label>
-              <textarea id="Qualification" v-model="qualificationInput" @change="updateQualifications" placeholder="Separate with commas" type="text" class="form-input" />
+              <textarea id="Qualification" v-model="qualificationInput" @change="updateQualifications" placeholder="Separate with /" type="text" class="form-input" />
             </div>
             <div class="form-row">
               <label for="Description">Description:</label>
